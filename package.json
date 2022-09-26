@@ -1,20 +1,19 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "个人用的 Node Cli",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "hello": "muc hello"
+    "hello": "node ./index.js hello"
   },
   "bin": {
-    "muc": "index.js"
+    "muc": "./index.js"
   },
   "keywords": ["Node", "Cli", "BTMuli"],
   "author": "目棃",
   "license": "MIT",
   "directories": {
-    "test": "tests"
+    "test": "./tests"
   },
   "repository": {
     "type": "git",

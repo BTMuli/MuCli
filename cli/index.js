@@ -1,6 +1,8 @@
-import {Command} from 'commander'
+'use strict';
 
-const MuCli = new Command();
+const commander = require('commander')
+
+const MuCli = new commander.Command()
 
 MuCli
     .version('0.1.1', '-v, --version')
@@ -14,4 +16,4 @@ MuCli
         console.log(name)
     });
 
-export default MuCli;
+MuCli.parse(process.argv)

@@ -1,7 +1,3 @@
-import MuCli from './cli/index.js'
+'use strict';
 
-const cmd = process.argv
-
-console.log(cmd)
-
-MuCli.parse(cmd)
+require('../Mucli/cli/index');
