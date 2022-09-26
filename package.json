@@ -3,16 +3,14 @@
   "version": "0.1.0",
   "description": "个人用的 Node Cli",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "index": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "index": "node index.js"
   },
   "bin": {
-    "muc": "bin/index.ps1"
+    "muc": "index.ps1"
   },
-  "keywords": [
-    "markdown"
-  ],
+  "keywords": ["Node", "Cli", "BTMuli"],
   "author": "目棃",
   "license": "MIT",
   "directories": {
@@ -20,10 +18,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BTMuli/Mu-Cli.git"
+    "url": "https://github.com/BTMuli/MuCli.git"
   },
   "bugs": {
-    "url": "https://github.com/BTMuli/Mu-Cli/issues"
+    "url": "https://github.com/BTMuli/MuCli/issues"
   },
-  "homepage": "https://github.com/BTMuli/Mu-Cli#readme"
+  "homepage": "https://github.com/BTMuli/MuCli#readme",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "commander": "^9.4.0",
+    "figlet": "^1.5.2",
+    "inquirer": "^9.1.2",
+    "shelljs": "^0.8.5"
+  }
 }
