@@ -1,13 +1,13 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "个人用的 Node Cli",
   "main": "index.js",
   "scripts": {
     "hello": "node ./index.js hello"
   },
   "bin": {
-    "muc": "./index.js"
+    "muc": "./cli/index.js"
   },
   "keywords": ["Node", "Cli", "BTMuli"],
   "author": "目棃",

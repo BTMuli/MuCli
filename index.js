@@ -1,3 +1,1 @@
-'use strict';
-
-require('./cli/index');
+console.log("Hello MuCli!")
