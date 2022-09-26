@@ -8,9 +8,10 @@ MuCli
 
 MuCli
     .command('hello')
+    .option('-n <name>', 'Your name', 'MuCli')
     .description("Say hello for user.")
-    .action(() => {
-        console.log("Hello MuCli!");
+    .action((name) => {
+        console.log(name)
     });
 
 export default MuCli;
