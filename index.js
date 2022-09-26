@@ -1,3 +1,3 @@
 'use strict';
 
-require('../Mucli/cli/index');
+require('./cli/index');
