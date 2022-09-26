@@ -1,7 +1,8 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "个人用的 Node Cli",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "hello": "node ./index.js hello"
