@@ -1,8 +1,6 @@
-'use strict';
+import {Command} from "commander";
 
-const commander = require('commander')
-
-const MuCli = new commander.Command()
+const MuCli = new Command()
 
 MuCli
     .version('0.1.1', '-v, --version')
