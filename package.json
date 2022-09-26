@@ -1,0 +1,29 @@
+{
+  "name": "mucli",
+  "version": "0.0.1",
+  "description": "个人用的 Node Cli",
+  "main": "index.js",
+  "scripts": {
+    "index": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "muc": "node bin/index.js"
+  },
+  "keywords": [
+    "markdown"
+  ],
+  "author": "目棃",
+  "license": "MIT",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BTMuli/Mu-Cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BTMuli/Mu-Cli/issues"
+  },
+  "homepage": "https://github.com/BTMuli/Mu-Cli#readme"
+}
