@@ -1,6 +1,6 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "个人用的 Node Cli",
   "type": "module",
   "main": "index.js",
@@ -20,6 +20,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/BTMuli/MuCli.git"
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com/"
   },
   "bugs": {
     "url": "https://github.com/BTMuli/MuCli/issues"
