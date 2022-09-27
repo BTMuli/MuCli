@@ -1,5 +1,6 @@
 import {Command} from "commander";
 import configAll from "../config/index.js";
+import Markdown from "../utils/markdown.js";
 
 const cliMarkdown = new Command();
 
@@ -8,6 +9,17 @@ cliMarkdown
     .name('mmd')
     .description('A subsystem with MuCli for markdown.')
     .version('0.0.1', '-V')
+
+// Command for create markdown new file
+cliMarkdown
+    .command('new')
+    .option('-n [name]', 'new md file [name]','README')
+    .description('create a markdown file')
+    .action(args => {
+        var path = process.cwd()
+        var name = args.n
+        Markdown.create(path,name);
+    })
 
 // Command for test
 cliMarkdown

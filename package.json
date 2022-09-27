@@ -1,6 +1,6 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "个人用的 Node Cli",
   "type": "module",
   "main": "index.js",
@@ -11,7 +11,11 @@
   "bin": {
     "muc": "./index.js"
   },
-  "keywords": ["Node", "Cli", "BTMuli"],
+  "keywords": [
+    "Node",
+    "Cli",
+    "BTMuli"
+  ],
   "author": "目棃",
   "license": "MIT",
   "directories": {
@@ -22,7 +26,7 @@
     "url": "https://github.com/BTMuli/MuCli.git"
   },
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/"
   },
   "bugs": {
     "url": "https://github.com/BTMuli/MuCli/issues"
@@ -34,6 +38,7 @@
     "commander": "^9.4.0",
     "figlet": "^1.5.2",
     "inquirer": "^9.1.2",
+    "moment": "^2.29.4",
     "shelljs": "^0.8.5"
   }
 }
