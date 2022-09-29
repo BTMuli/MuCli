@@ -2,22 +2,24 @@ name: MuCli Pub on GitHub & NPM
 
 on:
   push:
+    branches:
+      - master
     tags:
       - "v*"
 
 jobs:
-  build:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
+#  build:
+#    runs-on: windows-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 16
+#      - run: npm ci
 #      - run: npm test
 
   publish-gpr:
-    needs: build
+#    needs: build
     runs-on: windows-latest
     permissions:
       contents: read
@@ -27,21 +29,21 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          registry-url: https://npm.pkg.github.com/
+          registry-url: 'https://npm.pkg.github.com'
       - run: npm ci
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GHP_TOKEN}}
 
   publish-npm:
-    needs: build
+#    needs: build
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          registry-url: https://registry.npmjs.org/
+          registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm publish
         env:
