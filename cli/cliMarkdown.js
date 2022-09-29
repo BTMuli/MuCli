@@ -1,5 +1,4 @@
 import {Command} from "commander";
-// import configAll from "../config/index.js";
 import Markdown from "../utils/markdown.js";
 
 const cliMarkdown = new Command();
@@ -8,7 +7,7 @@ const cliMarkdown = new Command();
 cliMarkdown
     .name('mmd')
     .description('A subsystem with MuCli for markdown.')
-    .version('0.0.1', '-V')
+    .version('0.1.1', '-v')
 
 // Command for create markdown new file
 cliMarkdown
@@ -16,9 +15,7 @@ cliMarkdown
     .option('-n [name]', 'new md file [name]','README')
     .description('create a markdown file')
     .action(args => {
-        var path = process.cwd()
-        var name = args.n
-        Markdown.create(path,name);
+        Markdown.init(args.n)
     })
 
 // Command for test
@@ -26,11 +23,6 @@ cliMarkdown
 //     .command('test')
 //     .option('-t [command]', 'test [command] in mmd.', 'all')
 //     .description("A test module for mmd.")
-//     .action(args => {
-//         console.log("You are testing mmd(MuCli-Markdown) now...")
-//         if(args.t === 'all'){
-//             cliMarkdown.parse([configAll, 'mmd', '-V'])
-//         }
-//     });
+//     .action(Markdown.init);
 
 export default cliMarkdown;

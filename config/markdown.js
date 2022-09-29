@@ -1,22 +1,25 @@
 import moment from 'moment';
 
-const sign = "---"
+class MarkDownModel {
+    sign = "---"
+    quote = "> 本文档由 MuCli 自动生成"
 
-const dateNow = moment(Date.now()).format('YYYY-MM-DD')
+    // 构造函数，相当于 py 中的  __init__()
+    constructor(author, desc) {
+        this.author = author
+        this.description = desc
+    }
 
-const author = "目棃"
+    getModel() {
+        var dateNow = moment(Date.now()).format('YYYY-MM-DD')
+        return this.sign + "\n" +
+            "Date: " + dateNow + "\n" +
+            "Update: " + dateNow + "\n" +
+            "Author: " + this.author + "\n" +
+            "Description: " + this.description + "\n" +
+            this.sign + "\n" + "\n" +
+            this.quote + "\n";
+    }
+}
 
-const description = "说明文档"
-
-const quote = "> 本文档由 MuCli 自动生成"
-
-const configMarkdownCreate =
-    sign + "\n" +
-    "Date: " + dateNow + "\n" +
-    "Update: " + dateNow + "\n" +
-    "Author: " + author + "\n" +
-    "Description: " + description + "\n" +
-    sign + "\n" + "\n" +
-    quote + "\n";
-
-export default configMarkdownCreate
+export default MarkDownModel
