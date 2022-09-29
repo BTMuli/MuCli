@@ -7,7 +7,7 @@ const cliMarkdown = new Command();
 cliMarkdown
     .name('mmd')
     .description('A subsystem with MuCli for markdown.')
-    .version('0.1.1', '-v')
+    .version('0.1.2', '-v')
 
 // Command for create markdown new file
 cliMarkdown
@@ -15,7 +15,7 @@ cliMarkdown
     .option('-n [name]', 'new md file [name]','README')
     .description('create a markdown file')
     .action(args => {
-        Markdown.init(args.n)
+        Markdown.createNew(args.n)
     })
 
 // Command for test
@@ -23,6 +23,6 @@ cliMarkdown
 //     .command('test')
 //     .option('-t [command]', 'test [command] in mmd.', 'all')
 //     .description("A test module for mmd.")
-//     .action(Markdown.init);
+//     .action(Markdown.createNew);
 
 export default cliMarkdown;
