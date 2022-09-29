@@ -7,7 +7,7 @@ const MuCli = new Command()
 // Base info
 MuCli
     .name('MuCli')
-    .version('0.1.1', '-v, --version')
+    .version('0.2.3', '-v, --version')
     .description("A Node Cli for personal use by BTMUli.");
 
 // Command hello
