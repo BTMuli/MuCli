@@ -7,7 +7,7 @@ Description: 说明文档
 
 > 本文档由 MuCli 自动生成
 
-
+![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/workflow/status/btmuli/MuCli/MuCli%20Workflow/master?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli/master?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli/master?style=for-the-badge)
 
 ## 前言
 
