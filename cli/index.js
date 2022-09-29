@@ -1,5 +1,5 @@
 import {Command} from "commander";
-import cliMarkdown from "./cliMarkdown.js";
+import markdown from "./markdown.js";
 // import configAll from '../config/index.js'
 
 const MuCli = new Command()
@@ -21,7 +21,7 @@ MuCli
 
 // Command add mmd
 MuCli
-    .addCommand(cliMarkdown)
+    .addCommand(markdown)
 
 // Command for test
 // MuCli
@@ -32,7 +32,7 @@ MuCli
 //         console.log("You are testing MuCli now...")
 //         if(args.t === 'all'){
 //             console.log("The version of MuCli is v0.2.0")
-//             // cliMarkdown.parse( [configAll,'mmd', 'test'])
+//             // markdown.parse( [configAll,'mmd', 'test'])
 //         }
 //
 //     })
