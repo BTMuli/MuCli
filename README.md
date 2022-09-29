@@ -7,9 +7,13 @@ Description: 说明文档
 
 > 本文档由 MuCli 自动生成
 
+
+
 ## 前言
 
 本项目为个人使用的 Node-CLI 工具，即 `A Node CLI for Personal use by BTMuli`，为了方便自己使用，所以发包到 `npm` 上面以及 `github` 上面。
+
+> 若你写的 Workflow 发布到不同平台，则需保证`package.json`没有 `publishConfig` 之类的配置，其会覆盖你在 `workflow.yml`中写的路径。
 
 ## 提交规范
 
