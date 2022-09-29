@@ -1,5 +1,5 @@
 import {Command} from "commander";
-import configAll from "../config/index.js";
+// import configAll from "../config/index.js";
 import Markdown from "../utils/markdown.js";
 
 const cliMarkdown = new Command();
@@ -22,15 +22,15 @@ cliMarkdown
     })
 
 // Command for test
-cliMarkdown
-    .command('test')
-    .option('-t [command]', 'test [command] in mmd.', 'all')
-    .description("A test module for mmd.")
-    .action(args => {
-        console.log("You are testing mmd(MuCli-Markdown) now...")
-        if(args.t === 'all'){
-            cliMarkdown.parse([configAll, 'mmd', '-V'])
-        }
-    });
+// cliMarkdown
+//     .command('test')
+//     .option('-t [command]', 'test [command] in mmd.', 'all')
+//     .description("A test module for mmd.")
+//     .action(args => {
+//         console.log("You are testing mmd(MuCli-Markdown) now...")
+//         if(args.t === 'all'){
+//             cliMarkdown.parse([configAll, 'mmd', '-V'])
+//         }
+//     });
 
 export default cliMarkdown;
