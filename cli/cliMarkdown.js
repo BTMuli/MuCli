@@ -8,7 +8,7 @@ const cliMarkdown = new Command();
 cliMarkdown
     .name('mmd')
     .description('A subsystem with MuCli for markdown.')
-    .version('0.0.1', '-V')
+    .version('0.1.0', '-V')
 
 // Command for create markdown new file
 cliMarkdown
