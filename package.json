@@ -1,6 +1,6 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "个人用的 Node Cli",
   "type": "module",
   "main": "index.js",
@@ -31,11 +31,8 @@
   "homepage": "https://github.com/BTMuli/MuCli#readme",
   "dependencies": {
     "@types/node": "^18.7.21",
-    "chalk": "^5.0.1",
     "commander": "^9.4.0",
-    "figlet": "^1.5.2",
     "inquirer": "^9.1.2",
-    "moment": "^2.29.4",
-    "shelljs": "^0.8.5"
+    "moment": "^2.29.4"
   }
 }

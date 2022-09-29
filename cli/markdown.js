@@ -18,11 +18,4 @@ markdown
         Markdown.createNew(args.n)
     })
 
-// Command for test
-// markdown
-//     .command('test')
-//     .option('-t [command]', 'test [command] in mmd.', 'all')
-//     .description("A test module for mmd.")
-//     .action(Markdown.createNew);
-
 export default markdown;

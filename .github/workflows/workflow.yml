@@ -1,4 +1,4 @@
-name: MuCli Pub on GitHub & NPM
+name: MuCli
 
 on:
   push:
