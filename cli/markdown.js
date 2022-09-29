@@ -1,16 +1,16 @@
 import {Command} from "commander";
 import Markdown from "../utils/markdown.js";
 
-const cliMarkdown = new Command();
+const markdown = new Command();
 
 // Base info
-cliMarkdown
+markdown
     .name('mmd')
     .description('A subsystem with MuCli for markdown.')
     .version('0.1.2', '-v')
 
 // Command for create markdown new file
-cliMarkdown
+markdown
     .command('new')
     .option('-n [name]', 'new md file [name]','README')
     .description('create a markdown file')
@@ -18,11 +18,4 @@ cliMarkdown
         Markdown.createNew(args.n)
     })
 
-// Command for test
-// cliMarkdown
-//     .command('test')
-//     .option('-t [command]', 'test [command] in mmd.', 'all')
-//     .description("A test module for mmd.")
-//     .action(Markdown.createNew);
-
-export default cliMarkdown;
+export default markdown;
