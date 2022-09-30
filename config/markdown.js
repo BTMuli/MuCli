@@ -1,6 +1,4 @@
 import moment from 'moment';
-import fs from "node:fs";
-import * as util from "util";
 
 class MarkDownModel {
     sign = "---"
@@ -21,15 +19,6 @@ class MarkDownModel {
             "Description: " + this.description + "\n" +
             this.sign + "\n" + "\n" +
             this.quote + "\n";
-    }
-
-    async fileExistCheck(name) {
-        try {
-            let stat = await util.promisify(fs.stat)(name);
-            return stat.isFile() === true
-        } catch (err) {
-            return false
-        }
     }
 }
 

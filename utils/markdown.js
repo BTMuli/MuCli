@@ -4,7 +4,7 @@ import MucFile from "./file.js";
 
 class Markdown {
     createNew(name) {
-        var file = new MucFile()
+        var mucFile = new MucFile()
         inquirer.prompt([
             {type: 'input', message: '请输入文件名称', name: 'title', default: name || 'README'},
             {type: 'input', message: '请输入作者', name: 'author', default: '目棃'},
@@ -12,7 +12,7 @@ class Markdown {
         ]).then(async answers=> {
             var mdModel = new MarkDownModel(answers.author, answers.desc)
             var mdPath = answers.title + '.md'
-            if (await mdModel.fileExistCheck(mdPath)===true) {
+            if (await mucFile.fileExistCheck(mdPath)===true) {
                 inquirer.prompt([{
                     type: 'confirm',
                     message: '文件' + mdPath + '已存在,是否覆盖?',
@@ -20,11 +20,11 @@ class Markdown {
                     default: false
                 }]).then(rwc => {
                     if (rwc.rwChoice===true) {
-                        file.create(mdPath, mdModel.getModel())
+                        mucFile.create(mdPath, mdModel.getModel())
                     }
                 })
             } else {
-                file.create(mdPath, mdModel.getModel())
+                mucFile.create(mdPath, mdModel.getModel())
             }
         })
     }
