@@ -2,7 +2,7 @@ import moment from 'moment';
 
 class MarkDownModel {
     sign = "---"
-    quote = "> 本文档由 MuCli 自动生成"
+    quote = "> 本文档由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于 `" + moment(Date.now()).format('YYYY-MM-DD HH:MM:SS') + "`"
 
     // 构造函数，相当于 py 中的  __init__()
     constructor(author, desc) {
@@ -11,7 +11,7 @@ class MarkDownModel {
     }
 
     getModel() {
-        var dateNow = moment(Date.now()).format('YYYY-MM-DD')
+        let dateNow = moment(Date.now()).format('YYYY-MM-DD');
         return this.sign + "\n" +
             "Date: " + dateNow + "\n" +
             "Update: " + dateNow + "\n" +
