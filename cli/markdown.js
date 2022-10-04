@@ -6,10 +6,10 @@ const markdown = new Command();
 // Base info
 markdown
     .name('mmd')
-    .description('A Sub Command within MuCli for Markdown.')
-    .version('0.1.3', '-sv')
+    .description('A Sub SubCommand within MuCli for Markdown.')
+    .version('0.1.5', '-sv')
 
-// Command for create markdown new file
+// SubCommand for create markdown new file
 markdown
     .command('new')
     .option('-n [name]', 'new markdown file [name]','README')
