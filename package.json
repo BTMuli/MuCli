@@ -1,12 +1,9 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "个人用的 Node Cli",
   "type": "module",
   "main": "index.js",
-  "scripts": {
-    "test": "index.js test"
-  },
   "bin": {
     "muc": "./index.js"
   },
