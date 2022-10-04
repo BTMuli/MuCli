@@ -29,6 +29,6 @@
     "@types/node": "^18.7.21",
     "commander": "^9.4.0",
     "inquirer": "^9.1.2",
-    "moment": "^2.29.4"
+    "silly-datetime": "^0.1.2"
   }
 }
