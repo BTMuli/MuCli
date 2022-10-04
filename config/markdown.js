@@ -1,6 +1,6 @@
 import {format} from 'silly-datetime';
 
-class MarkDownModel {
+class MarkdownModel {
     // 默认配置， todo 通过 yml 配置文件读取/全局设置
     sign = "---"
     quote = "> 本文档由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于"
@@ -24,4 +24,4 @@ class MarkDownModel {
     }
 }
 
-export default MarkDownModel
+export default MarkdownModel
