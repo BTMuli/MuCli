@@ -1,0 +1,11 @@
+# 配置文件
+Commands:
+  # Markdown
+  mmd:
+    enable: true
+    name: markdown
+    author: 目棃
+  # SubCommand
+  ncm:
+    enable: true
+    name: subCommand

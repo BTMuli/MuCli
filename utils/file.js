@@ -12,6 +12,17 @@ class MucFile{
         })
     }
 
+    change(path, data){
+        fs.writeFile(path, data, error =>{
+            if (error){
+                console.log("文件修改失败！")
+                console.log(error)
+            } else {
+                console.log("文件修改成功！")
+            }
+        })
+    }
+
     async fileExistCheck(name) {
         try {
             let stat = await util.promisify(fs.stat)(name);
