@@ -13,7 +13,10 @@ MuCli
     .version('0.3.0', '-v, --version')
     .description("A Node Cli for Personal Use by BTMUli.");
 
-// Commands add func
+/**
+ * 检验权限然后添加命令
+ * @param cmd 命令
+ */
 function setCommand(...cmd) {
     var config = new Config()
     cmd.forEach(value => {

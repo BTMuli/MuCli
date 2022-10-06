@@ -7,14 +7,24 @@ class MucYaml{
         this.mucFile = new MucFile()
     }
 
+    /**
+     * 读取 yaml 文件
+     * @param path 文件路径
+     * @return {*}
+     */
     yamlRead(path){
         return YAML.load(path)
     }
 
+    /**
+     * 读取具体配置
+     * @param data yaml 文件内容
+     * @param args 配置位置
+     * @return {*} 配置内容
+     */
     yamlDetailRead(data, args){
         var yamlRead = data
         args.forEach(value => {
-            console.log(value)
             yamlRead = yamlRead[value]
         })
         return yamlRead

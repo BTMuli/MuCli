@@ -3,6 +3,10 @@ import MarkdownModel from "../config/markdown.js";
 import MucFile from "./file.js";
 
 class Markdown {
+    /**
+     * 创建新文件
+     * @param name 文件名称
+     */
     createNew(name) {
         var mucFile = new MucFile()
         inquirer.prompt([
@@ -12,7 +16,7 @@ class Markdown {
         ]).then(async answers => {
             var mdModel = new MarkdownModel(answers.author, answers.desc)
             var mdPath = answers.title + '.md'
-            await mucFile.fileRewriteCheck(mdPath, mdModel.getModel())
+            await mucFile.fileRewriteCheck(mdPath, mdModel.getModel(), inquirer)
         })
     }
 }

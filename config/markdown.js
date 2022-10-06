@@ -11,6 +11,10 @@ class MarkdownModel {
         this.description = desc
     }
 
+    /**
+     * 获取默认写入内容
+     * @return {string}
+     */
     getModel() {
         var dateNow = format(new Date(), 'YYYY-MM-DD');
         return this.sign + "\n" +
