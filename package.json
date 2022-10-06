@@ -1,6 +1,6 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "个人用的 Node Cli",
   "type": "module",
   "main": "index.js",
@@ -26,6 +26,7 @@
     "@types/node": "^18.7.21",
     "commander": "^9.4.0",
     "inquirer": "^9.1.2",
-    "silly-datetime": "^0.1.2"
+    "silly-datetime": "^0.1.2",
+    "yamljs": "^0.3.0"
   }
 }
