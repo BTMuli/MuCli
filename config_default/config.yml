@@ -4,7 +4,10 @@ Commands:
   mmd:
     enable: true
     name: markdown
-    author: 目棃
+    default:
+      author: 目棃
+      filename: 'README'
+      description: '说明文档'
   # SubCommand
   ncm:
     enable: true
