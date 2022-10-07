@@ -6,7 +6,7 @@ const subCommand = new Command();
 // Base info
 subCommand
     .name('ncm')
-    .description('create a sub command')
+    .description('A SubCommand within MuCli for SubCommand')
     .version('0.0.2', '-sv')
 
 // Command for create a new command(for dev)

@@ -2,7 +2,7 @@ import {format} from 'silly-datetime';
 
 class MarkdownModel {
     sign = "---"
-    quote = "> 本文档由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于"
+    quote = "> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于"
 
     // 构造函数，相当于 py 中的  __init__()
     constructor(author, desc) {

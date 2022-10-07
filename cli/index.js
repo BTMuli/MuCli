@@ -1,15 +1,17 @@
 // Default Commander
 import {Command} from "commander";
+// Config file
+import Config from "../config/index.js";
 // Personal SubCommand
 import markdown from "./markdown.js";
 import subCommand from "./SubCommand.js";
-import Config from "../config/index.js";
+import bangumi from "./bangumi.js";
 
 const MuCli = new Command()
 
 // Base info
 MuCli
-    .name('MuCli')
+    .name('muc')
     .version('0.3.0', '-v, --version')
     .description("A Node Cli for Personal Use by BTMUli.");
 
@@ -26,6 +28,6 @@ function setCommand(...cmd) {
 }
 
 // Commands add
-setCommand(markdown, subCommand)
+setCommand(markdown, subCommand, bangumi)
 
 export default MuCli;
