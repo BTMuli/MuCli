@@ -1,6 +1,6 @@
 import MucYaml from "../utils/yaml.js";
 
-class Config{
+class Config {
     constructor() {
         this.configPath = './config_default/config.yml'
         this.mucYaml = new MucYaml()
@@ -10,7 +10,7 @@ class Config{
      * 读取配置文件
      * @return {JSON}
      */
-    readConfig(){
+    readConfig() {
         return this.mucYaml.yamlRead(this.configPath)
     }
 
@@ -19,7 +19,7 @@ class Config{
      * @param args 可变参数，所获取位置
      * @return {*|JSON}
      */
-    readDetailConfig(...args){
+    readDetailConfig(...args) {
         var configRead = this.readConfig()
         configRead = this.mucYaml.yamlDetailRead(configRead, args)
         return configRead
@@ -30,7 +30,7 @@ class Config{
      * @param cmd 命令
      * @return {boolean} 是否开启
      */
-    doConfig(cmd){
+    doConfig(cmd) {
         var cmdConfig = this.readDetailConfig('Commands', cmd.name())
         return cmdConfig['enable'] === true;
     }
@@ -41,7 +41,7 @@ class Config{
      * @param key  修改项
      * @param args 可选参数，位置
      */
-    transConfig(val, key, ...args){
+    transConfig(val, key, ...args) {
         this.mucYaml.yamlChange(this.configPath, args, key, val)
     }
 }

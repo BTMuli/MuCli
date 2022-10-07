@@ -20,7 +20,7 @@ MuCli
 function setCommand(...cmd) {
     var config = new Config()
     cmd.forEach(value => {
-        if(config.doConfig(value))
+        if (config.doConfig(value))
             MuCli.addCommand(value)
     })
 }

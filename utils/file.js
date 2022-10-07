@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import util from "node:util";
 
-class MucFile{
+class MucFile {
     /**
      * 文件创建
      * @param path 文件路径
      * @param data 文件内容
      */
-    create(path, data){
+    create(path, data) {
         fs.writeFile(path, data, error => {
             if (error) {
                 console.log("创建失败" + error)
@@ -22,9 +22,9 @@ class MucFile{
      * @param path 文件路径
      * @param data 文件内容
      */
-    change(path, data){
-        fs.writeFile(path, data, error =>{
-            if (error){
+    change(path, data) {
+        fs.writeFile(path, data, error => {
+            if (error) {
                 console.log("文件修改失败！")
                 console.log(error)
             } else {
