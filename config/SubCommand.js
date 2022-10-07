@@ -1,6 +1,6 @@
 import path from "node:path";
 
-class SubCommandModel{
+class SubCommandModel {
     // 项目根目录
     rootDir = path.resolve() + '\\'
 
@@ -12,12 +12,12 @@ class SubCommandModel{
     }
 
     // 字符串替换
-    transCommand(name){
+    transCommand(name) {
         return name.slice(0, 1).toUpperCase() + name.slice(1).toLowerCase()
     }
 
     // 构造几个文件
-    getFilesPath(){
+    getFilesPath() {
         var fileName = this.name + '.js'
         var cliPath = this.rootDir + 'cli\\' + fileName
         var configPath = this.rootDir + 'config\\' + fileName
@@ -27,7 +27,7 @@ class SubCommandModel{
 
     // 根据类型返回文件内容
     getModel(key) {
-        switch (key){
+        switch (key) {
             case 'cliPath':
                 return this.getCliModel()
             case 'configPath':
@@ -52,7 +52,7 @@ class SubCommandModel{
             "    .name('" + this.command + "')\n" +
             "    .description('" + this.description + "')\n" +
             "    .version('0.0.1', '-sv')\n\n" +
-            "export default "+ this.name +";\n"
+            "export default " + this.name + ";\n"
     }
 
     // Config 目录文件，负责 Model 构建
@@ -67,7 +67,8 @@ class SubCommandModel{
     getUtilsModel() {
         var fileName = this.name + '.js'
         var clsName = this.transCommand(this.name)
-        return "import inquirer from \"inquirer\";\n" +
+        return "//此文件由 MuCli 自动生成\n" +
+            "import inquirer from \"inquirer\";\n" +
             "import " + clsName + "Model from \"../config/" + fileName + "\";\n" +
             "import MucFile from \"./file.js\";\n\n" +
             "class " + clsName + "{\n\n}\n\n" +
