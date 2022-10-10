@@ -1,8 +1,9 @@
 import MucYaml from "../utils/yaml.js";
+import MucConfig from "../config.js";
 
 class Config {
     constructor() {
-        this.configPath = './config_default/config.yml'
+        this.configPath = MucConfig.getPath() + '\\config_default\\config.yml'
         this.mucYaml = new MucYaml()
     }
 

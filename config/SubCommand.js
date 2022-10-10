@@ -1,8 +1,8 @@
-import path from "node:path";
+import MucConfig from "../config.js";
 
 class SubCommandModel {
     // 项目根目录
-    rootDir = path.resolve() + '\\'
+    rootDir = MucConfig.getPath()
 
     // 初始化命令
     constructor(name, command, desc) {
@@ -19,9 +19,9 @@ class SubCommandModel {
     // 构造几个文件
     getFilesPath() {
         var fileName = this.name + '.js'
-        var cliPath = this.rootDir + 'cli\\' + fileName
-        var configPath = this.rootDir + 'config\\' + fileName
-        var utilsPath = this.rootDir + 'utils\\' + fileName
+        var cliPath = this.rootDir + '\\cli\\' + fileName
+        var configPath = this.rootDir + '\\config\\' + fileName
+        var utilsPath = this.rootDir + '\\utils\\' + fileName
         return {cliPath, configPath, utilsPath}
     }
 
