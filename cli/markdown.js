@@ -24,17 +24,18 @@ markdown
     .command('typora')
     // Using Typora
     .option('-n [name]', 'open [name] with Typora', '')
-    .description('open file with Typora - config is needed')
-    .action(args => {
-        let md = new Markdown()
-        md.openTypora(args.n)
-    })
+    .description('open file with Typora')
     // Get Typora Info
     .option('-p, --path','get local typora path')
     .description('get local typora path')
-    .action(() => {
+    .action(args => {
         let md = new Markdown()
-        console.log(md.getConfigTypora().path)
+        if(args.path){
+            console.log(md.getConfigTypora().path)
+        } else if (args.n) {
+            md.openTypora(args.n)
+        }
     })
+    .description('using local Typora - config is needed')
 
 export default markdown;
