@@ -5,7 +5,6 @@ import Config from "../config/index.js";
 // Personal SubCommand
 import markdown from "./markdown.js";
 import subCommand from "./SubCommand.js";
-import bangumi from "./bangumi.js";
 
 const MuCli = new Command()
 
@@ -28,6 +27,6 @@ function setCommand(...cmd) {
 }
 
 // Commands add
-setCommand(markdown, subCommand, bangumi)
+setCommand(markdown, subCommand)
 
 export default MuCli;
