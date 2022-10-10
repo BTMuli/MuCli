@@ -5,9 +5,12 @@ Commands:
     enable: true
     name: markdown
     default:
-      author: 目棃
+      author: '目棃'
       filename: 'README'
       description: '说明文档'
+    typora:
+      enable: true
+      path: 'E:\\SoftWares\\Typora\\Typora.exe'
   # SubCommand
   ncm:
     enable: true
