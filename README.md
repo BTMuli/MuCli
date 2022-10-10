@@ -5,7 +5,7 @@ Author: 目棃
 Description: 说明文档
 ---
 
-> 本文档 [`Front-matter`](https://github.com/BTMuli/MuCli#README#FrontMatter) 由 [`MuCli`](https://github.com/BTMuli/MuCli) 自动生成
+> 本文档 [`Front-matter`](https://github.com/BTMuli/MuCli#FrontMatter) 由 [`MuCli`](https://github.com/BTMuli/MuCli) 自动生成
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/workflow/status/btmuli/MuCli/MuCli%20Workflow?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -47,14 +47,14 @@ Commands:
 
 ```text
 > muc -v
-0.3.0
+0.3.1
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc mmd -sv
-0.2.0
+0.3.0
 > muc ncm -sv
 0.0.2
 ```
@@ -139,7 +139,7 @@ Commands:
 ```markdown
 ---
 Date: 2022-09-29
-Update: 2022-10-07
+Update: 2022-10-10
 Author: 目棃
 Description: 说明文档
 ---
