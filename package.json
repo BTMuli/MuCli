@@ -1,9 +1,13 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "个人用的 Node Cli",
   "type": "module",
   "main": "index.js",
+  "scripts": {
+    "lint-all": "eslint cli/* config/* utils/* config.js index.js",
+    "lintfix": "eslint cli/* config/* utils/* config.js index.js --fix"
+  },
   "bin": {
     "muc": "./index.js"
   },
@@ -27,6 +31,7 @@
     "commander": "^9.4.0",
     "inquirer": "^9.1.2",
     "silly-datetime": "^0.1.2",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "eslint": "^8.25.0"
   }
 }

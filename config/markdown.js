@@ -1,27 +1,30 @@
 import {format} from 'silly-datetime';
 
 class MarkdownModel {
-    // 默认配置， todo 通过 yml 配置文件读取/全局设置
-    sign = "---"
-    quote = "> 本文档由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于"
+	sign = '---';
+	quote = '> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于';
 
-    // 构造函数，相当于 py 中的  __init__()
-    constructor(author, desc) {
-        this.author = author
-        this.description = desc
-    }
+	// 构造函数，相当于 py 中的  __init__()
+	constructor(author, desc) {
+		this.author = author;
+		this.description = desc;
+	}
 
-    getModel() {
-        var dateNow = format(new Date(), 'YYYY-MM-DD');
-        return this.sign + "\n" +
-            "Date: " + dateNow + "\n" +
-            "Update: " + dateNow + "\n" +
-            "Author: " + this.author + "\n" +
-            "Description: " + this.description + "\n" +
-            this.sign + "\n" + "\n" +
-            this.quote + "\n" +
-            "`" + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + "`";
-    }
+	/**
+     * 获取默认写入内容
+     * @return {string}
+     */
+	getModel() {
+		var dateNow = format(new Date(), 'YYYY-MM-DD');
+		return this.sign + '\n' +
+            'Date: ' + dateNow + '\n' +
+            'Update: ' + dateNow + '\n' +
+            'Author: ' + this.author + '\n' +
+            'Description: ' + this.description + '\n' +
+            this.sign + '\n' + '\n' +
+            this.quote + '\n' +
+            '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`';
+	}
 }
 
-export default MarkdownModel
+export default MarkdownModel;

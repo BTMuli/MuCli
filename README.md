@@ -1,13 +1,13 @@
 ---
 Date: 2022-09-29
-Update: 2022-09-30
+Update: 2022-10-10
 Author: 目棃
 Description: 说明文档
 ---
 
-> 本文档由 MuCli 自动生成
+> 本文档 [`Front-matter`](https://github.com/BTMuli/MuCli#README#FrontMatter) 由 [`MuCli`](https://github.com/BTMuli/MuCli) 自动生成
 
-![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/workflow/status/btmuli/MuCli/MuCli%20Workflow/master?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli/master?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli/master?style=for-the-badge)
+![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/workflow/status/btmuli/MuCli/MuCli%20Workflow?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
 ## 前言
 
@@ -15,11 +15,161 @@ Description: 说明文档
 
 > 若你写的 Workflow 发布到不同平台，则需保证`package.json`没有 `publishConfig` 之类的配置，其会覆盖你在 `workflow.yml`中写的路径。
 
+---
+
+## 命令说明
+
+本 CLI 采用加载子命令的形式运行，可以通过修改 [`config.yml`](./config_default/config.yml) 对应 command 的 `enable` 属性来选择是否加载。
+
+主 CLI 采用的是 `muc` 命令，其运行如下：
+
+```text
+> muc -h
+Usage: muc [options] [command]
+
+A Node Cli for Personal Use by BTMUli.
+
+Options:
+  -v, --version   output the version number
+  -h, --help      display help for command
+
+Commands:
+  mmd [options]   A SubCommand within MuCli for Markdown
+  ncm [options]   A SubCommand within MuCli for SubCommand
+  help [command]  display help for command
+```
+
+如上，除了 Commander 默认的 `help` 之外，目前有两个子命令，`mmd` 跟 `ncm`。
+
+### 查看版本
+
+主 CLI 采用 `-v` 或 `--version` 查看版本，如下：
+
+```text
+> muc -v
+0.3.0
+```
+
+子命令则通过 `-sv` 即 `subversion` 来查看，如下:
+
+```text
+> muc mmd -sv
+0.2.0
+> muc ncm -sv
+0.0.2
+```
+
+### SubCli-Markdown
+
+对应的是上面的 `mmd` 命令：
+
+```text
+> muc mmd -h
+Usage: muc mmd [options] [command]
+
+A SubCommand within MuCli for Markdown
+
+Options:
+  -sv               output the version number
+  -h, --help        display help for command
+
+Commands:
+  new [options]     create a markdown file
+  typora [options]  using local Typora - config is needed
+  help [command]    display help for command
+```
+
+目前的功能有两个：新建 Markdown 文件与调用 [`Typora`](https://typoraio.cn/) 打开文件。
+
+```text
+> muc mmd typora -h
+Usage: muc mmd typora [options]
+
+using local Typora - config is needed
+
+Options:
+  -n [name]   open [name] with Typora (default: "")
+  -p, --path  get local typora path
+  -h, --help  display help for command
+```
+
+默认内容如下（以 `muc mmd new -n README` 为例）
+
+```markdown
+---
+Date: 2022-10-07
+Update: 2022-10-07
+Author: 目棃
+Description: 说明文档
+---
+
+> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于
+`2022-10-07 15:34:07`
+```
+
+### SubCli-SubCommand
+
+对应的是上面的 `ncm` 命令：
+
+```text
+> muc ncm -h
+Usage: muc ncm [options] [command]
+
+A SubCommand within MuCli for SubCommand
+
+Options:
+  -sv             output the version number
+  -h, --help      display help for command
+
+Commands:
+  new [options]
+  help [command]  display help for command
+```
+
+用于个人新建一个子命令，即 `Just for dev`。
+
+---
+
+## FrontMatter
+
+`Frontmatter` 即前言，用来说明书目的总结跟内容。
+
+但是在 Markdown 中， Front-matter 指的是 `.md` 文件最开始的那部分，如本文，其 `Frontmatter` 为:
+
+```markdown
+---
+Date: 2022-09-29
+Update: 2022-10-07
+Author: 目棃
+Description: 说明文档
+---
+```
+
+是以 `yaml` 格式在文件开头增加的元数据。
+
+---
+
 ## 提交规范
 
 本项目 Commit 采用 [Angular 团队提交规范](https://zjdoc-gitguide.readthedocs.io/zh_CN/latest/message/angular-commit.html)。
 
 通过 Webstorm 上的插件 [Git Commit Template](https://plugins.jetbrains.com/plugin/9861-git-commit-template) 予以辅助。
+
+其提交格式如下：
+
+```text
+<type>(<scope>): <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
+```
+
+每次提交可以包含页眉 `header` 、正文 `body` 和页脚 `footer` ，每次提交必须包含页眉内容
+
+每次提交的信息不超过100个字符
+
+---
 
 ## LICENSE
 
