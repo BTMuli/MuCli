@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-10-07
+Update: 2022-10-10
 Author: 目棃
 Description: 说明文档
 ---
@@ -24,7 +24,7 @@ Description: 说明文档
 主 CLI 采用的是 `muc` 命令，其运行如下：
 
 ```text
-> muc
+> muc -h
 Usage: muc [options] [command]
 
 A Node Cli for Personal Use by BTMUli.
@@ -64,21 +64,34 @@ Commands:
 对应的是上面的 `mmd` 命令：
 
 ```text
-> muc mmd
+> muc mmd -h
 Usage: muc mmd [options] [command]
 
 A SubCommand within MuCli for Markdown
 
 Options:
-  -sv             output the version number
-  -h, --help      display help for command
+  -sv               output the version number
+  -h, --help        display help for command
 
 Commands:
-  new [options]   create a markdown file
-  help [command]  display help for command
+  new [options]     create a markdown file
+  typora [options]  using local Typora - config is needed
+  help [command]    display help for command
 ```
 
-目前仅有 `muc mmd new -n [mdFileName]` 的创建新 Markdown 文件并配置其 Front-matter 的功能。
+目前的功能有两个：新建 Markdown 文件与调用 [`Typora`](https://typoraio.cn/) 打开文件。
+
+```text
+> muc mmd typora -h
+Usage: muc mmd typora [options]
+
+using local Typora - config is needed
+
+Options:
+  -n [name]   open [name] with Typora (default: "")
+  -p, --path  get local typora path
+  -h, --help  display help for command
+```
 
 默认内容如下（以 `muc mmd new -n README` 为例）
 
@@ -94,12 +107,12 @@ Description: 说明文档
 `2022-10-07 15:34:07`
 ```
 
-### Cli-SubCommand
+### SubCli-SubCommand
 
 对应的是上面的 `ncm` 命令：
 
 ```text
-> muc ncm
+> muc ncm -h
 Usage: muc ncm [options] [command]
 
 A SubCommand within MuCli for SubCommand
