@@ -1,4 +1,4 @@
-import {Command} from 'commander';
+import { Command } from 'commander';
 import Markdown from '../utils/markdown.js';
 
 const markdown = new Command();
@@ -22,15 +22,15 @@ markdown
 // SubCommand for open file with Typora - config is needed
 markdown
 	.command('typora')
-// Using Typora
+	// Using Typora
 	.option('-n [name]', 'open [name] with Typora', '')
 	.description('open file with Typora')
-// Get Typora Info
-	.option('-p, --path','get local typora path')
+	// Get Typora Info
+	.option('-p, --path', 'get local typora path')
 	.description('get local typora path')
 	.action(args => {
 		let md = new Markdown();
-		if(args.path){
+		if (args.path) {
 			console.log(md.getConfigTypora().path);
 		} else if (args.n) {
 			md.openTypora(args.n);

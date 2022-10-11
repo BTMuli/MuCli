@@ -22,20 +22,20 @@ class SubCommandModel {
 		var cliPath = this.rootDir + '\\cli\\' + fileName;
 		var configPath = this.rootDir + '\\config\\' + fileName;
 		var utilsPath = this.rootDir + '\\utils\\' + fileName;
-		return {cliPath, configPath, utilsPath};
+		return { cliPath, configPath, utilsPath };
 	}
 
 	// 根据类型返回文件内容
 	getModel(key) {
 		switch (key) {
-		case 'cliPath':
-			return this.getCliModel();
-		case 'configPath':
-			return this.getConfigModel();
-		case 'utilsPath':
-			return this.getUtilsModel();
-		default:
-			return false;
+			case 'cliPath':
+				return this.getCliModel();
+			case 'configPath':
+				return this.getConfigModel();
+			case 'utilsPath':
+				return this.getUtilsModel();
+			default:
+				return false;
 		}
 	}
 
@@ -43,7 +43,9 @@ class SubCommandModel {
 	getCliModel() {
 		var fileName = this.name + '.js';
 		var clsName = this.transCommand(this.name);
-		return '//此文件由 MuCli 自动生成\n' +
+		/* eslint-disable */
+		return (
+			'//此文件由 MuCli 自动生成\n' +
             'import {Command} from "commander";\n' +
             'import ' + clsName + ' from "../utils/' + fileName + '";\n\n' +
             'const ' + this.name + '= new Command();\n\n' +
@@ -52,27 +54,37 @@ class SubCommandModel {
             '    .name(\'' + this.command + '\')\n' +
             '    .description(\'' + this.description + '\')\n' +
             '    .version(\'0.0.1\', \'-sv\')\n\n' +
-            'export default ' + this.name + ';\n';
+            'export default ' + this.name + ';\n'
+		);
+		/* eslint-disable */
 	}
 
 	// Config 目录文件，负责 Model 构建
 	getConfigModel() {
 		var clsName = this.transCommand(this.name);
-		return '//此文件由 MuCli 自动生成\n' +
+		/* eslint-disable */
+		return (
+			'//此文件由 MuCli 自动生成\n' +
             'class ' + clsName + 'Model {\n\n}\n\n' +
-            'export default ' + clsName + 'Model;';
+            'export default ' + clsName + 'Model;'
+		);
+		/* eslint-disable */
 	}
 
 	// Utils 目录文件，负责交互
 	getUtilsModel() {
 		var fileName = this.name + '.js';
 		var clsName = this.transCommand(this.name);
-		return '//此文件由 MuCli 自动生成\n' +
+		/* eslint-disable */
+		return (
+			'//此文件由 MuCli 自动生成\n' +
             'import inquirer from "inquirer";\n' +
             'import ' + clsName + 'Model from "../config/' + fileName + '";\n' +
             'import MucFile from "./file.js";\n\n' +
             'class ' + clsName + '{\n\n}\n\n' +
-            'export default ' + clsName + ';';
+            'export default ' + clsName + ';'
+		);
+		/* eslint-disable */
 	}
 }
 

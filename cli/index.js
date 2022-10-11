@@ -1,5 +1,5 @@
 // Default Commander
-import {Command} from 'commander';
+import { Command } from 'commander';
 // Config file
 import Config from '../config/index.js';
 // Personal SubCommand
@@ -9,8 +9,7 @@ import subCommand from './SubCommand.js';
 const MuCli = new Command();
 
 // Base info
-MuCli
-	.name('muc')
+MuCli.name('muc')
 	.version('0.3.1', '-v, --version')
 	.description('A Node Cli for Personal Use by BTMUli.');
 
@@ -21,8 +20,9 @@ MuCli
 function setCommand(...cmd) {
 	var config = new Config();
 	cmd.forEach(value => {
-		if (config.doConfig(value))
+		if (config.doConfig(value)) {
 			MuCli.addCommand(value);
+		}
 	});
 }
 

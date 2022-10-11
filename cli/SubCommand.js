@@ -1,4 +1,4 @@
-import {Command} from 'commander';
+import { Command } from 'commander';
 import SubCommand from '../utils/SubCommand.js';
 
 const subCommand = new Command();

@@ -1,0 +1,21 @@
+# Node JS lib
+node_modules
+
+# Config yaml dir
+config_default
+
+# Test dir
+test
+
+# Eslint config
+.eslintrc.json
+
+# Node config
+package.json
+package-lock.json
+
+# README
+README.md
+
+# LiCENSE
+LICENSE
