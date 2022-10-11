@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-10-10
+Update: 2022-10-11
 Author: 目棃
 Description: 说明文档
 ---
@@ -146,6 +146,50 @@ Description: 说明文档
 ```
 
 是以 `yaml` 格式在文件开头增加的元数据。
+
+---
+
+## 代码格式化
+
+本项目通过 [`Eslint`](http://eslint.cn/) 结合 [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) 进行代码格式化。
+
+相关安装包如下：
+
+```yaml
+"eslint": "^8.25.0",
+"eslint-config-prettier": "^8.5.0",
+"eslint-plugin-prettier": "^4.2.1",
+"prettier": "^2.7.1"
+```
+
+相关配置文件如下：
+
+> 参考：[prettier/eslint-plugin-prettier: ESLint plugin for Prettier formatting (github.com)](https://github.com/prettier/eslint-plugin-prettier)
+
++ [`.eslintignore`](.eslintignore)：Eslint 忽略文件，类似于 [`.gitignore`](.gitignore)
++ [`.eslintrc.json`](.eslintrc.json)：Eslint 主配置文件
++ [`.prettierrc.json`](.prettierrc.json)：Prettier 主配置文件
+
+配置完后可以通过如下命令执行：
+
++ `npm run lint-all`：执行 Eslint，进行代码检查
++ `npm run lint-fix`：执行 Eslint ，对一些不符合条件的代码进行格式化
+
+若有代码需要忽略，可以采用如下方式：
+
+```js
+/* 忽略某段代码 */
+/* eslint-disable */
+// [code block]
+/* eslint-disable */
+
+/* 忽略某行代码 */
+// [code line] // eslint-disable-line
+
+/* 忽略下一行代码 */
+// eslint-disable-next-line
+// [code line]
+```
 
 ---
 
