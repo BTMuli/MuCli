@@ -1,4 +1,5 @@
-import path from 'path';
+// Node JS
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 class MucConfig {

@@ -1,10 +1,10 @@
-// Default Commander
+// Node JS
 import { Command } from 'commander';
-// Config file
+// MuCli JS
 import Config from '../config/index.js';
-// Personal SubCommand
 import markdown from './markdown.js';
 import subCommand from './SubCommand.js';
+import bilibili from './bilibili.js';
 
 const MuCli = new Command();
 
@@ -27,6 +27,6 @@ function setCommand(...cmd) {
 }
 
 // Commands add
-setCommand(markdown, subCommand);
+setCommand(markdown, subCommand, bilibili);
 
 export default MuCli;

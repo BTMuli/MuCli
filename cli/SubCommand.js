@@ -1,4 +1,6 @@
+// Node JS
 import { Command } from 'commander';
+// MuCli JS
 import SubCommand from '../utils/SubCommand.js';
 
 const subCommand = new Command();

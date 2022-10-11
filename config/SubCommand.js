@@ -1,3 +1,4 @@
+// MuCli JS
 import MucConfig from '../config.js';
 
 class SubCommandModel {
@@ -45,8 +46,9 @@ class SubCommandModel {
 		var clsName = this.transCommand(this.name);
 		/* eslint-disable */
 		return (
-			'//此文件由 MuCli 自动生成\n' +
+			'// Node JS\n' +
             'import {Command} from "commander";\n' +
+			'// MuCli JS\n' +
             'import ' + clsName + ' from "../utils/' + fileName + '";\n\n' +
             'const ' + this.name + '= new Command();\n\n' +
             '// Base info\n' +
@@ -64,7 +66,6 @@ class SubCommandModel {
 		var clsName = this.transCommand(this.name);
 		/* eslint-disable */
 		return (
-			'//此文件由 MuCli 自动生成\n' +
             'class ' + clsName + 'Model {\n\n}\n\n' +
             'export default ' + clsName + 'Model;'
 		);
@@ -77,8 +78,9 @@ class SubCommandModel {
 		var clsName = this.transCommand(this.name);
 		/* eslint-disable */
 		return (
-			'//此文件由 MuCli 自动生成\n' +
+			'//Node JS\n' +
             'import inquirer from "inquirer";\n' +
+			'// MuCli JS\n' +
             'import ' + clsName + 'Model from "../config/' + fileName + '";\n' +
             'import MucFile from "./file.js";\n\n' +
             'class ' + clsName + '{\n\n}\n\n' +

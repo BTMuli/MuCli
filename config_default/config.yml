@@ -15,3 +15,9 @@ Commands:
   ncm:
     enable: true
     name: subCommand
+  # Bilibili Spider
+  bili:
+    enable: true
+    name: bilibili
+    APIs:
+      upInfo: 'https://api.bilibili.com/x/space/acc/info?mid={}'
