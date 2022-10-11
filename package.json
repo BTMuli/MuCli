@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "lint-all": "eslint **",
-    "lintfix": "eslint ** --fix"
+    "lint-fix": "eslint ** --fix"
   },
   "bin": {
     "muc": "./index.js"
@@ -27,14 +27,16 @@
   },
   "homepage": "https://github.com/BTMuli/MuCli#readme",
   "dependencies": {
-    "@types/node": "^18.7.21",
     "commander": "^9.4.0",
+    "inquirer": "^9.1.2",
+    "silly-datetime": "^0.1.2",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.21",
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "inquirer": "^9.1.2",
-    "prettier": "^2.7.1",
-    "silly-datetime": "^0.1.2",
-    "yamljs": "^0.3.0"
+    "prettier": "^2.7.1"
   }
 }
