@@ -7,13 +7,12 @@ import MarkdownModel from '../config/markdown.js';
 import MucFile from './file.js';
 import Config from '../config/index.js';
 
-var markdownConfig = new Config().readDetailConfig('Commands', 'mmd');
-
 class Markdown {
 	/**
 	 * 初始化构建各种设置
 	 */
 	constructor() {
+		var markdownConfig = new Config().readDetailConfig('Commands', 'mmd');
 		this.configAll = markdownConfig;
 		this.authorDefault = markdownConfig.default.author;
 		this.fileDefault = markdownConfig.default.filename;
@@ -22,13 +21,6 @@ class Markdown {
 		if (this.typora.enable) {
 			this.typoraPath = this.typora.path;
 		}
-	}
-
-	/*
-	 * 获取各种配置
-	 */
-	getConfigAll() {
-		return this.configAll;
 	}
 
 	getConfigTypora() {
