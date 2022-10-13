@@ -19,5 +19,9 @@ Commands:
   bili:
     enable: true
     name: bilibili
-    APIs:
+    api:
       upInfo: 'https://api.bilibili.com/x/space/acc/info?mid={}'
+    # Dev model
+    dev:
+      enable: true
+      userInfoPath: './test/upInfo_33009606.json'

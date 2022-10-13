@@ -19,6 +19,25 @@ class MucFile {
 	}
 
 	/**
+	 * 读取文件内容
+	 * @param path 文件相对路径
+	 * @param type 文件类型
+	 * @param encode 文件编码
+	 * @return {string} 文件解析内容
+	 */
+	read(path, type = 'json', encode = 'utf-8') {
+		var data = fs.readFileSync(path, encode);
+		var res;
+		switch (type) {
+			case 'json':
+				res = JSON.parse(data);
+				break;
+			default:
+				res = data;
+		}
+		return res;
+	}
+	/**
 	 * 文件修改
 	 * @param path 文件路径
 	 * @param data 文件内容
