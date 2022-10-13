@@ -20,7 +20,21 @@ Commands:
     enable: true
     name: bilibili
     api:
-      upInfo: 'https://api.bilibili.com/x/space/acc/info?mid={}'
+      user:
+        # 基本信息
+        info:
+          auth: false
+          url: 'https://api.bilibili.com/x/space/acc/info?mid={}'
+        # 粉丝 关注
+        relation:
+          auth: false
+          url: 'https://api.bilibili.com/x/relation/stat?vmid={}'
+        # 播放数 浏览数 authed
+        upstat:
+          auth: true
+          url: 'https://api.bilibili.com/x/space/upstat?mid={}'
+      video:
+
     # Dev model
     dev:
       enable: true

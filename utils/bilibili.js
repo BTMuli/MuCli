@@ -58,9 +58,9 @@ class Bilibili {
 					default: args === undefined ? undefined : args[type],
 				},
 			])
-			.then(answer => {
+			.then(async answer => {
 				var biliModel = new BilibiliModel();
-				biliModel.getUserInfo(answer);
+				await biliModel.getUserInfo(answer);
 				biliModel.output();
 			});
 	}

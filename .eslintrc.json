@@ -10,8 +10,14 @@
     },
     "extends": [
         "eslint:recommended",
+        "plugin:json/recommended",
         "plugin:prettier/recommended"
     ],
     "plugins": ["prettier"],
-    "rules": {"prettier/prettier": "error"}
+    "rules": {
+        "prettier/prettier": "error",
+        "json/*": ["warn"],
+        "json/duplicate-key": "error",
+        "json/trailing-comma": "error"
+    }
 }

@@ -9,27 +9,23 @@ class BilibiliModel {
 		this.bilibili = new BilibiliSpider();
 	}
 
-	getUserInfo(answer) {
-		console.log('BilibiliModel.getUserInfo');
-		console.log(answer);
-		this.resData = this.bilibili.getUserInfo(
+	async getUserInfo(answer) {
+		this.res = await this.bilibili.getUserInfo(
 			answer.infoType,
 			answer.infoData
 		);
 	}
 
-	getVideoInfo(answer) {
-		console.log('BilibiliModel.getVideoInfo');
-		console.log(answer);
-		this.resData = this.bilibili.getVideoInfo(
+	async getVideoInfo(answer) {
+		this.res = await this.bilibili.getVideoInfo(
 			answer.infoType,
 			answer.infoData
 		);
 	}
 
 	output() {
-		if (this.resData !== undefined) {
-			console.log(JSON.stringify(this.resData));
+		if (this.res !== undefined) {
+			console.log(this.res);
 		}
 	}
 }
