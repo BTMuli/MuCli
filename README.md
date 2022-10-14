@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-10-13
+Update: 2022-10-14
 Author: 目棃
 Description: 说明文档
 ---
@@ -27,7 +27,7 @@ Description: 说明文档
 > muc -h
 Usage: muc [options] [command]
 
-A Node Cli for Personal Use by BTMUli.
+A Node Cli for Personal Use by BTMUli.     
 
 Options:
   -v, --version   output the version number
@@ -36,10 +36,15 @@ Options:
 Commands:
   mmd [options]   A SubCommand within MuCli for Markdown
   ncm [options]   A SubCommand within MuCli for SubCommand
+  bili [options]  A SubCommand within MuCli for Bilibili
   help [command]  display help for command
 ```
 
-如上，除了 Commander 默认的 `help` 之外，目前有两个子命令，`mmd` 跟 `ncm`。
+如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
+
++ `mmd`：用于 Markdown 相关操作
++ `ncm`：用于创建子命令 `Just for dev`
++ `bili`：用于爬取 Bilibili 数据
 
 ### 查看版本
 
@@ -57,6 +62,8 @@ Commands:
 0.3.0
 > muc ncm -sv
 0.0.2
+> muc bili -sv
+0.0.1
 ```
 
 ### SubCli-Markdown
@@ -130,6 +137,31 @@ Commands:
 
 ---
 
+## SubCli-Bilibili
+
+对应的是上面的 `bili` 命令。
+
+```text
+> muc bili -sv
+Usage: muc bili [options] [command]
+
+A SubCommand within MuCli for Bilibili
+
+Options:
+  -sv              output the version number
+  -h, --help       display help for command
+
+Commands:
+  get [options]    get info in Bilibili
+  get-u [options]  get user info in Bilibili
+  get-v [options]  get video info in Bilibili
+  help [command]   display help for command
+```
+
+主要还是信息爬取，目前仍在不断完善当中。
+
+---
+
 ## FrontMatter
 
 `Frontmatter` 即前言，用来说明书目的总结跟内容。
@@ -158,6 +190,7 @@ Description: 说明文档
 ```yaml
 "eslint": "^8.25.0",
 "eslint-config-prettier": "^8.5.0",
+"eslint-plugin-json": "^3.1.0",
 "eslint-plugin-prettier": "^4.2.1",
 "prettier": "^2.7.1"
 ```
