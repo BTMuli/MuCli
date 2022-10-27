@@ -1,9 +1,7 @@
-name: MuCli Workflow
+name: MuCli Package Pub
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   build:
