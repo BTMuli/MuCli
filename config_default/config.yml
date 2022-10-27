@@ -17,7 +17,7 @@ Commands:
     name: subCommand
   # Bilibili Spider
   bili:
-    enable: true
+    enable: false
     name: bilibili
     api:
       enable: true
