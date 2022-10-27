@@ -1,6 +1,7 @@
 // Node JS
 import fs from 'node:fs';
 import util from 'node:util';
+import path from 'node:path';
 
 class MucFile {
 	/**
@@ -8,14 +9,38 @@ class MucFile {
 	 * @param path 文件路径
 	 * @param data 文件内容
 	 */
-	create(path, data) {
-		fs.writeFile(path, data, error => {
-			if (error) {
-				console.log('创建失败' + error);
-			} else {
-				console.info('\n文件创建成功！\n' + data);
+	createFile(path, data) {
+		try {
+			var fileName = path.split('/').pop();
+			var dirLen = path.length - fileName.length;
+			var filePath = path.substring(0, dirLen);
+			this.createDir(filePath);
+			fs.writeFile(path, data, error => {
+				if (error) {
+					console.log('创建失败\n' + error);
+				} else {
+					console.info('\n文件创建成功！\n' + data);
+				}
+			});
+		} catch (e) {
+			console.log('创建失败\n', e);
+		}
+	}
+
+	/**
+	 * 目录创建
+	 * @param dirPath 目录路径
+	 * @return {boolean}
+	 */
+	createDir(dirPath) {
+		if (fs.existsSync(dirPath)) {
+			return true;
+		} else {
+			if (this.createDir(path.dirname(dirPath))) {
+				fs.mkdirSync(dirPath);
+				return true;
 			}
-		});
+		}
 	}
 
 	/**
@@ -85,11 +110,11 @@ class MucFile {
 				},
 			]).then(rc => {
 				if (rc.choice === true) {
-					this.create(path, data);
+					this.createFile(path, data);
 				}
 			});
 		} else {
-			this.create(path, data);
+			this.createFile(path, data);
 		}
 	}
 }
