@@ -1,11 +1,11 @@
 ---
 Date: 2022-09-29
-Update: 2022-10-10
+Update: 2022-10-14
 Author: 目棃
 Description: 说明文档
 ---
 
-> 本文档 [`Front-matter`](https://github.com/BTMuli/MuCli#README#FrontMatter) 由 [`MuCli`](https://github.com/BTMuli/MuCli) 自动生成
+> 本文档 [`Front-matter`](https://github.com/BTMuli/MuCli#FrontMatter) 由 [`MuCli`](https://github.com/BTMuli/MuCli) 自动生成
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/workflow/status/btmuli/MuCli/MuCli%20Workflow?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -27,7 +27,7 @@ Description: 说明文档
 > muc -h
 Usage: muc [options] [command]
 
-A Node Cli for Personal Use by BTMUli.
+A Node Cli for Personal Use by BTMUli.     
 
 Options:
   -v, --version   output the version number
@@ -36,10 +36,15 @@ Options:
 Commands:
   mmd [options]   A SubCommand within MuCli for Markdown
   ncm [options]   A SubCommand within MuCli for SubCommand
+  bili [options]  A SubCommand within MuCli for Bilibili
   help [command]  display help for command
 ```
 
-如上，除了 Commander 默认的 `help` 之外，目前有两个子命令，`mmd` 跟 `ncm`。
+如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
+
++ `mmd`：用于 Markdown 相关操作
++ `ncm`：用于创建子命令 `Just for dev`
++ `bili`：用于爬取 Bilibili 数据
 
 ### 查看版本
 
@@ -47,16 +52,18 @@ Commands:
 
 ```text
 > muc -v
-0.3.0
+0.3.1
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc mmd -sv
-0.2.0
+0.3.0
 > muc ncm -sv
 0.0.2
+> muc bili -sv
+0.0.1
 ```
 
 ### SubCli-Markdown
@@ -130,6 +137,31 @@ Commands:
 
 ---
 
+## SubCli-Bilibili
+
+对应的是上面的 `bili` 命令。
+
+```text
+> muc bili -sv
+Usage: muc bili [options] [command]
+
+A SubCommand within MuCli for Bilibili
+
+Options:
+  -sv              output the version number
+  -h, --help       display help for command
+
+Commands:
+  get [options]    get info in Bilibili
+  get-u [options]  get user info in Bilibili
+  get-v [options]  get video info in Bilibili
+  help [command]   display help for command
+```
+
+主要还是信息爬取，目前仍在不断完善当中。
+
+---
+
 ## FrontMatter
 
 `Frontmatter` 即前言，用来说明书目的总结跟内容。
@@ -139,13 +171,58 @@ Commands:
 ```markdown
 ---
 Date: 2022-09-29
-Update: 2022-10-07
+Update: 2022-10-10
 Author: 目棃
 Description: 说明文档
 ---
 ```
 
 是以 `yaml` 格式在文件开头增加的元数据。
+
+---
+
+## 代码格式化
+
+本项目通过 [`Eslint`](http://eslint.cn/) 结合 [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) 进行代码格式化。
+
+相关安装包如下：
+
+```yaml
+"eslint": "^8.25.0",
+"eslint-config-prettier": "^8.5.0",
+"eslint-plugin-json": "^3.1.0",
+"eslint-plugin-prettier": "^4.2.1",
+"prettier": "^2.7.1"
+```
+
+相关配置文件如下：
+
+> 参考：[prettier/eslint-plugin-prettier: ESLint plugin for Prettier formatting (github.com)](https://github.com/prettier/eslint-plugin-prettier)
+
++ [`.eslintignore`](.eslintignore)：Eslint 忽略文件，类似于 [`.gitignore`](.gitignore)
++ [`.eslintrc.json`](.eslintrc.json)：Eslint 主配置文件
++ [`.prettierrc.json`](.prettierrc.json)：Prettier 主配置文件
+
+配置完后可以通过如下命令执行：
+
++ `npm run lint-all`：执行 Eslint，进行代码检查
++ `npm run lint-fix`：执行 Eslint ，对一些不符合条件的代码进行格式化
+
+若有代码需要忽略，可以采用如下方式：
+
+```js
+/* 忽略某段代码 */
+/* eslint-disable */
+// [code block]
+/* eslint-disable */
+
+/* 忽略某行代码 */
+// [code line] // eslint-disable-line
+
+/* 忽略下一行代码 */
+// eslint-disable-next-line
+// [code line]
+```
 
 ---
 
@@ -167,7 +244,7 @@ Description: 说明文档
 
 每次提交可以包含页眉 `header` 、正文 `body` 和页脚 `footer` ，每次提交必须包含页眉内容
 
-每次提交的信息不超过100个字符
+每次提交的信息不超过100个字符。
 
 ---
 

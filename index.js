@@ -1,3 +1,4 @@
+// MuCli JS
 import MuCli from './cli/index.js';
 
 const cmd = process.argv;

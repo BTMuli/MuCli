@@ -8,23 +8,16 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:json/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "plugins": ["prettier"],
     "rules": {
-        "indent": [
-            "error",
-            "tab"
-        ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ]
+        "prettier/prettier": "error",
+        "json/*": ["warn"],
+        "json/duplicate-key": "error",
+        "json/trailing-comma": "error"
     }
 }

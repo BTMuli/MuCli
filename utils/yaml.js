@@ -1,10 +1,17 @@
+// Node JS
 import YAML from 'yamljs';
+// MuCli JS
 import MucFile from './file.js';
 import MucConfig from '../config.js';
 
 class MucYaml {
-	constructor() {
-		this.configPath = MucConfig.getPath() + '\\config_default\\config.yml';
+	constructor(path = undefined) {
+		if (path === undefined) {
+			this.configPath =
+				MucConfig.getPath() + '\\config_default\\config.yml';
+		} else {
+			this.configPath = MucConfig.getPath() + path;
+		}
 		this.mucFile = new MucFile();
 	}
 

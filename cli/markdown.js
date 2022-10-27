@@ -1,4 +1,6 @@
-import {Command} from 'commander';
+// Node JS
+import { Command } from 'commander';
+// MuCli JS
 import Markdown from '../utils/markdown.js';
 
 const markdown = new Command();
@@ -7,7 +9,7 @@ const markdown = new Command();
 markdown
 	.name('mmd')
 	.description('A SubCommand within MuCli for Markdown')
-	.version('0.3.0', '-sv');
+	.version('0.3.1', '-sv');
 
 // SubCommand for create markdown new file
 markdown
@@ -22,15 +24,15 @@ markdown
 // SubCommand for open file with Typora - config is needed
 markdown
 	.command('typora')
-// Using Typora
+	// Using Typora
 	.option('-n [name]', 'open [name] with Typora', '')
 	.description('open file with Typora')
-// Get Typora Info
-	.option('-p, --path','get local typora path')
+	// Get Typora Info
+	.option('-p, --path', 'get local typora path')
 	.description('get local typora path')
 	.action(args => {
 		let md = new Markdown();
-		if(args.path){
+		if (args.path) {
 			console.log(md.getConfigTypora().path);
 		} else if (args.n) {
 			md.openTypora(args.n);
