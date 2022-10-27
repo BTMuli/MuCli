@@ -20,22 +20,9 @@ Commands:
     enable: true
     name: bilibili
     api:
-      user:
-        # 基本信息
-        info:
-          auth: false
-          url: 'https://api.bilibili.com/x/space/acc/info?mid={}'
-        # 粉丝 关注
-        relation:
-          auth: false
-          url: 'https://api.bilibili.com/x/relation/stat?vmid={}'
-        # 播放数 浏览数 authed
-        upstat:
-          auth: true
-          url: 'https://api.bilibili.com/x/space/upstat?mid={}'
-      video:
-
+      enable: true
+      path: '\config_default\bili_api.yml'
     # Dev model
     dev:
-      enable: true
+      enable: false
       userInfoPath: './test/upInfo_33009606.json'

@@ -1,0 +1,63 @@
+# todo https://github.com/Vespa314/bilibili-api
+# 用户相关
+user:
+  # 基本信息
+  info:
+    args: ['uid']
+    url: 'https://api.bilibili.com/x/space/acc/info?mid={}'
+  # 查询
+  search:
+    args: ['uname']
+    url: 'https://api.bilibili.com/x/web-interface/search/type?search_type=bili_user&keyword={}'
+  # 粉丝 关注
+  relation:
+    args: ['uid']
+    url: 'https://api.bilibili.com/x/relation/stat?vmid={}'
+  # 公告
+  notice:
+    args: ['uid']
+    url: 'https://api.bilibili.com/x/space/notice?mid={}'
+  # 粉丝 pn<=5 ps=50
+  followers:
+    args: ['uid','page_no','page_sum']
+    url: 'https://api.bilibili.com/x/relation/followers?vmid={}&pn={}&ps={}'
+  # 视频投稿
+  submitVideo:
+    args: ['uid','page_no','page_sum']
+    url: 'https://api.bilibili.com/x/space/arc/search?mid={}&pn={}&ps={}'
+  # 空间信息
+  space:
+    args: ['uid','page_no','page_sum']
+    url: 'https://api.bilibili.com/x/space/arc/search?mid={}&pn={}&ps={}'
+  # 动态
+  dynamic:
+    args: ['uid']
+    url: 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid={}'
+# 视频相关
+video:
+  # 视图
+  view:
+    args: ['bv']
+    url: 'https://api.bilibili.com/x/web-interface/view?bvid={}'
+# 直播相关
+live:
+  # 信息
+  info:
+    args: ['room_id']
+    url: 'https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom?room_id={}'
+  # 排名
+  rank:
+    args: ['uid']
+    url: 'https://api.live.bilibili.com/rankdb/v1/Common/roomInfo?ruid={}'
+# 番剧相关 https://github.com/lovelyyoshino/Bilibili-Live-API/blob/master/API.bangumi.md
+bangumi:
+  # 查询 todo
+  search:
+    args: ['type','season_type']
+    url: 'https://api.bilibili.com/pgc/season/index/result?{}'
+  # 更新
+  update:
+    args: false
+    url: 'https://bangumi.bilibili.com/web_api/timeline_global'
+
+
