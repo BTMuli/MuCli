@@ -9,7 +9,7 @@ const markdown = new Command();
 markdown
 	.name('mmd')
 	.description('A SubCommand within MuCli for Markdown')
-	.version('0.3.1', '-sv');
+	.version('0.3.2', '-sv');
 
 // SubCommand for create markdown new file
 markdown

@@ -11,10 +11,12 @@ class MucFile {
 	 */
 	createFile(path, data) {
 		try {
-			var fileName = path.split('/').pop();
-			var dirLen = path.length - fileName.length;
-			var filePath = path.substring(0, dirLen);
-			this.createDir(filePath);
+			if (path.indexOf('/') !== -1) {
+				var fileName = path.split('/').pop();
+				var dirLen = path.length - fileName.length;
+				var filePath = path.substring(0, dirLen);
+				this.createDir(filePath);
+			}
 			fs.writeFile(path, data, error => {
 				if (error) {
 					console.log('创建失败\n' + error);
