@@ -9,7 +9,7 @@ const subCommand = new Command();
 subCommand
 	.name('ncm')
 	.description('A SubCommand within MuCli for SubCommand')
-	.version('0.0.2', '-sv');
+	.version('0.0.3', '-sv');
 
 // Command for create a new command(for dev)
 subCommand
