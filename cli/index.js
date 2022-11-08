@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import Config from '../config/index.js';
 import markdown from './markdown.js';
 import subCommand from './SubCommand.js';
+import template from './template.js';
 
 const MuCli = new Command();
 let muc = new Config();
@@ -40,6 +41,6 @@ function setCommand(...cmd) {
 }
 
 // Commands add
-setCommand(markdown, subCommand);
+setCommand(markdown, subCommand, template);
 
 export default MuCli;
