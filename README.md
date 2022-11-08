@@ -57,7 +57,7 @@ Commands:
 
 ```text
 > muc -v
-0.3.2
+0.4.0
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
