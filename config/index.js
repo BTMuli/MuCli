@@ -12,7 +12,6 @@ class Config {
 			this.configPath = MucConfig.getPath() + path;
 			this.mucYaml = new MucYaml(path);
 		}
-		this.mucYaml = new MucYaml();
 	}
 
 	/**
@@ -32,6 +31,19 @@ class Config {
 		var configRead = this.readConfig();
 		configRead = this.mucYaml.yamlDetailRead(configRead, args);
 		return configRead;
+	}
+
+	/**
+	 * 读取并加载模块 todo 后续修改文件
+	 * @param data 命令列表
+	 */
+	setConfig(...data) {
+		var cmd_list = {};
+		data.forEach(value => {
+			let cmd_name = value.name();
+			cmd_list[cmd_name] = this.doConfig(value);
+		});
+		this.cmdList = cmd_list;
 	}
 
 	/**

@@ -15,13 +15,6 @@ Commands:
   ncm:
     enable: true
     name: subCommand
-  # Bilibili Spider
-  bili:
-    enable: false
-    name: bilibili
-    api:
-      enable: true
-      path: '\config_default\bili_api.yml'
     # Dev model
     dev:
       enable: false
