@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-10-14
+Update: 2022-11-08
 Author: 目棃
 Description: 说明文档
 ---
@@ -17,6 +17,12 @@ Description: 说明文档
 
 ---
 
+## 适用平台
+
+本命令行因为是个人使用，目前只在 Win 上运行测试，Linux 未经过测试可能运行不了。
+
+---
+
 ## 命令说明
 
 本 CLI 采用加载子命令的形式运行，可以通过修改 [`config.yml`](./config_default/config.yml) 对应 command 的 `enable` 属性来选择是否加载。
@@ -27,16 +33,16 @@ Description: 说明文档
 > muc -h
 Usage: muc [options] [command]
 
-A Node Cli for Personal Use by BTMUli.     
+A Node Cli for Personal Use by BTMUli.
 
 Options:
   -v, --version   output the version number
   -h, --help      display help for command
 
 Commands:
+  set [options]   change subcommand use status
   mmd [options]   A SubCommand within MuCli for Markdown
   ncm [options]   A SubCommand within MuCli for SubCommand
-  bili [options]  A SubCommand within MuCli for Bilibili
   help [command]  display help for command
 ```
 
@@ -44,7 +50,6 @@ Commands:
 
 + `mmd`：用于 Markdown 相关操作
 + `ncm`：用于创建子命令 `Just for dev`
-+ `bili`：用于爬取 Bilibili 数据
 
 ### 查看版本
 
@@ -52,18 +57,16 @@ Commands:
 
 ```text
 > muc -v
-0.3.1
+0.3.2
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc mmd -sv
-0.3.0
+0.3.2
 > muc ncm -sv
 0.0.2
-> muc bili -sv
-0.0.1
 ```
 
 ### SubCli-Markdown
@@ -134,31 +137,6 @@ Commands:
 ```
 
 用于个人新建一个子命令，即 `Just for dev`。
-
----
-
-## SubCli-Bilibili
-
-对应的是上面的 `bili` 命令。
-
-```text
-> muc bili -sv
-Usage: muc bili [options] [command]
-
-A SubCommand within MuCli for Bilibili
-
-Options:
-  -sv              output the version number
-  -h, --help       display help for command
-
-Commands:
-  get [options]    get info in Bilibili
-  get-u [options]  get user info in Bilibili
-  get-v [options]  get video info in Bilibili
-  help [command]   display help for command
-```
-
-主要还是信息爬取，目前仍在不断完善当中。
 
 ---
 
