@@ -19,13 +19,13 @@ class SubCommand {
 					type: 'input',
 					message: '请输入 SubCommand 命令',
 					name: 'command',
-					default: 'test',
+					default: name || 'test',
 				},
 				{
 					type: 'input',
 					message: '请输入 SubCommand 简介',
 					name: 'desc',
-					default: 'A SubCommand within MuCli for Test',
+					default: 'A SubCommand within MuCli for ' + name,
 				},
 			])
 			.then(async answers => {

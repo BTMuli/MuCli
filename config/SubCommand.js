@@ -47,7 +47,7 @@ class SubCommandModel {
 		/* eslint-disable */
 		return (
 			'// Node JS\n' +
-            'import {Command} from "commander";\n' +
+            'import { Command } from "commander";\n' +
 			'// MuCli JS\n' +
             'import ' + clsName + ' from "../utils/' + fileName + '";\n\n' +
             'const ' + this.name + '= new Command();\n\n' +
@@ -83,7 +83,7 @@ class SubCommandModel {
 			'// MuCli JS\n' +
             'import ' + clsName + 'Model from "../config/' + fileName + '";\n' +
             'import MucFile from "./file.js";\n\n' +
-            'class ' + clsName + '{\n\n}\n\n' +
+            'class ' + clsName + ' {\n\n}\n\n' +
             'export default ' + clsName + ';'
 		);
 		/* eslint-disable */

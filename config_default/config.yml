@@ -11,11 +11,11 @@ Commands:
     typora:
       enable: true
       path: 'E:\\SoftWares\\Typora\\Typora.exe'
+  # Template
+  tpl:
+    enable: false
+    name: template
   # SubCommand
   ncm:
     enable: true
     name: subCommand
-    # Dev model
-    dev:
-      enable: false
-      userInfoPath: './test/upInfo_33009606.json'

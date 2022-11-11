@@ -4,13 +4,14 @@ import { Command } from 'commander';
 import Config from '../config/index.js';
 import markdown from './markdown.js';
 import subCommand from './SubCommand.js';
+import template from './template.js';
 
 const MuCli = new Command();
 let muc = new Config();
 
 // Base info
 MuCli.name('muc')
-	.version('0.4.0', '-v, --version')
+	.version('0.4.1', '-v, --version')
 	.description('A Node Cli for Personal Use by BTMUli.');
 
 // Load subCommand and setting
@@ -40,6 +41,6 @@ function setCommand(...cmd) {
 }
 
 // Commands add
-setCommand(markdown, subCommand);
+setCommand(markdown, subCommand, template);
 
 export default MuCli;
