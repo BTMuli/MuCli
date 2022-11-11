@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-11-08
+Update: 2022-11-11
 Author: 目棃
 Description: 说明文档
 ---
@@ -19,7 +19,7 @@ Description: 说明文档
 
 ## 适用平台
 
-本命令行因为是个人使用，目前只在 Win 上运行测试，Linux 未经过测试可能运行不了。
+本命令行因为是个人使用, **仅适用于 Win 平台的 `powershell`**
 
 ---
 
