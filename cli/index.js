@@ -28,19 +28,4 @@ MuCli.command('set')
 		}
 	});
 
-/**
- * 检验权限然后添加命令
- * @param cmd 命令
- */
-function setCommand(...cmd) {
-	cmd.forEach(value => {
-		if (muc.doConfig(value)) {
-			MuCli.addCommand(value);
-		}
-	});
-}
-
-// Commands add
-setCommand(markdown, subCommand, template);
-
 export default MuCli;

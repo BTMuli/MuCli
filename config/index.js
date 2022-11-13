@@ -34,16 +34,16 @@ class Config {
 	}
 
 	/**
-	 * 读取并加载模块 todo 后续修改文件
+	 * 读取并加载模块
+	 * @param command Commander
 	 * @param data 命令列表
 	 */
-	setConfig(...data) {
-		var cmd_list = {};
+	setConfig(command, ...data) {
 		data.forEach(value => {
-			let cmd_name = value.name();
-			cmd_list[cmd_name] = this.doConfig(value);
+			if (this.checkConfig(value)) {
+				command.addCommand(value);
+			}
 		});
-		this.cmdList = cmd_list;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Config {
 	 * @param cmd 命令
 	 * @return {boolean} 是否开启
 	 */
-	doConfig(cmd) {
+	checkConfig(cmd) {
 		var cmdConfig = this.readDetailConfig('Commands', cmd.name());
 		return cmdConfig['enable'] === true;
 	}
