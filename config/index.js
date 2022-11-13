@@ -34,16 +34,16 @@ class Config {
 	}
 
 	/**
-	 * 读取并加载模块 todo 后续修改文件
+	 * 读取并加载模块
+	 * @param command Commander
 	 * @param data 命令列表
 	 */
-	setConfig(...data) {
-		var cmd_list = {};
+	setConfig(command, ...data) {
 		data.forEach(value => {
-			let cmd_name = value.name();
-			cmd_list[cmd_name] = this.doConfig(value);
+			if (this.checkConfig(value)) {
+				command.addCommand(value);
+			}
 		});
-		this.cmdList = cmd_list;
 	}
 
 	/**
@@ -51,19 +51,31 @@ class Config {
 	 * @param cmd 命令
 	 * @return {boolean} 是否开启
 	 */
-	doConfig(cmd) {
+	checkConfig(cmd) {
 		var cmdConfig = this.readDetailConfig('Commands', cmd.name());
 		return cmdConfig['enable'] === true;
 	}
 
 	/**
-	 * 修改 yml todo 待检验
-	 * @param val  修改后的值
-	 * @param key  修改项
-	 * @param args 可选参数，位置
+	 * 修改配置文件
+	 * @param name
+	 * @param target
 	 */
-	transConfig(val, key, ...args) {
-		this.mucYaml.yamlChange(this.configPath, args, key, val);
+	transConfig(name, target) {
+		let commandPath = this.mucYaml.configPath;
+		let commandList = ['all', 'mmd', 'tpl', 'ncm'];
+		let targetList = ['on', 'off'];
+		if (targetList.includes(target) && commandList.includes(name)) {
+			if (name === 'all') {
+				this.mucYaml.yamlChangeAsync(commandPath, 'mmd', 'enable', target === 'on');
+				this.mucYaml.yamlChangeAsync(commandPath, 'tpl', 'enable', target === 'on');
+				this.mucYaml.yamlChangeAsync(commandPath, 'ncm', 'enable', target === 'on');
+			} else {
+				this.mucYaml.yamlChangeAsync(commandPath, name, 'enable', target==='on');
+			}
+		} else {
+			console.log('参数错误');
+		}
 	}
 }
 

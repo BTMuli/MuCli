@@ -69,8 +69,8 @@ class MucFile {
 	 * @param path 文件路径
 	 * @param data 文件内容
 	 */
-	change(path, data) {
-		fs.writeFile(path, data, error => {
+	changeAsync(path, data) {
+		fs.writeFileSync(path, data, error => {
 			if (error) {
 				console.log('文件修改失败！');
 				console.log(error);

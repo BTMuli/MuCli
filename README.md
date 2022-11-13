@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-11-08
+Update: 2022-11-13
 Author: 目棃
 Description: 说明文档
 ---
@@ -19,7 +19,7 @@ Description: 说明文档
 
 ## 适用平台
 
-本命令行因为是个人使用，目前只在 Win 上运行测试，Linux 未经过测试可能运行不了。
+本命令行因为是个人使用, **仅适用于 Win 平台的 `powershell`**
 
 ---
 
@@ -48,6 +48,7 @@ Commands:
 
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
 
++ `set`：用于子命令的启用/禁用
 + `mmd`：用于 Markdown 相关操作
 + `ncm`：用于创建子命令 `Just for dev`
 
@@ -57,7 +58,7 @@ Commands:
 
 ```text
 > muc -v
-0.4.0
+0.4.2
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -66,7 +67,7 @@ Commands:
 > muc mmd -sv
 0.3.2
 > muc ncm -sv
-0.0.2
+0.0.3
 ```
 
 ### SubCli-Markdown
@@ -254,3 +255,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
+## 致谢
+
+感谢 Github 提供的 Education Pack，使得本项目可以免费使用 Github Copilot。
+
+感谢 JetBrains 提供的 Education Pack，使得本项目可以免费使用 Webstorm。
+
+感谢 npmjs 提供的免费服务，使得本项目可以免费使用 npmjs 仓库。
+
+用到本项目的朋友们，如果觉得本项目对你有帮助，欢迎 Star 本项目，也欢迎 Fork 本项目，如果有任何问题，欢迎提 Issue 或者 Pull Request。
