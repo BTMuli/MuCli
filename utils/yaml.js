@@ -39,16 +39,16 @@ class MucYaml {
 	}
 
 	/**
-	 * 修改 yaml 文件某属性值 todo 待检验
+	 * 修改 yaml 文件某属性值
 	 * @param path yaml 文件路径
 	 * @param args 要修改属性位置
 	 * @param key  要修改属性名称
 	 * @param val  要修改属性值
 	 */
-	yamlChange(path, args, key, val) {
-		var yamlOri = this.yamlRead(path);
-		yamlOri[args][key] = val;
-		this.mucFile.change(path, yamlOri);
+	yamlChangeAsync(path, args, key, val) {
+		var yamlTrans = this.yamlRead(path);
+		yamlTrans["Commands"][args][key] = val;
+		this.mucFile.changeAsync(path, YAML.stringify(yamlTrans, 4));
 	}
 }
 

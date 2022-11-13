@@ -1,21 +1,17 @@
-# 配置文件
 Commands:
-  # Markdown
-  mmd:
-    enable: true
-    name: markdown
-    default:
-      author: '目棃'
-      filename: 'README'
-      description: '说明文档'
-    typora:
-      enable: true
-      path: 'E:\\SoftWares\\Typora\\Typora.exe'
-  # Template
-  tpl:
-    enable: false
-    name: template
-  # SubCommand
-  ncm:
-    enable: true
-    name: subCommand
+    mmd:
+        enable: true
+        name: markdown
+        default:
+            author: 目棃
+            filename: README
+            description: 说明文档
+        typora:
+            enable: true
+            path: 'E:\\SoftWares\\Typora\\Typora.exe'
+    tpl:
+        enable: false
+        name: template
+    ncm:
+        enable: true
+        name: subCommand

@@ -57,13 +57,25 @@ class Config {
 	}
 
 	/**
-	 * 修改 yml todo 待检验
-	 * @param val  修改后的值
-	 * @param key  修改项
-	 * @param args 可选参数，位置
+	 * 修改配置文件
+	 * @param name
+	 * @param target
 	 */
-	transConfig(val, key, ...args) {
-		this.mucYaml.yamlChange(this.configPath, args, key, val);
+	transConfig(name, target) {
+		let commandPath = this.mucYaml.configPath;
+		let commandList = ['all', 'mmd', 'tpl', 'ncm'];
+		let targetList = ['on', 'off'];
+		if (targetList.includes(target) && commandList.includes(name)) {
+			if (name === 'all') {
+				this.mucYaml.yamlChangeAsync(commandPath, 'mmd', 'enable', target === 'on');
+				this.mucYaml.yamlChangeAsync(commandPath, 'tpl', 'enable', target === 'on');
+				this.mucYaml.yamlChangeAsync(commandPath, 'ncm', 'enable', target === 'on');
+			} else {
+				this.mucYaml.yamlChangeAsync(commandPath, name, 'enable', target==='on');
+			}
+		} else {
+			console.log('参数错误');
+		}
 	}
 }
 
