@@ -55,42 +55,32 @@ class Pip {
 	 * @param args
 	 */
 	install(args) {
-		// 根据镜像源url获取host
+		// 根据镜像源url获取host --trusted-host
 		var host = this.mirrorList.useMirror.url
-			.replace('https://', '')
-			.replace('http://', '');
 		var command = 'pip install -i ' + host + ' ';
 		if (args.package !== undefined) {
 			command += args.package;
 			console.log('command:\t' + command);
-			exec(command + args.package, (error, stdout, stderr) => {
+			// 在命令运行的目录下执行命令
+			exec(command, { cwd: process.cwd() }, (error, stdout, stderr) => {
 				if (error) {
-					console.log(`error: ${error.message}`);
-					return;
-				}
-				if (stderr) {
-					console.log(`stderr: ${stderr}`);
+					console.error(`执行的错误: ${error}`);
 					return;
 				}
 				console.log(`stdout: ${stdout}`);
+				console.log(`stderr: ${stderr}`);
 			});
 		} else if (args.requirement !== undefined) {
 			command += '-r ' + args.requirement;
-			console.log('command:' + command);
-			exec(
-				command + '-r ' + args.requirement,
-				(error, stdout, stderr) => {
-					if (error) {
-						console.log(`error: ${error.message}`);
-						return;
-					}
-					if (stderr) {
-						console.log(`stderr: ${stderr}`);
-						return;
-					}
-					console.log(`stdout: ${stdout}`);
+			console.log('command:\t' + command);
+			exec(command, { cwd: process.cwd() }, (error, stdout, stderr) => {
+				if (error) {
+					console.error(`执行的错误: ${error}`);
+					return;
 				}
-			);
+				console.log(`stdout: ${stdout}`);
+				console.log(`stderr: ${stderr}`);
+			});
 		}
 	}
 
