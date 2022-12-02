@@ -47,7 +47,7 @@ class MucYaml {
 	 */
 	yamlChangeAsync(path, args, key, val) {
 		var yamlTrans = this.yamlRead(path);
-		yamlTrans["Commands"][args][key] = val;
+		yamlTrans['Commands'][args][key] = val;
 		this.mucFile.changeAsync(path, YAML.stringify(yamlTrans, 4));
 	}
 }
