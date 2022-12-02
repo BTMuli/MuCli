@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // MuCli JS
 import MuCli from './cli/index.js';
 // Config
