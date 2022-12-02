@@ -37,15 +37,20 @@ export class MirrorModel {
 		if (url === undefined) {
 			url = this.url;
 		}
-		return await axios
-			.get(url)
-			.then(response => {
-				return response.status === 200;
-			})
-			.catch(error => {
-				console.log(error);
-				return false;
+		// 测试镜像地址是否可用
+		// 返回耗时
+		let time = 0;
+		try {
+			const start = new Date().getTime();
+			await axios.get(url, {
+				timeout: 5000,
 			});
+			const end = new Date().getTime();
+			time = end - start;
+		} catch (error) {
+			time = 0;
+		}
+		return time;
 	}
 
 	/**
