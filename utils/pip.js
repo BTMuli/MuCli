@@ -38,11 +38,19 @@ class Pip {
 			console.log('正在测试镜像源:' + mirror.name);
 			var result = await mirror.verifyMirror();
 			console.log('测试结果:' + result + 'ms');
-			mirrorListTest[i].usable = result < 5000;
+			if (result <= 5000 && result > 0) {
+				mirrorListTest[i].usable = true;
+			}
 			mirrorListTest[i].time = result;
 		}
-		// 按照时间给镜像源排序
+		// 按照时间给镜像源排序，从小到大，但是-1的放在最后
 		mirrorListTest.sort(function (a, b) {
+			if (a.time === -1) {
+				return 1;
+			}
+			if (b.time === -1) {
+				return -1;
+			}
 			return a.time - b.time;
 		});
 		// 除去 time 属性

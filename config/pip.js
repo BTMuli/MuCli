@@ -48,7 +48,7 @@ export class MirrorModel {
 			const end = new Date().getTime();
 			time = end - start;
 		} catch (error) {
-			time = 0;
+			time = -1;
 		}
 		return time;
 	}
