@@ -57,25 +57,56 @@ class Config {
 	}
 
 	/**
-	 * 修改配置文件
+	 * 修改命令可用性
 	 * @param name
 	 * @param target
 	 */
 	transConfig(name, target) {
 		let commandPath = this.mucYaml.configPath;
-		let commandList = ['all', 'mmd', 'tpl', 'ncm'];
+		let commandList = ['all', 'mmd', 'tpl', 'ncm', 'pip'];
 		let targetList = ['on', 'off'];
 		if (targetList.includes(target) && commandList.includes(name)) {
 			if (name === 'all') {
-				this.mucYaml.yamlChangeAsync(commandPath, 'mmd', 'enable', target === 'on');
-				this.mucYaml.yamlChangeAsync(commandPath, 'tpl', 'enable', target === 'on');
-				this.mucYaml.yamlChangeAsync(commandPath, 'ncm', 'enable', target === 'on');
+				this.mucYaml.yamlChangeAsync(
+					commandPath,
+					'mmd',
+					'enable',
+					target === 'on'
+				);
+				this.mucYaml.yamlChangeAsync(
+					commandPath,
+					'tpl',
+					'enable',
+					target === 'on'
+				);
+				this.mucYaml.yamlChangeAsync(
+					commandPath,
+					'ncm',
+					'enable',
+					target === 'on'
+				);
 			} else {
-				this.mucYaml.yamlChangeAsync(commandPath, name, 'enable', target==='on');
+				this.mucYaml.yamlChangeAsync(
+					commandPath,
+					name,
+					'enable',
+					target === 'on'
+				);
 			}
 		} else {
 			console.log('参数错误');
 		}
+	}
+
+	/**
+	 * 修改配置文件
+	 * @param name 命令
+	 * @param target 目标
+	 * @param value 值
+	 */
+	changeConfig(name, target, value) {
+		let commandPath = this.mucYaml.configPath;
+		this.mucYaml.yamlChangeAsync(commandPath, name, target, value);
 	}
 }
 
