@@ -6,6 +6,7 @@ import Config from './config/index.js';
 import markdown from './cli/markdown.js';
 import subCommand from './cli/SubCommand.js';
 import template from './cli/template.js';
+import pip from './cli/pip.js';
 
 // Read command line arguments
 const cmd = process.argv;
@@ -14,7 +15,7 @@ const cmd = process.argv;
 const muc = new Config();
 
 // Load subCommand and setting
-muc.setConfig(MuCli, markdown, subCommand, template);
+muc.setConfig(MuCli, markdown, subCommand, template, pip);
 
 // Parse command line arguments
 MuCli.parse(cmd);

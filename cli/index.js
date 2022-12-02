@@ -24,15 +24,13 @@ MuCli.command('set')
 	.action(args => {
 		if (args.name && args.target) {
 			muc.transConfig(args.name, args.target);
-			muc.setConfig(MuCli, markdown, subCommand, template);
+			muc.setConfig(MuCli, markdown, subCommand, template, pip);
 		} else if (args.name) {
 			muc.transConfig(args.name, 'on');
-			muc.setConfig(MuCli, markdown, subCommand, template);
+			muc.setConfig(MuCli, markdown, subCommand, template, pip);
 		} else {
 			console.log('Please input a name.');
 		}
 	});
-
-MuCli.addCommand(pip);
 
 export default MuCli;
