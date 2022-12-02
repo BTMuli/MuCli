@@ -6,13 +6,14 @@ import Config from '../config/index.js';
 import markdown from './markdown.js';
 import subCommand from './SubCommand.js';
 import template from './template.js';
+import pip from './pip.js';
 
 const MuCli = new Command();
 let muc = new Config();
 
 // Base info
 MuCli.name('muc')
-	.version('0.4.2', '-v, --version')
+	.version('0.5.0', '-v, --version')
 	.description('A Node Cli for Personal Use by BTMUli.');
 
 // Load subCommand and setting
@@ -31,5 +32,7 @@ MuCli.command('set')
 			console.log('Please input a name.');
 		}
 	});
+
+MuCli.addCommand(pip);
 
 export default MuCli;
