@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-11-13
+Update: 2022-12-02
 Author: 目棃
 Description: 说明文档
 ---
@@ -43,6 +43,7 @@ Commands:
   set [options]   change subcommand use status
   mmd [options]   A SubCommand within MuCli for Markdown
   ncm [options]   A SubCommand within MuCli for SubCommand
+  pip [options]   A SubCommand within MuCli for pip
   help [command]  display help for command
 ```
 
@@ -51,6 +52,7 @@ Commands:
 + `set`：用于子命令的启用/禁用
 + `mmd`：用于 Markdown 相关操作
 + `ncm`：用于创建子命令 `Just for dev`
++ `pip`：用于 pip 相关操作
 
 ### 查看版本
 
@@ -58,7 +60,7 @@ Commands:
 
 ```text
 > muc -v
-0.4.2
+0.5.1
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -68,6 +70,8 @@ Commands:
 0.3.2
 > muc ncm -sv
 0.0.3
+> muc pip -sv
+0.1.0
 ```
 
 ### SubCli-Markdown
@@ -138,6 +142,33 @@ Commands:
 ```
 
 用于个人新建一个子命令，即 `Just for dev`。
+
+---
+
+## SubCli-pip
+
+对应的是上面的 `pip` 命令：
+
+```text
+> muc pip -h
+Usage: muc pip [options] [command]
+
+A SubCommand within MuCli for pip
+
+Options:
+  -sv                output the version number
+  -h, --help         display help for command
+
+Commands:
+  install [options]  install package
+  test               test mirror
+  show               show mirror
+  help [command]     display help for command
+```
+
+目前支持镜像源的可用性测试，以及镜像源的查看。
+
+`pip` 命令的 `pip install -i`跟 `pip install -r` 也支持使用镜像源。
 
 ---
 
