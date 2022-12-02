@@ -1,6 +1,6 @@
 {
   "name": "@btmuli/mucli",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "个人用的 Node Cli",
   "type": "module",
   "main": "index.js",

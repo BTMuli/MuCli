@@ -60,7 +60,7 @@ Commands:
 
 ```text
 > muc -v
-0.5.1
+0.5.2
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -71,7 +71,7 @@ Commands:
 > muc ncm -sv
 0.0.3
 > muc pip -sv
-0.1.0
+0.1.1
 ```
 
 ### SubCli-Markdown

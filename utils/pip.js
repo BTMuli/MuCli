@@ -30,14 +30,24 @@ class Pip {
 	 * 测试镜像源
 	 */
 	async verifyMirror() {
+		let i;
 		let mirrorListTest = this.mirrorList.mirrorList;
 		console.log('正在测试镜像源,请稍后...');
-		for (var i = 0; i < mirrorListTest.length; i++) {
+		for (i = 0; i < mirrorListTest.length; i++) {
 			var mirror = mirrorListTest[i];
 			console.log('正在测试镜像源:' + mirror.name);
 			var result = await mirror.verifyMirror();
-			console.log('测试结果:' + result);
-			mirrorListTest[i].usable = result;
+			console.log('测试结果:' + result + 'ms');
+			mirrorListTest[i].usable = result < 5000;
+			mirrorListTest[i].time = result;
+		}
+		// 按照时间给镜像源排序
+		mirrorListTest.sort(function (a, b) {
+			return a.time - b.time;
+		});
+		// 除去 time 属性
+		for (i = 0; i < mirrorListTest.length; i++) {
+			delete mirrorListTest[i].time;
 		}
 		// 将测试结果写入配置文件
 		this.mirrorList.mirrorList = mirrorListTest;
@@ -56,7 +66,7 @@ class Pip {
 	 */
 	install(args) {
 		// 根据镜像源url获取host --trusted-host
-		var host = this.mirrorList.useMirror.url
+		var host = this.mirrorList.useMirror.url;
 		var command = 'pip install -i ' + host + ' ';
 		if (args.package !== undefined) {
 			command += args.package;

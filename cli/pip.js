@@ -8,7 +8,7 @@ const pip = new Command();
 // Base info
 pip.name('pip')
 	.description('A SubCommand within MuCli for pip')
-	.version('0.1.0', '-sv');
+	.version('0.1.1', '-sv');
 
 // 安装包
 pip.command('install')
