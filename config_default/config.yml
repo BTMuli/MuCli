@@ -15,3 +15,16 @@ Commands:
     ncm:
         enable: true
         name: subCommand
+    pip:
+        enable: true
+        name: pip
+        mirrorList:
+            - {name: tsinghua, url: 'https://pypi.tuna.tsinghua.edu.cn/simple', usable: true}
+            - {name: aliyun, url: 'https://mirrors.aliyun.com/pypi/simple/', usable: true}
+            - {name: douban, url: 'http://pypi.douban.com/simple/', usable: true}
+            - {name: 163, url: 'http://mirrors.163.com/pypi/simple/', usable: true}
+            - {name: 中国科技大学, url: 'http://pypi.mirrors.ustc.edu.cn/simple/', usable: true}
+            - {name: 南京大学, url: 'http://mirrors.nju.edu.cn/pypi/web/simple/', usable: true}
+            - {name: 清华大学, url: 'https://pypi.tuna.tsinghua.edu.cn/simple/', usable: true}
+            - {name: 中国科学技术大学, url: 'http://pypi.mirrors.ustc.edu.cn/simple/', usable: true}
+            - {name: 山东理工大学, url: 'http://pypi.sdutlinux.org/', usable: true}
