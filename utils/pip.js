@@ -35,11 +35,14 @@ class Pip {
 		console.log('正在测试镜像源,请稍后...');
 		for (i = 0; i < mirrorListTest.length; i++) {
 			var mirror = mirrorListTest[i];
-			console.log('正在测试镜像源:' + mirror.name);
+			console.log('正在测试镜像源:' + mirror.name + '\t' + mirror.url);
 			var result = await mirror.verifyMirror();
-			console.log('测试结果:' + result + 'ms');
 			if (result <= 5000 && result > 0) {
 				mirrorListTest[i].usable = true;
+				console.log('测试结果:' + result + 'ms');
+			} else {
+				mirrorListTest[i].usable = false;
+				console.log('测试结果:超时或不可用');
 			}
 			mirrorListTest[i].time = result;
 		}
@@ -73,33 +76,23 @@ class Pip {
 	 * @param args
 	 */
 	install(args) {
-		// 根据镜像源url获取host --trusted-host
-		var host = this.mirrorList.useMirror.url;
-		var command = 'pip install -i ' + host + ' ';
-		if (args.package !== undefined) {
-			command += args.package;
-			console.log('command:\t' + command);
-			// 在命令运行的目录下执行命令
-			exec(command, { cwd: process.cwd() }, (error, stdout, stderr) => {
-				if (error) {
-					console.error(`执行的错误: ${error}`);
-					return;
-				}
-				console.log(`stdout: ${stdout}`);
-				console.log(`stderr: ${stderr}`);
-			});
-		} else if (args.requirement !== undefined) {
-			command += '-r ' + args.requirement;
-			console.log('command:\t' + command);
-			exec(command, { cwd: process.cwd() }, (error, stdout, stderr) => {
-				if (error) {
-					console.error(`执行的错误: ${error}`);
-					return;
-				}
-				console.log(`stdout: ${stdout}`);
-				console.log(`stderr: ${stderr}`);
-			});
+		var url = this.mirrorList.useMirror.url;
+		var command = '';
+		// 获取运行命令目录下的python虚拟环境
+		var venv = process.env.VIRTUAL_ENV;
+		if (venv !== undefined) {
+			venv = venv + '\\Scripts\\pip.exe';
+		} else {
+			venv = 'pip';
 		}
+		if (args.package !== undefined) {
+			// 在虚拟环境中安装包
+			command = venv + ' install ' + args.package + ' -i ' + url;
+		} else if (args.requirement !== undefined) {
+			command = venv + ' install -r ' + args.requirement + ' -i ' + url;
+		}
+		console.log('command:\t' + command);
+		exec(command);
 	}
 
 	/**
