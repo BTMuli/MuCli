@@ -11,6 +11,12 @@
   "bin": {
     "muc": "./index.js"
   },
+  "imports": {
+    "#*": "./*.js",
+    "#cli/*": "./cli/*.js",
+    "#utils/*": "./utils/*.js",
+    "#config/*": "./config/*.js"
+  },
   "keywords": [
     "Node",
     "Cli",

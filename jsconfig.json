@@ -5,6 +5,9 @@
     "lib": [
       "esnext", "dom"
     ],
+    "exclude": [
+      "node_modules"
+    ],
     "allowJs": true,
     "checkJs": true,
     "strict": true,
@@ -21,10 +24,10 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "@*": ["./*"],
-      "@cli/*": ["./cli/*"],
-      "@config/*": ["./config/*"],
-      "@utils/*": ["./utils/*"]
+      "#/*": ["./*"],
+      "#cli/*": ["./cli/*"],
+      "#config/*": ["./config/*"],
+      "#utils/*": ["./utils/*"]
     },
     "esModuleInterop": true,
     "experimentalDecorators": true,
