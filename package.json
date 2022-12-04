@@ -5,8 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "lint-all": "eslint **",
-    "lint-fix": "eslint ** --fix"
+    "lint-all": "eslint --ext .js,.json ./",
+    "lint-fix": "eslint --ext .js,.json ./ --fix"
   },
   "bin": {
     "muc": "./index.js"
