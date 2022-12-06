@@ -38,11 +38,11 @@ pip.command('install')
 /* 测试镜像源 */
 pip.command('test')
 	.description('test mirror')
-	.option('-l, --link [link]', 'test mirror link')
-	.action(async (options) => {
+	.option('-n, --name [name]', 'mirror name')
+	.action(async options => {
 		let pip = new Pip();
-		if(options.link) {
-			await pip.verifyMirror(options.link);
+		if (options.name) {
+			await pip.verifyMirror(options.name);
 		} else {
 			await pip.verifyMirror();
 		}
@@ -57,13 +57,13 @@ pip.command('mirror')
 	.option('-l, --list', 'list mirror')
 	.action(options => {
 		let pip = new Pip();
-		if(options.add) {
+		if (options.add) {
 			pip.addMirror(options.add);
-		} else if(options.delete) {
+		} else if (options.delete) {
 			pip.deleteMirror(options.delete);
-		} else if(options.set) {
+		} else if (options.set) {
 			pip.setMirror(options.set);
-		} else if(options.list) {
+		} else if (options.list) {
 			pip.listMirror();
 		}
 	});
