@@ -40,15 +40,20 @@ markdown
 markdown
 	.command('typora')
 	/* 通过 Typora 打开 markdown 文件 */
-	.option('-n, --name [name]', 'the name of the markdown file', './')
+	.option('-n, --name [name]', 'the name of the markdown file')
 	.description('open file with Typora')
 	/* 获取 Typora 的路径 */
 	.option('-i, --info', 'get the path of Typora')
 	.description('get local typora path')
+	/* 设置 Typora 的路径 */
+	.option('-s, --set [path]', 'set the path of Typora')
 	.action(options => {
+		console.log(options);
 		let md = new Markdown();
 		if (options.info) {
 			md.getConfigTypora();
+		} else if (options.set) {
+			md.setConfigTypora(options.set);
 		} else if (options.name) {
 			md.openTypora(options.name);
 		}

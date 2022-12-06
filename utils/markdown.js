@@ -12,6 +12,7 @@ import { execFile } from 'node:child_process';
 import MarkdownModel from '../config/markdown.js';
 import MucFile from './file.js';
 import Config from '../config/index.js';
+import { exec } from 'child_process';
 
 class Markdown {
 	constructor() {
@@ -291,6 +292,48 @@ class Markdown {
 	 */
 	changeLabel(labelCustom) {
 		new Config().changeConfig(['mmd', 'label'], 'custom', labelCustom);
+	}
+	/**
+	 * 设置 Typora 路径
+	 * @param binPath Typora 路径
+	 */
+	setConfigTypora(binPath) {
+		inquirer
+			.prompt([
+				{
+					type: 'input',
+					message: `请输入 Typora 路径`,
+					name: 'path',
+					default: binPath,
+				},
+			])
+			.then(answer => {
+				inquirer
+					.prompt([
+						{
+							type: 'confirm',
+							message: `即将尝试打开 Typora，请打开后关闭 Typora 窗口`,
+							name: 'choice',
+							default: false,
+						},
+					])
+					.then(confirm => {
+						if (confirm.choice) {
+							try {
+								exec(`${answer.path}`);
+								new Config().changeConfig(
+									['mmd', 'typora'],
+									'path',
+									answer.path
+								);
+								console.log('设置成功！');
+								return true;
+							} catch (error) {
+								console.log('Typora 路径错误！');
+							}
+						}
+					});
+			});
 	}
 }
 
