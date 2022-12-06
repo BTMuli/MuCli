@@ -1,21 +1,19 @@
 #!/usr/bin/env node
-// MuCli JS
+
+/**
+ * @author: BTMuli<bt-muli@outlook.com>
+ * @date: 2022-12-06
+ * @description: 启动文件
+ * @update: 2022-12-06
+ */
+
+/* MuCli */
 import MuCli from './cli/index.js';
-// Config
+import { COMMAND_LIST } from './config.js';
 import Config from './config/index.js';
-// SubCommand
-import markdown from './cli/markdown.js';
-import subCommand from './cli/SubCommand.js';
-import pip from './cli/pip.js';
 
-// Read command line arguments
-const cmd = process.argv;
+/* 加载配置文件 */
+new Config().setConfig(MuCli, COMMAND_LIST);
 
-// Load config
-const muc = new Config();
-
-// Load subCommand and setting
-muc.setConfig(MuCli, markdown, subCommand, pip);
-
-// Parse command line arguments
-MuCli.parse(cmd);
+/* 解析命令行参数 */
+MuCli.parse(process.argv);
