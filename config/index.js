@@ -11,9 +11,9 @@ import { ROOT_PATH } from '../config.js';
 /* SubCommand */
 import markdown from '../cli/markdown.js';
 import pip from '../cli/pip.js';
-import subCommand from '../cli/SubCommand.js';
+import dev from '../cli/dev.js';
 /* Project command list */
-export let COMMAND_LIST = [markdown, pip, subCommand];
+export let COMMAND_LIST = [markdown, pip, dev];
 
 class Config {
 	constructor(path = undefined) {
