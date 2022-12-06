@@ -13,7 +13,7 @@ import { COMMAND_LIST } from './config.js';
 import Config from './config/index.js';
 
 /* 加载配置文件 */
-new Config().setConfig(MuCli, COMMAND_LIST);
+new Config().loadConfig(MuCli, COMMAND_LIST);
 
 /* 解析命令行参数 */
 MuCli.parse(process.argv);

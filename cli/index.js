@@ -31,7 +31,7 @@ MuCli.command('set')
 		/* 更新配置 */
 		muc.transConfig(options.name, options.target);
 		/* 读取配置 */
-		muc.setConfig(MuCli, COMMAND_LIST);
+		muc.loadConfig(MuCli, COMMAND_LIST);
 	});
 
 export default MuCli;
