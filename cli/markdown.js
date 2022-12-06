@@ -33,7 +33,7 @@ markdown
 	.description('create a markdown file')
 	.action(options => {
 		let md = new Markdown();
-		md.createNew(options.name);
+		md.promoteFile(options.name);
 	});
 
 /* Typora 相关 */
@@ -43,16 +43,43 @@ markdown
 	.option('-n, --name [name]', 'the name of the markdown file', './')
 	.description('open file with Typora')
 	/* 获取 Typora 的路径 */
-	.option('-p, --path', 'get local typora path')
+	.option('-i, --info', 'get the path of Typora')
 	.description('get local typora path')
 	.action(options => {
 		let md = new Markdown();
-		if (options.path) {
-			console.log(md.getConfigTypora().path);
+		if (options.info) {
+			md.getConfigTypora();
 		} else if (options.name) {
 			md.openTypora(options.name);
 		}
-	})
-	.description('using local Typora - config is needed');
+	});
+
+/* markdown 模板相关 */
+markdown
+	.command('label')
+	/* 获取模板列表 */
+	.option('-l, --list', 'get the list of markdown label')
+	.description('get the list of markdown label')
+	/* 获取模板 */
+	.option('-g, --get <name>', 'get the markdown label')
+	.description('get the template')
+	/* 删除模板 */
+	.option('-d, --delete <name>', 'delete the markdown label')
+	.description('delete the template')
+	/* 添加模板 */
+	.option('-a, --add <name>', 'add the markdown label')
+	.description('add the template')
+	.action(options => {
+		let md = new Markdown();
+		if (options.list) {
+			md.getLabel('all');
+		} else if (options.get) {
+			md.getLabel(options.get);
+		} else if (options.delete) {
+			md.delLabel(options.delete);
+		} else if (options.add) {
+			md.addLabel(options.add);
+		}
+	});
 
 export default markdown;
