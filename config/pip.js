@@ -1,13 +1,14 @@
+/**
+ * @author: BTMuli<bt-muli@outlook.com>
+ * @date: 2022-12-06
+ * @description: 子命令 pip 相关模板
+ * @update: 2022-12-06
+ */
+
+/* Node */
 import axios from 'axios';
 
-/**
- * 镜像模型
- */
 export class MirrorModel {
-	/**
-	 * 构造函数
-	 * @param mirror 镜像
-	 */
 	constructor(mirror) {
 		this.name = mirror.name;
 		this.url = mirror.url;
@@ -18,18 +19,6 @@ export class MirrorModel {
 			this.usable = false;
 		}
 	}
-
-	/**
-	 * 获取镜像模型
-	 */
-	getModel() {
-		return {
-			name: this.name,
-			url: this.url,
-			usable: this.usable,
-		};
-	}
-
 	/**
 	 * 测试镜像地址是否可用
 	 */
@@ -37,9 +26,7 @@ export class MirrorModel {
 		if (url === undefined) {
 			url = this.url;
 		}
-		// 测试镜像地址是否可用
-		// 返回耗时
-		let time = 0;
+		let time;
 		try {
 			const start = new Date().getTime();
 			await axios.get(url, {
@@ -48,38 +35,15 @@ export class MirrorModel {
 			const end = new Date().getTime();
 			time = end - start;
 		} catch (error) {
-			time = 0;
+			time = -1;
 		}
 		return time;
 	}
-
-	/**
-	 * 获取镜像地址
-	 */
-	getMirrorUrl() {
-		return this.url;
-	}
-
-	/**
-	 * 获取镜像名称
-	 */
-	getMirrorName() {
-		return this.name;
-	}
-
-	/**
-	 * 更新镜像地址
-	 */
-	updateMirrorUrl(url) {
-		this.url = url;
-	}
-
 	/**
 	 * 输出镜像信息
 	 */
 	outputMirrorInfo() {
 		console.log(
-			// 左对齐
 			`镜像名称：${this.name}，镜像地址：${this.url}，是否可用：${this.usable}`
 		);
 	}
@@ -87,13 +51,9 @@ export class MirrorModel {
 
 export class PipModel {
 	constructor(useMirror, mirrorList) {
-		// 镜像源是否采用
 		this.useMirror = useMirror;
-		// 镜像源地址
-		// {name: '清华', url: 'https://pypi.tuna.tsinghua.edu.cn/simple'}
 		this.mirrorList = mirrorList;
 	}
-
 	/**
 	 * 获取所有镜像源信息
 	 * @return {Array<MirrorModel>} 镜像源信息
@@ -102,5 +62,98 @@ export class PipModel {
 		this.mirrorList.forEach(mirror => {
 			mirror.outputMirrorInfo();
 		});
+	}
+	/**
+	 * 获取当前使用的镜像源信息
+	 */
+	getUseMirror() {
+		this.useMirror.outputMirrorInfo();
+	}
+	/**
+	 * 设置使用的镜像源
+	 * @param name {String} 镜像源名称
+	 */
+	async setUseMirror(name) {
+		const mirror = this.mirrorList.find(mirror => mirror.name === name);
+		const time = await mirror.verifyMirror();
+		if (time === -1 || time > 5000) {
+			console.log('该镜像源不可用');
+			return;
+		}
+		this.useMirror = mirror;
+		console.log(`已设置为使用 ${name} 镜像源，耗时 ${time} ms`);
+	}
+	/**
+	 * 添加镜像源
+	 * @param name {String} 镜像源名称
+	 * @param url {String} 镜像源地址
+	 */
+	async addMirror(name, url) {
+		let mirror = new MirrorModel({
+			name: name,
+			url: url,
+		});
+		const time = await mirror.verifyMirror(url);
+		if (time === -1 || time > 5000) {
+			console.log('该镜像源不可用');
+			return;
+		}
+		this.mirrorList.push(
+			new MirrorModel({
+				name,
+				url,
+				usable: true,
+			})
+		);
+		console.log(`已添加 ${name} 镜像源，耗时 ${time} ms`);
+	}
+	/**
+	 * 删除镜像源
+	 * @param name {String} 镜像源名称
+	 */
+	deleteMirror(name) {
+		const mirror = this.mirrorList.find(mirror => mirror.name === name);
+		this.mirrorList.splice(this.mirrorList.indexOf(mirror), 1);
+		console.log(`已删除 ${name} 镜像源`);
+	}
+	/**
+	 * 更新镜像源
+	 * @param name {String} 镜像源名称
+	 * @param url {String} 镜像源地址
+	 */
+	async updateMirror(name, url) {
+		const mirror = this.mirrorList.find(mirror => mirror.name === name);
+		mirror.url = url;
+		const time = await mirror.verifyMirror(url);
+		if (time === -1 || time > 5000) {
+			console.log('该镜像源不可用');
+			return;
+		}
+		console.log(`已更新 ${name} 镜像源，耗时 ${time} ms`);
+	}
+	/**
+	 * 检查镜像源是否存在
+	 * @param name {String} 镜像源名称
+	 * @return {Boolean} 是否存在
+	 */
+	checkMirrorExist(name) {
+		return (
+			this.mirrorList.find(mirror => mirror.name === name) !== undefined
+		);
+	}
+	/**
+	 * 测试特定镜像源
+	 * @param name {String} 镜像源名称
+	 * @return {Number} 耗时
+	 */
+	async testMirror(name) {
+		const mirror = this.mirrorList.find(mirror => mirror.name === name);
+		console.log(`\n正在测试 ${name} 镜像源,url: ${mirror.url}`);
+		const time = await mirror.verifyMirror();
+		if (time === -1 || time > 5000) {
+			console.log('该镜像源不可用');
+			return;
+		}
+		console.log(`已测试 ${name} 镜像源，耗时 ${time} ms\n`);
 	}
 }

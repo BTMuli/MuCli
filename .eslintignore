@@ -4,8 +4,8 @@ node_modules
 # Config yaml dir
 config_default
 
-# Test dir
-test
+# Github
+.github
 
 # Eslint config
 .eslintrc.json

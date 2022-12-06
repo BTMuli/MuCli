@@ -1,61 +1,65 @@
-// MuCli JS
+/**
+ * @author: BTMuli<bt-muli@outlook.com>
+ * @date: 2022-12-06
+ * @description: 配置相关
+ * @update: 2022-12-06
+ */
+
+/* MuCli */
 import MucYaml from '../utils/yaml.js';
-import MucConfig from '../config.js';
+import { ROOT_PATH } from '../config.js';
+/* SubCommand */
+import markdown from '../cli/markdown.js';
+import pip from '../cli/pip.js';
+import dev from '../cli/dev.js';
+/* Project command list */
+export let COMMAND_LIST = [markdown, pip, dev];
 
 class Config {
 	constructor(path = undefined) {
 		if (path === undefined) {
-			this.configPath =
-				MucConfig.getPath() + '\\config_default\\config.yml';
-			this.mucYaml = new MucYaml();
-		} else {
-			this.configPath = MucConfig.getPath() + path;
-			this.mucYaml = new MucYaml(path);
+			path = '\\config_default\\config.yml';
 		}
+		this.configPath = ROOT_PATH + path;
+		this.mucYaml = new MucYaml(path);
 	}
-
 	/**
 	 * 读取配置文件
 	 * @return {JSON}
 	 */
 	readConfig() {
-		return this.mucYaml.yamlRead(this.configPath);
+		return this.mucYaml.readYaml();
 	}
-
 	/**
 	 * 读取子配置
 	 * @param args 可变参数，所获取位置
 	 * @return {*|JSON}
 	 */
-	readDetailConfig(...args) {
-		var configRead = this.readConfig();
-		configRead = this.mucYaml.yamlDetailRead(configRead, args);
+	readConfigDetail(args) {
+		let configRead = this.readConfig();
+		configRead = this.mucYaml.readYamlDetail(configRead, [args]);
 		return configRead;
 	}
-
 	/**
 	 * 读取并加载模块
 	 * @param command Commander
-	 * @param data 命令列表
 	 */
-	setConfig(command, ...data) {
-		data.forEach(value => {
-			if (this.checkConfig(value)) {
+	loadConfig(command) {
+		COMMAND_LIST.forEach(value => {
+			if (this.commandUse(value)) {
 				command.addCommand(value);
 			}
 		});
 	}
-
 	/**
 	 * 加载检验
 	 * @param cmd 命令
-	 * @return {boolean} 是否开启
+	 * @return boolean 是否开启
 	 */
-	checkConfig(cmd) {
-		var cmdConfig = this.readDetailConfig('Commands', cmd.name());
-		return cmdConfig['enable'] === true;
+	commandUse(cmd) {
+		let cmdConfig = this.readConfigDetail(cmd.name());
+		return cmdConfig['enable'];
 	}
-
 	/**
 	 * 修改命令可用性
 	 * @param name
@@ -63,30 +67,25 @@ class Config {
 	 */
 	transConfig(name, target) {
 		let commandPath = this.mucYaml.configPath;
-		let commandList = ['all', 'mmd', 'tpl', 'ncm', 'pip'];
+		let commandList = COMMAND_LIST.map(value => {
+			return value.name();
+		});
 		let targetList = ['on', 'off'];
-		if (targetList.includes(target) && commandList.includes(name)) {
+		if (
+			targetList.includes(target) &&
+			(commandList.includes(name) || name === 'all')
+		) {
 			if (name === 'all') {
-				this.mucYaml.yamlChangeAsync(
-					commandPath,
-					'mmd',
-					'enable',
-					target === 'on'
-				);
-				this.mucYaml.yamlChangeAsync(
-					commandPath,
-					'tpl',
-					'enable',
-					target === 'on'
-				);
-				this.mucYaml.yamlChangeAsync(
-					commandPath,
-					'ncm',
-					'enable',
-					target === 'on'
-				);
+				commandList.forEach(value => {
+					this.mucYaml.changeYaml(
+						commandPath,
+						[value],
+						'enable',
+						target === 'on'
+					);
+				});
 			} else {
-				this.mucYaml.yamlChangeAsync(
+				this.mucYaml.changeYaml(
 					commandPath,
 					name,
 					'enable',
@@ -97,7 +96,6 @@ class Config {
 			console.log('参数错误');
 		}
 	}
-
 	/**
 	 * 修改配置文件
 	 * @param name 命令
@@ -105,8 +103,8 @@ class Config {
 	 * @param value 值
 	 */
 	changeConfig(name, target, value) {
-		let commandPath = this.mucYaml.configPath;
-		this.mucYaml.yamlChangeAsync(commandPath, name, target, value);
+		const commandPath = this.mucYaml.configPath;
+		this.mucYaml.changeYaml(commandPath, name, target, value);
 	}
 }
 

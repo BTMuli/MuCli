@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-12-02
+Update: 2022-12-06
 Author: 目棃
 Description: 说明文档
 ---
@@ -11,9 +11,9 @@ Description: 说明文档
 
 ## 前言
 
-本项目为个人使用的 Node-CLI 工具，即 `A Node CLI for Personal Use by BTMuli`，为了方便自己使用，所以发包到 `npm` 上面以及 `github` 上面。
+本项目为个人使用的 Node-CLI 工具，即 `A Node CLI for Personal Use by BTMuli`，
 
-> 若你写的 Workflow 发布到不同平台，则需保证`package.json`没有 `publishConfig` 之类的配置，其会覆盖你在 `workflow.yml`中写的路径。
+为了方便自己使用，所以发包到 `npm` 上面以及 `github` 上面。
 
 ---
 
@@ -42,8 +42,8 @@ Options:
 Commands:
   set [options]   change subcommand use status
   mmd [options]   A SubCommand within MuCli for Markdown
-  ncm [options]   A SubCommand within MuCli for SubCommand
   pip [options]   A SubCommand within MuCli for pip
+  dev [options]   A SubCommand within MuCli for SubCommand
   help [command]  display help for command
 ```
 
@@ -51,7 +51,7 @@ Commands:
 
 + `set`：用于子命令的启用/禁用
 + `mmd`：用于 Markdown 相关操作
-+ `ncm`：用于创建子命令 `Just for dev`
++ `dev`：用于创建子命令 `Just for dev`
 + `pip`：用于 pip 相关操作
 
 ### 查看版本
@@ -60,21 +60,21 @@ Commands:
 
 ```text
 > muc -v
-0.5.2
+0.6.0
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc mmd -sv
-0.3.2
-> muc ncm -sv
-0.0.3
+0.4.0
+> muc dev -sv
+0.1.0
 > muc pip -sv
-0.1.1
+0.2.0
 ```
 
-### SubCli-Markdown
+### MuCli-Markdown
 
 对应的是上面的 `mmd` 命令：
 
@@ -85,67 +85,83 @@ Usage: muc mmd [options] [command]
 A SubCommand within MuCli for Markdown
 
 Options:
-  -sv               output the version number
-  -h, --help        display help for command
+  -sv, --subversion  output the subversion of MuCli-Markdown
+  -h, --help         display help for command
 
 Commands:
-  new [options]     create a markdown file
-  typora [options]  using local Typora - config is needed
-  help [command]    display help for command
+  new [options]      create a markdown file
+  typora [options]   get local typora path
+  label [options]    add the template
+  help [command]     display help for command
 ```
 
-目前的功能有两个：新建 Markdown 文件与调用 [`Typora`](https://typoraio.cn/) 打开文件。
+目前主要功能就是两个：新建 markdown 文件和 Typora 软件相关。
 
-```text
+markdown 文件支持模板，模板参数如下：
+
+```yaml
+author: [author]
+filename: [filename]
+description: [description]
+```
+
+相关命令如下:
+
+```shell
+> muc mmd label -h
+Usage: muc mmd label [options]
+
+add the template
+
+Options:
+  -l, --list           get the list of markdown label
+  -g, --get <name>     get the markdown label
+  -d, --delete <name>  delete the markdown label
+  -a, --add <name>     add the markdown label
+  -h, --help           display help for command
+```
+
+Typora 相关操作如下：
+
+```shell
 > muc mmd typora -h
 Usage: muc mmd typora [options]
 
-using local Typora - config is needed
+get local typora path
 
 Options:
-  -n [name]   open [name] with Typora (default: "")
-  -p, --path  get local typora path
-  -h, --help  display help for command
+  -n, --name [name]  the name of the markdown file
+  -i, --info         get the path of Typora
+  -s, --set [path]   set the path of Typora
+  -h, --help         display help for command
 ```
 
-默认内容如下（以 `muc mmd new -n README` 为例）
-
-```markdown
----
-Date: 2022-10-07
-Update: 2022-10-07
-Author: 目棃
-Description: 说明文档
 ---
 
-> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于
-`2022-10-07 15:34:07`
-```
+### MuCli-Dev
 
-### SubCli-SubCommand
+对应的是上面的 `dev` 命令：
 
-对应的是上面的 `ncm` 命令：
-
-```text
-> muc ncm -h
-Usage: muc ncm [options] [command]
+```shell
+> muc dev -h
+Usage: muc dev [options] [command]
 
 A SubCommand within MuCli for SubCommand
 
 Options:
-  -sv             output the version number
-  -h, --help      display help for command
+  -sv, --subversion  output the subversion of MuCli-Dev
+  -h, --help         display help for command
 
 Commands:
   new [options]
-  help [command]  display help for command
+  help [command]     display help for command
 ```
 
 用于个人新建一个子命令，即 `Just for dev`。
 
 ---
 
-## SubCli-pip
+## MuCli-Pip
 
 对应的是上面的 `pip` 命令：
 
@@ -156,19 +172,61 @@ Usage: muc pip [options] [command]
 A SubCommand within MuCli for pip
 
 Options:
-  -sv                output the version number
+  -sv, --subversion  output the subversion of MuCli-Pip
   -h, --help         display help for command
 
 Commands:
   install [options]  install package
-  test               test mirror
-  show               show mirror
+  test [options]     test mirror
+  mirror [options]   handle mirror
   help [command]     display help for command
 ```
 
-目前支持镜像源的可用性测试，以及镜像源的查看。
+目前支持：使用镜像源下载包跟`requirements.txt`文件，测试镜像源速度，以及镜像源的增删改查。
 
-`pip` 命令的 `pip install -i`跟 `pip install -r` 也支持使用镜像源。
+`pip install` 相关操作如下：
+
+```shell
+> muc pip install -h
+Usage: muc pip install [options]
+
+install package
+
+Options:
+  -p, --package [package]          install package
+  -r, --requirement [requirement]  install requirement
+  -h, --help                       display help for command
+```
+
+`pip mirror` 相关操作如下：
+
+```shell
+> muc pip mirror -h
+Usage: muc pip mirror [options]
+
+handle mirror
+
+Options:
+  -a, --add [add]        add mirror
+  -d, --delete [delete]  delete mirror
+  -s, --set [set]        set mirror
+  -l, --list             list mirror
+  -u, --update           update mirror
+  -h, --help             display help for command
+```
+
+`pip test` 相关操作如下：
+
+```shell
+> muc pip test -h
+Usage: muc pip test [options]
+
+test mirror
+
+Options:
+  -n, --name [name]  mirror name
+  -h, --help         display help for command
+```
 
 ---
 
@@ -181,7 +239,7 @@ Commands:
 ```markdown
 ---
 Date: 2022-09-29
-Update: 2022-10-10
+Update: 2022-12-06
 Author: 目棃
 Description: 说明文档
 ---
@@ -288,10 +346,17 @@ THE SOFTWARE.
 
 ## 致谢
 
-感谢 Github 提供的 Education Pack，使得本项目可以免费使用 Github Copilot。
+感谢 Github 提供的 Education Pack[^1]，使得本项目可以免费使用 Github Copilot[^2]。
 
-感谢 JetBrains 提供的 Education Pack，使得本项目可以免费使用 Webstorm。
+感谢 JetBrains 提供的 Education Pack[^3]，使得本项目可以免费使用 Webstorm[^4]。
 
-感谢 npmjs 提供的免费服务，使得本项目可以免费使用 npmjs 仓库。
+感谢 npmjs[^5] 提供的免费服务，使得本项目可以免费使用 npmjs 仓库[^6]。
 
 用到本项目的朋友们，如果觉得本项目对你有帮助，欢迎 Star 本项目，也欢迎 Fork 本项目，如果有任何问题，欢迎提 Issue 或者 Pull Request。
+
+[^1]: [GitHub Education Pack](https://education.github.com/pack)
+[^2]: [GitHub Copilot](https://copilot.github.com/)
+[^3]: [JetBrains Education Pack](https://www.jetbrains.com/zh-cn/community/education/#students)
+[^4]: [JetBrains Webstorm](https://www.jetbrains.com/zh-cn/webstorm/)
+[^5]: [npmjs](https://www.npmjs.com/)
+[^6]: [本项目 npmjs 仓库](https://www.npmjs.com/package/@btmuli/mucli)
