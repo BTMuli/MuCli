@@ -55,16 +55,19 @@ pip.command('mirror')
 	.option('-d, --delete [delete]', 'delete mirror')
 	.option('-s, --set [set]', 'set mirror')
 	.option('-l, --list', 'list mirror')
-	.action(options => {
+	.option('-u, --update', 'update mirror')
+	.action(async options => {
 		let pip = new Pip();
 		if (options.add) {
-			pip.addMirror(options.add);
+			await pip.addMirror(options.add);
 		} else if (options.delete) {
-			pip.deleteMirror(options.delete);
+			await pip.deleteMirror(options.delete);
 		} else if (options.set) {
-			pip.setMirror(options.set);
+			await pip.setMirror(options.set);
+		} else if (options.update) {
+			await pip.updateMirror();
 		} else if (options.list) {
-			pip.listMirror();
+			await pip.listMirror();
 		}
 	});
 
