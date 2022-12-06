@@ -1,85 +1,96 @@
-//Node JS
+/**
+ * @author: BTMuli<bt-muli@outlook.com>
+ * @date: 2022-12-06
+ * @description: pip 镜像源相关操作
+ */
+
+/* Node */
 import { exec } from 'child_process';
-// MuCli JS
+/* MuCli */
 import { PipModel, MirrorModel } from '../config/pip.js';
 import Config from '../config/index.js';
+import inquirer from 'inquirer';
 
 class Pip {
-	/**
-	 * 初始化构建各种设置
-	 */
 	constructor() {
-		var pipConfig = new Config().readDetailConfig('Commands', 'pip');
+		const pipConfig = new Config().readConfigDetail('pip');
 		this.pipConfig = new Config();
-		var mirrorList = [];
-		var mirrorUse = undefined;
-		for (var i = 0; i < pipConfig.mirrorList.length; i++) {
-			var mirror = new MirrorModel(pipConfig.mirrorList[i]);
+		let mirrorList = [];
+		let mirrorUse = undefined;
+		for (let i = 0; i < pipConfig.mirrorList.length; i++) {
+			let mirror = new MirrorModel(pipConfig.mirrorList[i]);
 			if (mirror.usable === true && mirrorUse === undefined) {
 				mirrorUse = mirror;
 			}
 			mirrorList.push(mirror);
 		}
 		if (mirrorUse === undefined) {
-			mirrorUse = this.mirrorList[0];
+			mirrorUse = this.mirrorInfo[0];
 		}
-		this.mirrorList = new PipModel(mirrorUse, mirrorList);
+		this.mirrorInfo = new PipModel(mirrorUse, mirrorList);
 	}
-
 	/**
 	 * 测试镜像源
+	 * @param {String} mirror 镜像源名称
 	 */
-	async verifyMirror() {
-		let i;
-		let mirrorListTest = this.mirrorList.mirrorList;
-		console.log('正在测试镜像源,请稍后...');
-		for (i = 0; i < mirrorListTest.length; i++) {
-			var mirror = mirrorListTest[i];
-			console.log('正在测试镜像源:' + mirror.name + '\t' + mirror.url);
-			var result = await mirror.verifyMirror();
-			if (result <= 5000 && result > 0) {
-				mirrorListTest[i].usable = true;
-				console.log('测试结果:' + result + 'ms');
+	async verifyMirror(mirror = undefined) {
+		if (mirror !== undefined) {
+			if (this.mirrorInfo.checkMirrorExist(mirror) === false) {
+				inquirer
+					.prompt([
+						{
+							type: 'confirm',
+							name: 'confirm',
+							message: `镜像源 ${mirror} 不存在，是否添加？`,
+							default: true,
+						},
+					])
+					.then(async answer => {
+						if (answer.confirm === true) {
+							await this.addMirror(mirror);
+						}
+					});
 			} else {
-				mirrorListTest[i].usable = false;
-				console.log('测试结果:超时或不可用');
+				this.mirrorInfo.testMirror(mirror);
 			}
-			mirrorListTest[i].time = result;
+		} else {
+			let mirrorListTest = this.mirrorInfo.mirrorList;
+			for (let i = 0; i < mirrorListTest.length; i++) {
+				mirror = mirrorListTest[i].name;
+				let result = await this.mirrorInfo.testMirror(mirror);
+				mirrorListTest[i].usable = result !== -1;
+				mirrorListTest[i].time = result;
+			}
+			mirrorListTest.sort(function (a, b) {
+				if (a.time === -1) {
+					return 1;
+				}
+				if (b.time === -1) {
+					return -1;
+				}
+				return a.time - b.time;
+			});
+			for (let i = 0; i < mirrorListTest.length; i++) {
+				delete mirrorListTest[i].time;
+			}
+			this.mirrorInfo.mirrorList = mirrorListTest;
+			console.log('正在写入配置文件...');
+			this.pipConfig.changeConfig(
+				['pip'],
+				'mirrorList',
+				this.mirrorInfo.mirrorList
+			);
+			console.log('写入配置文件成功');
 		}
-		// 按照时间给镜像源排序，从小到大，但是-1的放在最后
-		mirrorListTest.sort(function (a, b) {
-			if (a.time === -1) {
-				return 1;
-			}
-			if (b.time === -1) {
-				return -1;
-			}
-			return a.time - b.time;
-		});
-		// 除去 time 属性
-		for (i = 0; i < mirrorListTest.length; i++) {
-			delete mirrorListTest[i].time;
-		}
-		// 将测试结果写入配置文件
-		this.mirrorList.mirrorList = mirrorListTest;
-		console.log('正在写入配置文件...');
-		this.pipConfig.changeConfig(
-			'pip',
-			'mirrorList',
-			this.mirrorList.mirrorList
-		);
-		console.log('写入配置文件成功');
 	}
-
 	/**
 	 * 安装包
 	 * @param args
 	 */
 	install(args) {
-		var url = this.mirrorList.useMirror.url;
-		var command = '';
-		// 获取运行命令目录下的python虚拟环境
-		var venv = process.env.VIRTUAL_ENV;
+		const url = this.mirrorInfo.useMirror.url;
+		let command = '';
+		let venv = process.env.VIRTUAL_ENV;
 		if (venv !== undefined) {
 			venv = venv + '\\Scripts\\pip.exe';
 		} else {
@@ -94,14 +105,118 @@ class Pip {
 		console.log('command:\t' + command);
 		exec(command);
 	}
-
 	/**
 	 * 查看镜像源
 	 */
-	showMirror() {
-		console.log('当前使用镜像源:' + this.mirrorList.useMirror.name);
-		console.log('镜像源列表:');
-		this.mirrorList.getMirrorList();
+	listMirror() {
+		this.mirrorInfo.getUseMirror();
+		this.mirrorInfo.getMirrorList();
+	}
+	/**
+	 * 添加镜像源
+	 * @param {String} mirrorName 镜像源名称
+	 */
+	async addMirror(mirrorName) {
+		if (this.mirrorInfo.checkMirrorExist(mirrorName) === false) {
+			let mirror = await inquirer.prompt([
+				{
+					type: 'input',
+					name: 'name',
+					message: '请输入镜像源地址',
+					default: mirrorName,
+				},
+				{
+					type: 'input',
+					name: 'url',
+					message: '请输入镜像源地址',
+				},
+			]);
+			await this.mirrorInfo.addMirror(mirror.name, mirror.url);
+			console.log('正在写入配置文件...');
+			this.pipConfig.changeConfig(
+				['pip'],
+				'mirrorList',
+				this.mirrorInfo.mirrorList
+			);
+			console.log('写入配置文件成功');
+		} else {
+			console.log('镜像源已存在');
+		}
+	}
+	/**
+	 * 删除镜像源
+	 * @param {String} mirrorName 镜像源名称
+	 */
+	async deleteMirror(mirrorName) {
+		if (this.mirrorInfo.checkMirrorExist(mirrorName) === true) {
+			inquirer
+				.prompt([
+					{
+						type: 'confirm',
+						name: 'confirm',
+						message: `是否删除镜像源 ${mirrorName}？`,
+						default: false,
+					},
+				])
+				.then(async answer => {
+					if (answer.confirm === true) {
+						await this.mirrorInfo.deleteMirror(mirrorName);
+						console.log('正在写入配置文件...');
+						this.pipConfig.changeConfig(
+							['pip'],
+							'mirrorList',
+							this.mirrorInfo.mirrorList
+						);
+						console.log('写入配置文件成功');
+					}
+				});
+		} else {
+			console.log('镜像源不存在');
+		}
+	}
+	/**
+	 * 设置使用镜像源
+	 * @param {String} mirrorName 镜像源名称
+	 */
+	async setMirror(mirrorName) {
+		if (this.mirrorInfo.checkMirrorExist(mirrorName) === true) {
+			await this.mirrorInfo.setUseMirror(mirrorName);
+			console.log('正在写入配置文件...');
+			this.pipConfig.changeConfig(
+				['pip'],
+				'useMirror',
+				this.mirrorInfo.useMirror
+			);
+			console.log('写入配置文件成功');
+		} else {
+			console.log('镜像源不存在');
+		}
+	}
+	/**
+	 * 更新镜像源
+	 * @param {String} mirrorName 镜像源名称
+	 */
+	async updateMirror(mirrorName) {
+		if (this.mirrorInfo.checkMirrorExist(mirrorName) === true) {
+			let url = await inquirer.prompt([
+				{
+					type: 'input',
+					name: 'url',
+					message: '请输入镜像源地址',
+				},
+			]);
+			url = url.url;
+			await this.mirrorInfo.updateMirror(mirrorName, url);
+			console.log('正在写入配置文件...');
+			this.pipConfig.changeConfig(
+				['pip'],
+				'mirrorList',
+				this.mirrorInfo.mirrorList
+			);
+			console.log('写入配置文件成功');
+		} else {
+			console.log('镜像源不存在');
+		}
 	}
 }
 
