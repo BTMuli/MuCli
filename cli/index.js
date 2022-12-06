@@ -1,35 +1,37 @@
-// Node JS
+/**
+ * @author: BTMuli<bt-muli@outlook.com>
+ * @date: 2022-12-06
+ * @description: 主命令文件
+ * @update: 2022-12-06
+ */
+
+/* Node */
 import { Command } from 'commander';
-// MuCli JS
+/* MuCli */
+import { COMMAND_LIST, PROJECT_INFO } from '../config.js';
 import Config from '../config/index.js';
-// SubCommand
-import markdown from './markdown.js';
-import subCommand from './SubCommand.js';
-import pip from './pip.js';
+
+/* 版本管理 */
+const MuCliVersion = PROJECT_INFO.version;
 
 const MuCli = new Command();
-let muc = new Config();
 
-// Base info
+/* 基本信息 */
 MuCli.name('muc')
-	.version('0.5.2', '-v, --version')
+	.version(MuCliVersion, '-v, --version')
 	.description('A Node Cli for Personal Use by BTMUli.');
 
-// Load subCommand and setting
+/* 选用/弃用子命令 */
 MuCli.command('set')
-	.option('-n, --name [name]', 'see and set [name]', 'all')
-	.option('-t, --target [status]', 'set [target] to [status]', 'on')
+	.option('-n, --name <name>', 'see and set [name]', 'all')
+	.option('-t, --target <status>', 'set [target] to [status]', 'on')
 	.description('change subcommand use status')
-	.action(args => {
-		if (args.name && args.target) {
-			muc.transConfig(args.name, args.target);
-			muc.setConfig(MuCli, markdown, subCommand, pip);
-		} else if (args.name) {
-			muc.transConfig(args.name, 'on');
-			muc.setConfig(MuCli, markdown, subCommand, pip);
-		} else {
-			console.log('Please input a name.');
-		}
+	.action(options => {
+		let muc = new Config();
+		/* 更新配置 */
+		muc.transConfig(options.name, options.target);
+		/* 读取配置 */
+		muc.setConfig(MuCli, COMMAND_LIST);
 	});
 
 export default MuCli;
