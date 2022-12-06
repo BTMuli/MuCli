@@ -8,7 +8,7 @@
 /* Node */
 import { Command } from 'commander';
 /* MuCli */
-import { COMMAND_LIST, PROJECT_INFO } from '../config.js';
+import { PROJECT_INFO } from '../config.js';
 import Config from '../config/index.js';
 
 /* 版本管理 */
@@ -31,7 +31,7 @@ MuCli.command('set')
 		/* 更新配置 */
 		muc.transConfig(options.name, options.target);
 		/* 读取配置 */
-		muc.loadConfig(MuCli, COMMAND_LIST);
+		muc.loadConfig(MuCli);
 	});
 
 export default MuCli;

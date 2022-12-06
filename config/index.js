@@ -7,7 +7,13 @@
 
 /* MuCli */
 import MucYaml from '../utils/yaml.js';
-import { COMMAND_LIST, ROOT_PATH } from '../config.js';
+import { ROOT_PATH } from '../config.js';
+/* SubCommand */
+import markdown from '../cli/markdown.js';
+import pip from '../cli/pip.js';
+import subCommand from '../cli/SubCommand.js';
+/* Project command list */
+export let COMMAND_LIST = [markdown, pip, subCommand];
 
 class Config {
 	constructor(path = undefined) {
@@ -37,10 +43,9 @@ class Config {
 	/**
 	 * 读取并加载模块
 	 * @param command Commander
-	 * @param subCommand 子命令列表，数组
 	 */
-	loadConfig(command, subCommand) {
-		subCommand.forEach(value => {
+	loadConfig(command) {
+		COMMAND_LIST.forEach(value => {
 			if (this.commandUse(value)) {
 				command.addCommand(value);
 			}
