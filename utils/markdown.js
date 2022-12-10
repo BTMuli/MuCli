@@ -2,6 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: markdown 文件相关操作
+ * @update: 2022-12-10
  */
 
 /* Node */
@@ -39,13 +40,13 @@ class Markdown {
 	 */
 	checkLabel(fileName) {
 		const label = this.label.custom;
-		const emptyLabel = {
-			author: undefined,
-			description: undefined,
+		const defaultLabel = {
+			author: this.label_default.author,
+			description: fileName,
 		};
 		// 判断label是否为空
 		if (label === null) {
-			return emptyLabel;
+			return defaultLabel;
 		}
 		for (let i = 0; i < label.length; i++) {
 			let labelGet = label[i];
@@ -53,7 +54,7 @@ class Markdown {
 				return labelGet;
 			}
 		}
-		return emptyLabel;
+		return defaultLabel;
 	}
 	/**
 	 * 创建新文件前的提示
@@ -101,16 +102,13 @@ class Markdown {
 								type: 'input',
 								message: '请输入作者',
 								name: 'author',
-								default:
-									label.author || this.label_default.author,
+								default: label.author,
 							},
 							{
 								type: 'input',
 								message: '请输入描述',
 								name: 'description',
-								default:
-									label.description ||
-									this.label_default.description,
+								default: label.description,
 							},
 						])
 						.then(async lv3 => {
