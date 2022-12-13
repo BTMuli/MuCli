@@ -86,7 +86,7 @@ class DevModel {
 			'import { PROJECT_INFO } from \'../config.js\';\n\n' +
             'const ' + this.name + '= new Command();\n\n' +
 			'/* 版本管理 */\n' +
-			'const '+ clsName + 'Version = PROJECT_INFO[\'subversion\'][' + this.name + '];\n\n' +
+			'const '+ clsName + 'Version = PROJECT_INFO[\'subversion\'][\'' + this.name + '\'];\n\n' +
             '/* 基本信息 */\n' +
             this.name + '\n' +
             '    .name(\'' + this.command + '\')\n' +
