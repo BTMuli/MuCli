@@ -1,3 +1,6 @@
+dev:
+    enable: true
+    name: subCommand
 mmd:
     enable: true
     name: markdown
@@ -10,9 +13,6 @@ mmd:
     typora:
         enable: true
         path: 'E:\\SoftWares\\Typora\\Typora.exe'
-dev:
-    enable: true
-    name: subCommand
 pip:
     enable: true
     name: pip

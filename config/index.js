@@ -9,11 +9,11 @@
 import MucYaml from '../utils/yaml.js';
 import { ROOT_PATH } from '../config.js';
 /* SubCommand */
+import dev from '../cli/dev.js';
 import markdown from '../cli/markdown.js';
 import pip from '../cli/pip.js';
-import dev from '../cli/dev.js';
 /* Project command list */
-export let COMMAND_LIST = [markdown, pip, dev];
+export let COMMAND_LIST = [dev, markdown, pip];
 
 class Config {
 	constructor(path = undefined) {
