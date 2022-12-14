@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 主命令文件
- * @update: 2022-12-06
+ * @update: 2022-12-14
  */
 
 /* Node */
@@ -24,10 +24,12 @@ MuCli.name('muc')
 /* 查看子命令信息 */
 MuCli.option('-l, --list', 'list all commands').action(options => {
 	if (options.list) {
+		let muc = new Config();
 		let commandList = [];
 		COMMAND_LIST.forEach(command => {
 			commandList[command.name()] = {
 				version: command.version(),
+				enable: muc.commandUse(command),
 			};
 		});
 		console.table(commandList);
