@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 文件相关操作
- * @update: 2022-12-06
+ * @update: 2022-12-14
  */
 
 /* Node */
@@ -12,7 +12,7 @@ import path from 'node:path';
 
 class MucFile {
 	/**
-	 * 文件创建
+	 * @description 文件创建
 	 * @param inputPath 文件路径
 	 * @param fileData 文件内容
 	 */
@@ -38,7 +38,7 @@ class MucFile {
 		}
 	}
 	/**
-	 * 目录创建
+	 * @description 目录创建
 	 * @param dirPath 目录路径
 	 * @return boolean 是否创建成功
 	 */
@@ -53,7 +53,7 @@ class MucFile {
 		}
 	}
 	/**
-	 * 文件覆写
+	 * @description 文件覆写
 	 * @param filePath 文件路径
 	 * @param fileData 文件内容
 	 */
@@ -67,7 +67,7 @@ class MucFile {
 		});
 	}
 	/**
-	 * 文件存在检验
+	 * @description 文件存在检验
 	 * @param fileName 文件名称暨路径
 	 * @return {Promise<boolean>} 文件是否存在
 	 */

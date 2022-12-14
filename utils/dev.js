@@ -14,7 +14,7 @@ import { PROJECT_INFO, ROOT_PATH } from '../config.js';
 
 class Dev {
 	/**
-	 * @description: 创建新的子命令
+	 * @description 创建新的子命令
 	 * @param name {String} 子命令名称
 	 */
 	createNew(name) {
@@ -54,7 +54,7 @@ class Dev {
 			});
 	}
 	/**
-	 * @description: 更新命令版本号，包括主命令和子命令
+	 * @description 更新命令版本号，包括主命令和子命令
 	 */
 	updateVersion() {
 		let subCommandsArr = Object.keys(PROJECT_INFO['subversion']).map(
@@ -89,7 +89,7 @@ class Dev {
 			});
 	}
 	/**
-	 * @description: 检查版本号是否合法
+	 * @description 检查版本号是否合法
 	 * @param version {String} 新版本号
 	 * @param oldVersion {String} 旧版本号
 	 * @return {Boolean} 是否合法
@@ -107,7 +107,7 @@ class Dev {
 		return true;
 	}
 	/**
-	 * @description: 更新 主命令 版本号
+	 * @description 更新 主命令 版本号
 	 */
 	updateMucVersion() {
 		let mucVersion = PROJECT_INFO.version;
@@ -139,7 +139,7 @@ class Dev {
 			});
 	}
 	/**
-	 * @description: 更新 子命令 版本号
+	 * @description 更新 子命令 版本号
 	 * @param name {String} 子命令名称
 	 */
 	updateSubVersion(name) {
@@ -188,7 +188,7 @@ class Dev {
 		}
 	}
 	/**
-	 * @description: 更新/新增 package.json 中的子命令
+	 * @description 更新/新增 package.json 中的子命令
 	 * @param name {String} 子命令名称
 	 * @param version {String} 子命令版本号
 	 */

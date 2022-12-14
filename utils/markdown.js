@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: markdown 文件相关操作
- * @update: 2022-12-10
+ * @update: 2022-12-14
  */
 
 /* Node */
@@ -24,7 +24,7 @@ class Markdown {
 		this.mucFile = new MucFile();
 	}
 	/**
-	 * 获取 Typora 相关配置
+	 * @description 获取 Typora 相关配置
 	 * @returns {Object} Typora 相关配置
 	 */
 	getConfigTypora() {
@@ -34,7 +34,7 @@ class Markdown {
 		}
 	}
 	/**
-	 * 检查文件名是否在配置中
+	 * @description 检查文件名是否在配置中
 	 * @param {String} fileName 文件名
 	 * @returns {Object} 是否在配置中 | 配置信息
 	 */
@@ -57,7 +57,7 @@ class Markdown {
 		return defaultLabel;
 	}
 	/**
-	 * 创建新文件前的提示
+	 * @description 创建新文件前的提示
 	 * @param fileName 文件名称
 	 */
 	promoteFile(fileName) {
@@ -122,7 +122,7 @@ class Markdown {
 			});
 	}
 	/**
-	 * 创建文件
+	 * @description 创建文件
 	 * @param {String} fileName 文件名
 	 * @param {String} author 作者
 	 * @param {String} description 描述
@@ -153,7 +153,7 @@ class Markdown {
 		}
 	}
 	/**
-	 * 调用 Typora 打开文件
+	 * @description 调用 Typora 打开文件
 	 * @param fileName 文件名称
 	 */
 	openTypora(fileName) {
@@ -169,7 +169,7 @@ class Markdown {
 		}
 	}
 	/**
-	 * 获取 markdown label
+	 * @description 获取 markdown label
 	 * @param {String} fileName 文件名
 	 */
 	getLabel(fileName = 'all') {
@@ -199,7 +199,7 @@ class Markdown {
 		}
 	}
 	/**
-	 * 添加 markdown label
+	 * @description 添加 markdown label
 	 * @param {String} fileName 文件名
 	 */
 	addLabel(fileName) {
@@ -255,7 +255,7 @@ class Markdown {
 		}
 	}
 	/**
-	 * 删除 markdown label
+	 * @description 删除 markdown label
 	 * @param {String} fileName 文件名
 	 */
 	delLabel(fileName) {
@@ -285,14 +285,14 @@ class Markdown {
 		}
 	}
 	/**
-	 * 将 markdown label 写入文件
+	 * @description 将 markdown label 写入文件
 	 * @param {Array} labelCustom 自定义模板
 	 */
 	changeLabel(labelCustom) {
 		new Config().changeConfig(['mmd', 'label'], 'custom', labelCustom);
 	}
 	/**
-	 * 设置 Typora 路径
+	 * @description 设置 Typora 路径
 	 * @param binPath Typora 路径
 	 */
 	setConfigTypora(binPath) {

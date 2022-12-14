@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: yaml 文件解析及相关操作
- * @update: 2021-12-06
+ * @update: 2021-12-14
  */
 
 /* Node */
@@ -21,7 +21,7 @@ class MucYaml {
 		this.mucFile = new MucFile();
 	}
 	/**
-	 * 读取 yaml 文件
+	 * @description 读取 yaml 文件
 	 * @param filePath 文件路径
 	 * @return {Object} yaml 文件内容
 	 */
@@ -32,7 +32,7 @@ class MucYaml {
 		return YAML.load(filePath);
 	}
 	/**
-	 * 读取具体配置
+	 * @description 读取具体配置
 	 * @param yamlData yaml 文件内容
 	 * @param args 配置位置
 	 * @return {*} 配置内容
@@ -45,7 +45,7 @@ class MucYaml {
 		return yamlRead;
 	}
 	/**
-	 * 修改 yaml 文件某属性值
+	 * @description 修改 yaml 文件某属性值
 	 * @param filePath yaml 文件路径
 	 * @param args 要修改属性位置，数组形式
 	 * @param itemKey  要修改属性名称

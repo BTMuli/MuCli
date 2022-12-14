@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 mmd 相关模型
- * @update: 2021-12-06
+ * @update: 2021-12-14
  */
 
 /* Node */
@@ -21,7 +21,7 @@ class MarkdownModel {
 		this.description = desc;
 	}
 	/**
-	 * 获取默认写入内容
+	 * @description 获取默认写入内容
 	 * @return {string}
 	 */
 	getLabel() {

@@ -24,14 +24,14 @@ class Config {
 		this.mucYaml = new MucYaml(path);
 	}
 	/**
-	 * 读取配置文件
+	 * @description 读取配置文件
 	 * @return {JSON}
 	 */
 	readConfig() {
 		return this.mucYaml.readYaml();
 	}
 	/**
-	 * 读取子配置
+	 * @description 读取子配置
 	 * @param args 可变参数，所获取位置
 	 * @return {*|JSON}
 	 */
@@ -41,7 +41,7 @@ class Config {
 		return configRead;
 	}
 	/**
-	 * 读取并加载模块
+	 * @description 读取并加载模块
 	 * @param command Commander
 	 */
 	loadConfig(command) {
@@ -52,16 +52,16 @@ class Config {
 		});
 	}
 	/**
-	 * 加载检验
-	 * @param cmd 命令
+	 * @description 加载检验
+	 * @param command 命令
 	 * @return boolean 是否开启
 	 */
-	commandUse(cmd) {
-		let cmdConfig = this.readConfigDetail(cmd.name());
+	commandUse(command) {
+		let cmdConfig = this.readConfigDetail(command.name());
 		return cmdConfig['enable'];
 	}
 	/**
-	 * 修改命令可用性
+	 * @description 修改命令可用性
 	 * @param name
 	 * @param target
 	 */
@@ -86,7 +86,7 @@ class Config {
 		}
 	}
 	/**
-	 * 修改配置文件
+	 * @description 修改配置文件
 	 * @param name 命令
 	 * @param target 目标
 	 * @param value 值

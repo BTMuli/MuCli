@@ -20,7 +20,7 @@ export class MirrorModel {
 		}
 	}
 	/**
-	 * 测试镜像地址是否可用
+	 * @description 测试镜像地址是否可用
 	 * @param {string} url 镜像地址
 	 */
 	async verifyMirror(url = undefined) {
@@ -41,7 +41,7 @@ export class MirrorModel {
 		return time;
 	}
 	/**
-	 * 输出镜像信息
+	 * @description 输出镜像信息
 	 */
 	outputMirrorInfo() {
 		console.log(
@@ -56,7 +56,7 @@ export class PipModel {
 		this.mirrorList = mirrorList;
 	}
 	/**
-	 * 获取所有镜像源信息
+	 * @description 获取所有镜像源信息
 	 */
 	getMirrorList() {
 		this.mirrorList.forEach(mirror => {
@@ -64,7 +64,7 @@ export class PipModel {
 		});
 	}
 	/**
-	 * 获取当前使用的镜像源信息
+	 * @description 获取当前使用的镜像源信息
 	 * @return {MirrorModel} 镜像源
 	 */
 	getUseMirror() {
@@ -73,7 +73,7 @@ export class PipModel {
 		});
 	}
 	/**
-	 * 设置使用的镜像源
+	 * @description 设置使用的镜像源
 	 * @param name {String} 镜像源名称
 	 */
 	async setUseMirror(name) {
@@ -81,7 +81,7 @@ export class PipModel {
 		console.log(`已将使用的镜像源设置为：${name}`);
 	}
 	/**
-	 * 添加镜像源
+	 * @description 添加镜像源
 	 * @param name {String} 镜像源名称
 	 * @param url {String} 镜像源地址
 	 */
@@ -105,7 +105,7 @@ export class PipModel {
 		console.log(`已添加 ${name} 镜像源，耗时 ${time} ms`);
 	}
 	/**
-	 * 删除镜像源
+	 * @description 删除镜像源
 	 * @param name {String} 镜像源名称
 	 */
 	deleteMirror(name) {
@@ -114,7 +114,7 @@ export class PipModel {
 		console.log(`已删除 ${name} 镜像源`);
 	}
 	/**
-	 * 更新镜像源
+	 * @description 更新镜像源
 	 * @param name {String} 镜像源名称
 	 * @param url {String} 镜像源地址
 	 */
@@ -129,7 +129,7 @@ export class PipModel {
 		console.log(`已更新 ${name} 镜像源，耗时 ${time} ms`);
 	}
 	/**
-	 * 检查镜像源是否存在
+	 * @description 检查镜像源是否存在
 	 * @param name {String} 镜像源名称
 	 * @return {Boolean} 是否存在
 	 */
@@ -139,7 +139,7 @@ export class PipModel {
 		);
 	}
 	/**
-	 * 测试特定镜像源
+	 * @description 测试特定镜像源
 	 * @param name {String} 镜像源名称
 	 * @return {Number} 耗时
 	 */
