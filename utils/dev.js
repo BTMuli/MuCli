@@ -90,12 +90,21 @@ class Dev {
 	}
 	/**
 	 * @description: 检查版本号是否合法
-	 * @param version {String} 版本号
+	 * @param version {String} 新版本号
+	 * @param oldVersion {String} 旧版本号
 	 * @return {Boolean} 是否合法
 	 */
-	checkVersion(version) {
-		let reg = /^(\d+\.){2}\d+$/;
-		return reg.test(version);
+	checkVersion(version, oldVersion) {
+		const reg = /^(\d+\.){2}\d+$/;
+		if (!reg.test(version)) {
+			console.log('\n版本号格式不正确\n');
+			return false;
+		}
+		if (version < oldVersion) {
+			console.log('\n新版本号不能小于旧版本号\n');
+			return false;
+		}
+		return true;
 	}
 	/**
 	 * @description: 更新 主命令 版本号
@@ -112,19 +121,19 @@ class Dev {
 				},
 			])
 			.then(answers => {
-				if (!this.checkVersion(answers.version)) {
-					console.log('版本号不合法');
+				const oldVersion = mucVersion;
+				if (!this.checkVersion(answers.version, oldVersion)) {
 					return;
 				}
 				this.updatePackage('all', answers.version);
-				if (answers.version !== mucVersion) {
+				if (answers.version !== oldVersion) {
 					console.log(
-						`\n版本号已更新 ${mucVersion} -> ${answers.version}`
+						`\n版本号已更新 ${oldVersion} -> ${answers.version}`
 					);
 					console.log('请运行 npm install 更新依赖\n');
 				} else {
 					console.log(
-						`\n版本号未变化，当前 MuCli 版本为 ${answers.version}\n`
+						`\n版本号未更新，当前 MuCli 版本为 ${oldVersion}\n`
 					);
 				}
 			});
@@ -146,18 +155,18 @@ class Dev {
 					},
 				])
 				.then(answers => {
-					if (!this.checkVersion(answers.version)) {
-						console.log('版本号格式不正确');
+					const oldVersion = subInfo[name];
+					if (!this.checkVersion(answers.version, oldVersion)) {
 						return;
 					}
 					this.updatePackage(name, answers.version);
-					if (answers.version !== subInfo[name]) {
+					if (answers.version !== oldVersion) {
 						console.log(
-							`\n版本号已更新 ${subInfo[name]} -> ${answers.version}`
+							`\n版本号已更新 ${oldVersion} -> ${answers.version}\n`
 						);
 					} else {
 						console.log(
-							`\n版本号未更新，当前 ${name} 版本号为 ${subInfo[name]}\n`
+							`\n版本号未更新，当前 ${name} 版本号为 ${oldVersion}\n`
 						);
 					}
 				});
