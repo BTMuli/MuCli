@@ -2,14 +2,14 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 主命令文件
- * @update: 2022-12-06
+ * @update: 2022-12-14
  */
 
 /* Node */
 import { Command } from 'commander';
 /* MuCli */
 import { PROJECT_INFO } from '../config.js';
-import Config from '../config/index.js';
+import Config, { COMMAND_LIST } from '../config/index.js';
 
 /* 版本管理 */
 const MuCliVersion = PROJECT_INFO.version;
@@ -20,6 +20,29 @@ const MuCli = new Command();
 MuCli.name('muc')
 	.version(MuCliVersion, '-v, --version')
 	.description('A Node Cli for Personal Use by BTMUli.');
+
+/* 查看子命令信息 */
+MuCli.option('-l, --list', 'list all commands').action(options => {
+	if (options.list) {
+		let muc = new Config();
+		let commandList = [];
+		commandList['muc'] = {
+			version: MuCliVersion,
+			enable: true,
+			description: MuCli.description(),
+		};
+		COMMAND_LIST.forEach(command => {
+			commandList[command.name()] = {
+				version: command.version(),
+				enable: muc.commandUse(command),
+				description: command.description(),
+			};
+		});
+		console.table(commandList);
+	} else {
+		MuCli.help();
+	}
+});
 
 /* 选用/弃用子命令 */
 MuCli.command('set')

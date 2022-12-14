@@ -2,6 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 创建子命令相关
+ * @update: 2022-12-14
  */
 
 /* Node */
@@ -26,10 +27,19 @@ dev.name('dev')
 
 /* 创建子命令 */
 dev.command('new')
-	.option('-c, --command [command]', 'command name')
+	.option('-c, --command [command]', 'command name', 'test')
+	.description('create a new command')
 	.action(options => {
 		let muc = new Dev();
 		muc.createNew(options.command);
+	});
+
+/* 更新命令版本（包括主命令跟子命令 */
+dev.command('update')
+	.description('update a command version')
+	.action(() => {
+		let muc = new Dev();
+		muc.updateVersion();
 	});
 
 export default dev;

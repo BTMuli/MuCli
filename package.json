@@ -1,49 +1,49 @@
 {
-  "name": "@btmuli/mucli",
-  "version": "0.6.0",
-  "subversion": {
-    "dev": "0.1.0",
-    "mmd": "0.4.0",
-    "pip": "0.2.0"
-  },
-  "description": "个人用的 Node Cli",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "lint-all": "eslint --ext .js,.json ./",
-    "lint-fix": "eslint --ext .js,.json ./ --fix"
-  },
-  "bin": {
-    "muc": "./index.js"
-  },
-  "keywords": [
-    "Node",
-    "Cli",
-    "BTMuli"
-  ],
-  "author": "目棃",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/BTMuli/MuCli.git"
-  },
-  "bugs": {
-    "url": "https://github.com/BTMuli/MuCli/issues"
-  },
-  "homepage": "https://github.com/BTMuli/MuCli#readme",
-  "dependencies": {
-    "axios": "^1.2.0",
-    "commander": "^9.4.0",
-    "inquirer": "^9.1.2",
-    "silly-datetime": "^0.1.2",
-    "yamljs": "^0.3.0"
-  },
-  "devDependencies": {
-    "@types/node": "^18.7.21",
-    "eslint": "^8.25.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-json": "^3.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.7.1"
-  }
+    "name": "@btmuli/mucli",
+    "version": "0.6.1",
+    "subversion": {
+        "dev": "0.1.5",
+        "mmd": "0.4.1",
+        "pip": "0.3.0"
+    },
+    "description": "个人用的 Node Cli",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "lint-all": "eslint --ext .js,.json ./",
+        "lint-fix": "eslint --ext .js,.json ./ --fix"
+    },
+    "bin": {
+        "muc": "./index.js"
+    },
+    "keywords": [
+        "Node",
+        "Cli",
+        "BTMuli"
+    ],
+    "author": "目棃",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/BTMuli/MuCli.git"
+    },
+    "bugs": {
+        "url": "https://github.com/BTMuli/MuCli/issues"
+    },
+    "homepage": "https://github.com/BTMuli/MuCli#readme",
+    "dependencies": {
+        "axios": "^1.2.0",
+        "commander": "^9.4.0",
+        "inquirer": "^9.1.2",
+        "silly-datetime": "^0.1.2",
+        "yamljs": "^0.3.0"
+    },
+    "devDependencies": {
+        "@types/node": "^18.7.21",
+        "eslint": "^8.25.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-json": "^3.1.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "prettier": "^2.7.1"
+    }
 }

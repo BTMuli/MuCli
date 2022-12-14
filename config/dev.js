@@ -2,6 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 dev 相关配置
+ * @update: 2022-12-13
  */
 
 /* MuCli */
@@ -44,11 +45,11 @@ class DevModel {
 		/* eslint-disable */
 		return (
 			'/**\n' +
-			'  * @author: ' + this.author + '\n' +
-			'  * @date: ' + new Date().toLocaleDateString() + '\n' +
-			'  * @description: ' + this.description + '\n' +
-			'  * @update: ' + new Date().toLocaleDateString() + '\n' +
-			'  */\n\n'
+			' * @author: ' + this.author + '\n' +
+			' * @date: ' + new Date().toLocaleDateString() + '\n' +
+			' * @description: ' + this.description + '\n' +
+			' * @update: ' + new Date().toLocaleDateString() + '\n' +
+			' */\n\n'
 			);
 		/* eslint-disable */
 	}
@@ -80,18 +81,20 @@ class DevModel {
 		return (
 			this.getFileHeader() +
 			'/* Node */\n' +
-            'import { Command } from "commander";\n' +
+            'import { Command } from \'commander\';\n' +
 			'/* MuCli */\n' +
-            'import ' + clsName + ' from "../utils/' + fileName + '";\n' +
+            'import ' + clsName + ' from \'../utils/' + fileName + '\';\n' +
 			'import { PROJECT_INFO } from \'../config.js\';\n\n' +
-            'const ' + this.name + '= new Command();\n\n' +
+            'const ' + this.name + ' = new Command();\n\n' +
 			'/* 版本管理 */\n' +
-			'const '+ clsName + 'Version = PROJECT_INFO[\'subversion\'][' + this.name + '];\n\n' +
+			'const '+ clsName + 'Version = PROJECT_INFO[\'subversion\'][\'' + this.name + '\'];\n\n' +
             '/* 基本信息 */\n' +
-            this.name + '\n' +
-            '    .name(\'' + this.command + '\')\n' +
-            '    .description(\'' + this.description + '\')\n' +
-            '    .version(' + clsName + 'Version, \'-sv, --subversion\', \'output the subversion of MuCli-' + clsName + '\');\n\n' +
+            this.name + '.name(\'' + this.command + '\')\n' +
+            '\t.description(\'' + this.description + '\')\n' +
+            '\t.version(\n\t\t' + clsName + 'Version,\n' +
+			'\t\t\'-sv, --subversion\',\n' +
+			'\t\t\'output the subversion of MuCli-' + clsName + '\'\n' +
+			'\t);\n\n' +
             'export default ' + this.name + ';\n'
 		);
 		/* eslint-disable */
@@ -105,7 +108,7 @@ class DevModel {
 		/* eslint-disable */
 		return (
 			this.getFileHeader() +
-            'class ' + clsName + 'Model {\n\n}\n\n' +
+            'class ' + clsName + 'Model {}\n\n' +
             'export default ' + clsName + 'Model;\n'
 		);
 		/* eslint-disable */
@@ -121,11 +124,11 @@ class DevModel {
 		return (
 			this.getFileHeader() +
 			'/* Node */\n' +
-            'import inquirer from "inquirer";\n' +
+            'import inquirer from \'inquirer\';\n' +
 			'/* MuCli */\n' +
-            'import ' + clsName + 'Model from "../config/' + fileName + '";\n' +
-            'import MucFile from "./file.js";\n\n' +
-            'class ' + clsName + ' {\n\n}\n\n' +
+            'import ' + clsName + 'Model from \'../config/' + fileName + '\';\n' +
+            'import MucFile from \'./file.js\';\n\n' +
+            'class ' + clsName + ' {}\n\n' +
             'export default ' + clsName + ';\n'
 		);
 		/* eslint-disable */

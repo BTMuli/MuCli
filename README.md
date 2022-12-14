@@ -1,6 +1,6 @@
 ---
 Date: 2022-09-29
-Update: 2022-12-06
+Update: 2022-12-14
 Author: 目棃
 Description: 说明文档
 ---
@@ -36,22 +36,23 @@ Usage: muc [options] [command]
 A Node Cli for Personal Use by BTMUli.
 
 Options:
-  -v, --version   output the version number
-  -h, --help      display help for command
+  -v, --version  output the version number
+  -l, --list     list all commands
+  -h, --help     display help for command
 
 Commands:
-  set [options]   change subcommand use status
-  mmd [options]   A SubCommand within MuCli for Markdown
-  pip [options]   A SubCommand within MuCli for pip
-  dev [options]   A SubCommand within MuCli for SubCommand
-  help [command]  display help for command
+  set [options]  change subcommand use status
+  dev [options]  A SubCommand within MuCli for SubCommand
+  mmd [options]  A SubCommand within MuCli for Markdown
+  pip [options]  A SubCommand within MuCli for pip
 ```
 
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
 
 + `set`：用于子命令的启用/禁用
++ `list`：用于列出所有子命令
 + `mmd`：用于 Markdown 相关操作
-+ `dev`：用于创建子命令 `Just for dev`
++ `dev`：用于创建子命令及更新命令版本，**Just for Dev**。
 + `pip`：用于 pip 相关操作
 
 ### 查看版本
@@ -60,18 +61,32 @@ Commands:
 
 ```text
 > muc -v
-0.6.0
+0.6.1
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
-> muc mmd -sv
-0.4.0
 > muc dev -sv
-0.1.0
+0.1.5
+> muc mmd -sv
+0.4.1
 > muc pip -sv
-0.2.0
+0.3.0
+```
+
+当然，你也可以通过 `muc -l` 来查看所有命令的版本及其可用性，如下：
+
+```text
+> muc -l
+┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
+│ (index) │ version │ enable │                description                 │
+├─────────┼─────────┼────────┼────────────────────────────────────────────┤
+│   muc   │ '0.6.1' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.1.5' │  true  │ 'A SubCommand within MuCli for SubCommand' │
+│   mmd   │ '0.4.1' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   pip   │ '0.3.0' │  true  │    'A SubCommand within MuCli for pip'     │
+└─────────┴─────────┴────────┴────────────────────────────────────────────┘
 ```
 
 ### MuCli-Markdown
@@ -153,11 +168,12 @@ Options:
   -h, --help         display help for command
 
 Commands:
-  new [options]
+  new [options]      create a new command
+  update             update a command version
   help [command]     display help for command
 ```
 
-用于个人新建一个子命令，即 `Just for dev`。
+其中，`new` 命令用于创建新的子命令，`update` 命令用于更新命令版本。
 
 ---
 

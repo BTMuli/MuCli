@@ -2,18 +2,18 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 配置相关
- * @update: 2022-12-06
+ * @update: 2022-12-14
  */
 
 /* MuCli */
 import MucYaml from '../utils/yaml.js';
 import { ROOT_PATH } from '../config.js';
 /* SubCommand */
+import dev from '../cli/dev.js';
 import markdown from '../cli/markdown.js';
 import pip from '../cli/pip.js';
-import dev from '../cli/dev.js';
 /* Project command list */
-export let COMMAND_LIST = [markdown, pip, dev];
+export let COMMAND_LIST = [dev, markdown, pip];
 
 class Config {
 	constructor(path = undefined) {
@@ -66,7 +66,6 @@ class Config {
 	 * @param target
 	 */
 	transConfig(name, target) {
-		let commandPath = this.mucYaml.configPath;
 		let commandList = COMMAND_LIST.map(value => {
 			return value.name();
 		});
@@ -77,20 +76,10 @@ class Config {
 		) {
 			if (name === 'all') {
 				commandList.forEach(value => {
-					this.mucYaml.changeYaml(
-						commandPath,
-						[value],
-						'enable',
-						target === 'on'
-					);
+					this.changeConfig([value], 'enable', target === 'on');
 				});
 			} else {
-				this.mucYaml.changeYaml(
-					commandPath,
-					name,
-					'enable',
-					target === 'on'
-				);
+				this.changeConfig([name], 'enable', target === 'on');
 			}
 		} else {
 			console.log('参数错误');
