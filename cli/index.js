@@ -26,10 +26,16 @@ MuCli.option('-l, --list', 'list all commands').action(options => {
 	if (options.list) {
 		let muc = new Config();
 		let commandList = [];
+		commandList['muc'] = {
+			version: MuCliVersion,
+			enable: true,
+			description: MuCli.description(),
+		};
 		COMMAND_LIST.forEach(command => {
 			commandList[command.name()] = {
 				version: command.version(),
 				enable: muc.commandUse(command),
+				description: command.description(),
 			};
 		});
 		console.table(commandList);
