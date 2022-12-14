@@ -12,7 +12,7 @@ mmd:
         custom: null
     typora:
         enable: true
-        path: 'E:\\SoftWares\\Typora\\Typora.exe'
+        path: 'E:\SoftWares\Typora\Typora.exe'
 pip:
     enable: true
     name: pip

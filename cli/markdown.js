@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令，负责处理 markdown 文件
- * @update: 2021-12-06
+ * @update: 2021-12-14
  */
 
 /* Node */
@@ -47,15 +47,20 @@ markdown
 	.description('get local typora path')
 	/* 设置 Typora 的路径 */
 	.option('-s, --set [path]', 'set the path of Typora')
+	/* 测试 Typora 的配置 */
+	.option('-t, --test', 'test the config of Typora')
 	.action(options => {
-		console.log(options);
 		let md = new Markdown();
 		if (options.info) {
-			md.getConfigTypora();
+			md.showTypora();
 		} else if (options.set) {
-			md.setConfigTypora(options.set);
+			md.modifyTypora();
 		} else if (options.name) {
 			md.openTypora(options.name);
+		} else if (options.test) {
+			md.testTypora();
+		} else {
+			md.operaTypora();
 		}
 	});
 

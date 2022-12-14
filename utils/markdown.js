@@ -7,55 +7,154 @@
 
 /* Node */
 import inquirer from 'inquirer';
-import { resolve } from 'node:path';
-import { execFile } from 'node:child_process';
 /* MuCli */
 import MarkdownModel from '../config/markdown.js';
 import MucFile from './file.js';
 import Config from '../config/index.js';
-import { exec } from 'child_process';
+import Typora from './typora.js';
 
 class Markdown {
 	constructor() {
 		const markdownConfig = new Config().readConfigDetail('mmd');
+		const typora = new Typora(markdownConfig.typora);
+		this.config = new Config();
 		this.label = markdownConfig.label;
 		this.label_default = markdownConfig.label.default;
-		this.typora = markdownConfig.typora;
+		this.typora = typora;
 		this.mucFile = new MucFile();
+	}
+	/* Typora 相关 */
+	/**
+	 * @description 检测 Typora 配置
+	 */
+	testTypora() {
+		this.typora.verifyConfig();
 	}
 	/**
 	 * @description 获取 Typora 相关配置
-	 * @returns {Object} Typora 相关配置
 	 */
-	getConfigTypora() {
-		console.log(`\n${this.typora.enable ? '已' : '未'}启用 Typora`);
-		if (this.typora.enable) {
-			console.log(`Typora 路径：${this.typora.path}\n`);
-		}
+	showTypora() {
+		this.typora.showConfig();
 	}
 	/**
-	 * @description 检查文件名是否在配置中
-	 * @param {String} fileName 文件名
-	 * @returns {Object} 是否在配置中 | 配置信息
+	 * @description 调用 Typora 打开文件
+	 * @param fileName 文件名称
 	 */
-	checkLabel(fileName) {
-		const label = this.label.custom;
-		const defaultLabel = {
-			author: this.label_default.author,
-			description: fileName,
-		};
-		// 判断label是否为空
-		if (label === null) {
-			return defaultLabel;
-		}
-		for (let i = 0; i < label.length; i++) {
-			let labelGet = label[i];
-			if (labelGet.filename === fileName) {
-				return labelGet;
-			}
-		}
-		return defaultLabel;
+	openTypora(fileName) {
+		this.typora.openFile(fileName);
 	}
+	/**
+	 * @description 修改 Typora 配置
+	 */
+	modifyTypora() {
+		this.showTypora();
+		inquirer
+			.prompt([
+				{
+					type: 'input',
+					name: 'change',
+					message: '是否修改 Typora 配置？',
+					default: false,
+				},
+				{
+					type: 'checkbox',
+					name: 'typora',
+					message: '请选择要修改的配置',
+					choices: [
+						{
+							name: 'Typora 可用性',
+							value: 'enable',
+						},
+						{
+							name: 'Typora 路径',
+							value: 'path',
+						},
+					],
+					when: answers => answers.change,
+				},
+				{
+					type: 'input',
+					name: 'enable',
+					message: `确认修改可用性？（当前${
+						this.typora.enable ? '可用' : '不可用'
+					}）`,
+					when: answers =>
+						answers.typora && answers.typora.includes('enable'),
+					default: true,
+				},
+				{
+					type: 'input',
+					name: 'path',
+					message: '请输入 Typora 路径',
+					when: answers =>
+						answers.typora && answers.typora.includes('path'),
+					default: this.typora.path,
+				},
+			])
+			.then(answers => {
+				if (answers.change) {
+					if (answers.typora.includes('enable')) {
+						this.typora.enable = !this.typora.enable;
+					}
+					if (answers.typora.includes('path')) {
+						this.typora.path = answers.path;
+					}
+					this.typora.saveConfig();
+					console.log('\nTypora 配置修改成功');
+					this.showTypora();
+				}
+			});
+	}
+	/**
+	 * @description 根据配置选择响应操作
+	 */
+	operaTypora() {
+		inquirer
+			.prompt([
+				{
+					type: 'list',
+					name: 'typora',
+					message: '请选择操作',
+					choices: [
+						{
+							name: '初始化 Typora 配置',
+							value: 'init',
+						},
+						{
+							name: '查看 Typora 配置',
+							value: 'show',
+						},
+						{
+							name: '修改 Typora 配置',
+							value: 'modify',
+						},
+						{
+							name: '检测 Typora 配置是否正确',
+							value: 'test',
+						},
+					],
+				},
+			])
+			.then(answers => {
+				switch (answers.typora) {
+					case 'init':
+						this.typora.initConfig();
+						break;
+					case 'test':
+						this.testTypora();
+						break;
+					case 'show':
+						this.showTypora();
+						break;
+					case 'modify':
+						this.modifyTypora();
+						break;
+					default:
+						break;
+				}
+			});
+	}
+	/* File 相关 */
 	/**
 	 * @description 创建新文件前的提示
 	 * @param fileName 文件名称
@@ -152,21 +251,29 @@ class Markdown {
 			await this.mucFile.createFile(mdPath, mdModel.getLabel());
 		}
 	}
+	/* Label 相关 */
 	/**
-	 * @description 调用 Typora 打开文件
-	 * @param fileName 文件名称
+	 * @description 检查文件名是否在配置中
+	 * @param {String} fileName 文件名
+	 * @returns {Object} 是否在配置中 | 配置信息
 	 */
-	openTypora(fileName) {
-		if (this.typora.enable) {
-			const filePath = resolve() + '\\' + fileName;
-			execFile(this.typora.path, [filePath], err => {
-				if (err) {
-					console.log(err);
-				}
-			});
-		} else {
-			console.log('Typora 模块未加载！');
+	checkLabel(fileName) {
+		const label = this.label.custom;
+		const defaultLabel = {
+			author: this.label_default.author,
+			description: fileName,
+		};
+		// 判断label是否为空
+		if (label === null) {
+			return defaultLabel;
 		}
+		for (let i = 0; i < label.length; i++) {
+			let labelGet = label[i];
+			if (labelGet.filename === fileName) {
+				return labelGet;
+			}
+		}
+		return defaultLabel;
 	}
 	/**
 	 * @description 获取 markdown label
@@ -290,48 +397,6 @@ class Markdown {
 	 */
 	changeLabel(labelCustom) {
 		new Config().changeConfig(['mmd', 'label'], 'custom', labelCustom);
-	}
-	/**
-	 * @description 设置 Typora 路径
-	 * @param binPath Typora 路径
-	 */
-	setConfigTypora(binPath) {
-		inquirer
-			.prompt([
-				{
-					type: 'input',
-					message: `请输入 Typora 路径`,
-					name: 'path',
-					default: binPath,
-				},
-			])
-			.then(answer => {
-				inquirer
-					.prompt([
-						{
-							type: 'confirm',
-							message: `即将尝试打开 Typora，请打开后关闭 Typora 窗口`,
-							name: 'choice',
-							default: false,
-						},
-					])
-					.then(confirm => {
-						if (confirm.choice) {
-							try {
-								exec(`${answer.path}`);
-								new Config().changeConfig(
-									['mmd', 'typora'],
-									'path',
-									answer.path
-								);
-								console.log('设置成功！');
-								return true;
-							} catch (error) {
-								console.log('Typora 路径错误！');
-							}
-						}
-					});
-			});
 	}
 }
 
