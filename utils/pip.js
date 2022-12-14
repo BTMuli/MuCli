@@ -2,30 +2,25 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: pip 镜像源相关操作
+ * @update: 2021-12-14
  */
 
 /* Node */
 import { exec } from 'child_process';
+import inquirer from 'inquirer';
 /* MuCli */
 import { PipModel, MirrorModel } from '../config/pip.js';
 import Config from '../config/index.js';
-import inquirer from 'inquirer';
 
 class Pip {
 	constructor() {
 		const pipConfig = new Config().readConfigDetail('pip');
 		this.pipConfig = new Config();
+		let mirrorUse = pipConfig.mirrorUse;
 		let mirrorList = [];
-		let mirrorUse = undefined;
 		for (let i = 0; i < pipConfig.mirrorList.length; i++) {
-			let mirror = new MirrorModel(pipConfig.mirrorList[i]);
-			if (mirror.usable === true && mirrorUse === undefined) {
-				mirrorUse = mirror;
-			}
-			mirrorList.push(mirror);
-		}
-		if (mirrorUse === undefined) {
-			mirrorUse = this.mirrorInfo[0];
+			const mirrorModel = new MirrorModel(pipConfig.mirrorList[i]);
+			mirrorList.push(mirrorModel);
 		}
 		this.mirrorInfo = new PipModel(mirrorUse, mirrorList);
 	}
@@ -42,7 +37,7 @@ class Pip {
 							type: 'confirm',
 							name: 'confirm',
 							message: `镜像源 ${mirror} 不存在，是否添加？`,
-							default: true,
+							default: false,
 						},
 					])
 					.then(async answer => {
@@ -61,26 +56,81 @@ class Pip {
 				mirrorListTest[i].usable = result !== -1;
 				mirrorListTest[i].time = result;
 			}
-			mirrorListTest.sort(function (a, b) {
-				if (a.time === -1) {
-					return 1;
-				}
-				if (b.time === -1) {
-					return -1;
-				}
-				return a.time - b.time;
+			// 排除不可用的镜像源后，获取最快的镜像源
+			const fastestMirror = mirrorListTest
+				.filter(item => item.time !== -1)
+				.reduce((prev, curr) => {
+					return prev.time < curr.time ? prev : curr;
+				});
+			// 获取当前使用的镜像源
+			const currentMirror = this.mirrorInfo.mirrorList.find(mirror => {
+				return mirror.name === this.mirrorInfo.mirrorUse;
 			});
-			for (let i = 0; i < mirrorListTest.length; i++) {
-				delete mirrorListTest[i].time;
-			}
-			this.mirrorInfo.mirrorList = mirrorListTest;
-			console.log('正在写入配置文件...');
-			this.pipConfig.changeConfig(
-				['pip'],
-				'mirrorList',
-				this.mirrorInfo.mirrorList
+			// 输出结果
+			console.log(
+				`\n测试镜像源数量：${mirrorListTest.length}，可用镜像源数量：${
+					mirrorListTest.filter(mirror => mirror.usable === true)
+						.length
+				}`
 			);
-			console.log('写入配置文件成功');
+			console.log(
+				`\n当前使用镜像源：${currentMirror.name}，${
+					currentMirror.url
+				}，${
+					currentMirror.time === -1
+						? '不可用'
+						: '耗时：' + currentMirror.time + 'ms'
+				}`
+			);
+			console.log(
+				`\n最快镜像源：${fastestMirror.name}，${fastestMirror.url}，耗时：${fastestMirror.time}ms\n`
+			);
+			if (fastestMirror.name !== currentMirror.name) {
+				await inquirer
+					.prompt([
+						{
+							type: 'confirm',
+							name: 'confirm',
+							message: `是否切换到最快的镜像源 ${fastestMirror.name}？\n`,
+							default: false,
+						},
+					])
+					.then(async answer => {
+						if (answer.confirm === true) {
+							await this.mirrorInfo.setUseMirror(
+								fastestMirror.name
+							);
+						}
+						this.pipConfig.changeConfig(
+							['pip'],
+							'mirrorUse',
+							this.mirrorInfo.mirrorUse
+						);
+					});
+			}
+			await inquirer
+				.prompt([
+					{
+						type: 'confirm',
+						name: 'confirm',
+						message: '是否更新配置文件？\n',
+						default: false,
+					},
+				])
+				.then(async answer => {
+					if (answer.confirm === true) {
+						for (let i = 0; i < mirrorListTest.length; i++) {
+							delete mirrorListTest[i].time;
+						}
+						console.log('\n正在更新配置文件...');
+						this.pipConfig.changeConfig(
+							['pip'],
+							'mirrorList',
+							mirrorListTest
+						);
+						console.log('\n更新配置文件成功!\n');
+					}
+				});
 		}
 	}
 	/**
@@ -88,7 +138,7 @@ class Pip {
 	 * @param args
 	 */
 	install(args) {
-		const url = this.mirrorInfo.useMirror.url;
+		const url = this.mirrorInfo.getUseMirror().url;
 		let command = '';
 		let venv = process.env.VIRTUAL_ENV;
 		if (venv !== undefined) {

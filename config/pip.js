@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 pip 相关模板
- * @update: 2022-12-06
+ * @update: 2022-12-14
  */
 
 /* Node */
@@ -21,6 +21,7 @@ export class MirrorModel {
 	}
 	/**
 	 * 测试镜像地址是否可用
+	 * @param {string} url 镜像地址
 	 */
 	async verifyMirror(url = undefined) {
 		if (url === undefined) {
@@ -50,13 +51,12 @@ export class MirrorModel {
 }
 
 export class PipModel {
-	constructor(useMirror, mirrorList) {
-		this.useMirror = useMirror;
+	constructor(mirrorUse, mirrorList) {
+		this.mirrorUse = mirrorUse;
 		this.mirrorList = mirrorList;
 	}
 	/**
 	 * 获取所有镜像源信息
-	 * @return {Array<MirrorModel>} 镜像源信息
 	 */
 	getMirrorList() {
 		this.mirrorList.forEach(mirror => {
@@ -65,23 +65,20 @@ export class PipModel {
 	}
 	/**
 	 * 获取当前使用的镜像源信息
+	 * @return {MirrorModel} 镜像源
 	 */
 	getUseMirror() {
-		this.useMirror.outputMirrorInfo();
+		return this.mirrorList.find(mirror => {
+			return mirror.name === this.mirrorUse;
+		});
 	}
 	/**
 	 * 设置使用的镜像源
 	 * @param name {String} 镜像源名称
 	 */
 	async setUseMirror(name) {
-		const mirror = this.mirrorList.find(mirror => mirror.name === name);
-		const time = await mirror.verifyMirror();
-		if (time === -1 || time > 5000) {
-			console.log('该镜像源不可用');
-			return;
-		}
-		this.useMirror = mirror;
-		console.log(`已设置为使用 ${name} 镜像源，耗时 ${time} ms`);
+		this.mirrorUse = name;
+		console.log(`已将使用的镜像源设置为：${name}`);
 	}
 	/**
 	 * 添加镜像源
@@ -148,12 +145,13 @@ export class PipModel {
 	 */
 	async testMirror(name) {
 		const mirror = this.mirrorList.find(mirror => mirror.name === name);
-		console.log(`\n正在测试 ${name} 镜像源,url: ${mirror.url}`);
+		await console.log(`\n正在测试 ${name} 镜像源,url: ${mirror.url}`);
 		const time = await mirror.verifyMirror();
 		if (time === -1 || time > 5000) {
-			console.log('该镜像源不可用');
-			return;
+			await console.log('该镜像源不可用');
+			return -1;
 		}
-		console.log(`已测试 ${name} 镜像源，耗时 ${time} ms\n`);
+		await console.log(`已测试 ${name} 镜像源，耗时 ${time} ms`);
+		return time;
 	}
 }

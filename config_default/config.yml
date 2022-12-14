@@ -16,15 +16,12 @@ mmd:
 pip:
     enable: true
     name: pip
+    mirrorUse: 中国科学技术大学
     mirrorList:
         -
             name: 163
             url: 'https://mirrors.163.com/pypi/simple/'
-            usable: true
-        -
-            name: 中国科技大学
-            url: 'https://pypi.mirrors.ustc.edu.cn/simple/'
-            usable: true
+            usable: false
         -
             name: 中国科学技术大学
             url: 'https://pypi.mirrors.ustc.edu.cn/simple/'
