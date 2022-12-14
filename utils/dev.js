@@ -65,23 +65,16 @@ class Dev {
 				.prompt([
 					{
 						type: 'input',
-						message: '请输入新的版本号',
+						message: `请输入新的 ${name} 版本号`,
 						name: 'version',
-						default: version || `当前版本${subInfo[name]}`,
+						default: version || subInfo[name],
 					},
 				])
 				.then(answers => {
-					if (answers.version.indexOf('当前版本') === 0) {
-						answers.version = answers.version.replace(
-							'当前版本',
-							''
-						);
-					} else {
-						let reg = /^(\d+\.){2}\d+$/;
-						if (!reg.test(answers.version)) {
-							console.log('版本号格式不正确');
-							return;
-						}
+					let reg = /^(\d+\.){2}\d+$/;
+					if (!reg.test(answers.version)) {
+						console.log('版本号格式不正确');
+						return;
 					}
 					this.updatePackage(name, answers.version);
 					console.log(
