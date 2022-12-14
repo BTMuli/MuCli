@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 dev 相关配置
- * @update: 2022-12-13
+ * @update: 2022-12-14
  */
 
 /* MuCli */
@@ -30,7 +30,7 @@ class DevModel {
 	 * @return {{cliPath: string, utilsPath: string, configPath: string}}
 	 */
 	getFilesPath() {
-		let fileName = this.name + '.js';
+		let fileName = this.command + '.js';
 		let cliPath = ROOT_PATH + '\\cli\\' + fileName;
 		let configPath = ROOT_PATH + '\\config\\' + fileName;
 		let utilsPath = ROOT_PATH + '\\utils\\' + fileName;
@@ -75,7 +75,7 @@ class DevModel {
 	 * @return {string}
 	 */
 	getCliModel() {
-		const fileName = this.name + '.js';
+		const fileName = this.command + '.js';
 		const clsName = this.transCommand(this.name);
 		/* eslint-disable */
 		return (
@@ -87,7 +87,7 @@ class DevModel {
 			'import { PROJECT_INFO } from \'../config.js\';\n\n' +
             'const ' + this.name + ' = new Command();\n\n' +
 			'/* 版本管理 */\n' +
-			'const '+ clsName + 'Version = PROJECT_INFO[\'subversion\'][\'' + this.name + '\'];\n\n' +
+			'const '+ clsName + 'Version = PROJECT_INFO[\'subversion\'][\'' + this.command + '\'];\n\n' +
             '/* 基本信息 */\n' +
             this.name + '.name(\'' + this.command + '\')\n' +
             '\t.description(\'' + this.description + '\')\n' +
@@ -118,7 +118,7 @@ class DevModel {
 	 * @return {string}
 	 */
 	getUtilsModel() {
-		let fileName = this.name + '.js';
+		let fileName = this.command + '.js';
 		let clsName = this.transCommand(this.name);
 		/* eslint-disable */
 		return (
