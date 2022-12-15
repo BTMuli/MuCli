@@ -134,56 +134,23 @@ class Dev {
 	/**
 	 * @description 获取新版本号
 	 * @param {string} oldVersion 旧版本号
-	 * @return {Array<string>} 新版本号
+	 * @return {Array<{name:string,value:string}>} 新版本号
 	 */
 	getUpVersion(oldVersion) {
-		// 0.0.1 -> 0.0.2
-		const sVersion = oldVersion
-			.split('.')
-			.map((value, index) => {
-				if (index === 2) {
-					return Number(value) + 1;
-				}
-				return Number(value);
-			})
-			.join('.');
-		// 0.0.1 -> 0.1.0
-		const mVersion = oldVersion
-			.split('.')
-			.map((value, index) => {
-				if (index === 1) {
-					return Number(value) + 1;
-				}
-				if (index > 1) {
-					return 0;
-				}
-				return Number(value);
-			})
-			.join('.');
-		// 0.0.1 -> 1.0.0
-		const lVersion = oldVersion
-			.split('.')
-			.map((value, index) => {
-				if (index === 0) {
-					return Number(value) + 1;
-				}
-				return 0;
-			})
-			.join('.');
 		return [
-			{
-				name: sVersion,
-				value: sVersion,
-			},
-			{
-				name: mVersion,
-				value: mVersion,
-			},
-			{
-				name: lVersion,
-				value: lVersion,
-			},
-		];
+			oldVersion
+				.split('.')
+				.map((v, i) => (i === 2 ? Number(v) + 1 : v))
+				.join('.'),
+			oldVersion
+				.split('.')
+				.map((v, i) => (i > 1 ? 0 : i === 1 ? Number(v) + 1 : v))
+				.join('.'),
+			oldVersion
+				.split('.')
+				.map((v, i) => (i === 0 ? Number(v) + 1 : 0))
+				.join('.'),
+		].map(v => ({ name: v, value: v }));
 	}
 	/**
 	 * @description 检查版本号是否合法
