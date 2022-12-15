@@ -2,11 +2,12 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: markdown 文件相关操作
- * @update: 2022-12-14
+ * @update: 2022-12-15
  */
 
 /* Node */
 import inquirer from 'inquirer';
+import { exec } from 'child_process';
 /* MuCli */
 import MarkdownModel from '../config/markdown.js';
 import MucFile from './file.js';
@@ -51,12 +52,6 @@ class Markdown {
 		inquirer
 			.prompt([
 				{
-					type: 'input',
-					name: 'change',
-					message: '是否修改 Typora 配置？',
-					default: false,
-				},
-				{
 					type: 'checkbox',
 					name: 'typora',
 					message: '请选择要修改的配置',
@@ -70,7 +65,6 @@ class Markdown {
 							value: 'path',
 						},
 					],
-					when: answers => answers.change,
 				},
 				{
 					type: 'input',
@@ -78,21 +72,19 @@ class Markdown {
 					message: `确认修改可用性？（当前${
 						this.typora.enable ? '可用' : '不可用'
 					}）`,
-					when: answers =>
-						answers.typora && answers.typora.includes('enable'),
+					when: answers => answers.typora.includes('enable'),
 					default: true,
 				},
 				{
 					type: 'input',
 					name: 'path',
 					message: '请输入 Typora 路径',
-					when: answers =>
-						answers.typora && answers.typora.includes('path'),
+					when: answers => answers.typora.includes('path'),
 					default: this.typora.path,
 				},
 			])
 			.then(answers => {
-				if (answers.change) {
+				if (answers.typora.length !== 0) {
 					if (answers.typora.includes('enable')) {
 						this.typora.enable = !this.typora.enable;
 					}
@@ -101,8 +93,10 @@ class Markdown {
 					}
 					this.typora.saveConfig();
 					console.log('\nTypora 配置修改成功');
-					this.showTypora();
+				} else {
+					console.log('\n未对Typora配置进行修改。');
 				}
+				this.showTypora();
 			});
 	}
 	/**
@@ -132,6 +126,10 @@ class Markdown {
 							name: '检测 Typora 配置是否正确',
 							value: 'test',
 						},
+						{
+							name: '查看 muc mmd typora 命令说明',
+							value: 'help',
+						},
 					],
 				},
 			])
@@ -148,6 +146,21 @@ class Markdown {
 						break;
 					case 'modify':
 						this.modifyTypora();
+						break;
+					case 'help':
+						exec('muc mmd typora -h', (error, stdout, stderr) => {
+							if (error) {
+								console.log(error);
+								return;
+							}
+							if (stderr) {
+								console.log(stderr);
+								return;
+							}
+							if (stdout) {
+								console.log(stdout);
+							}
+						});
 						break;
 					default:
 						break;

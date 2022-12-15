@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-14
  * @description: typora 相关操作
- * @update: 2021-12-14
+ * @update: 2021-12-15
  */
 
 /* Node */
@@ -127,13 +127,11 @@ class Typora {
 	 * @description 展示配置
 	 */
 	showConfig() {
-		console.log('\n当前系统：' + os.platform());
-		if (this.enable) {
-			console.log('Typora 已启用');
-			console.log(`Typora 路径：${this.path}\n`);
-		} else {
-			console.log('Typora 未启用\n');
-		}
+		const info = [];
+		info['system'] = os.platform();
+		info['usable'] = this.enable;
+		info['path'] = this.path;
+		console.table(info);
 	}
 	/**
 	 * @description: 获取配置
@@ -150,6 +148,7 @@ class Typora {
 	 */
 	verifyConfig() {
 		const system = os.platform();
+		this.showConfig();
 		if (system === 'win32' && this.enable === false) {
 			inquirer
 				.prompt([
@@ -182,6 +181,8 @@ class Typora {
 						this.changeConfig(false);
 					}
 				});
+		} else {
+			console.log('\n当前配置正确\n');
 		}
 	}
 	/**
