@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 dev 的具体实现
- * @update: 2022-12-14
+ * @update: 2022-12-15
  */
 
 /* Node */
@@ -61,7 +61,7 @@ class Dev {
 			key => {
 				return {
 					name: `${key}(${PROJECT_INFO['subversion'][key]})`,
-					value: key,
+					value: [key, PROJECT_INFO['subversion'][key]],
 				};
 			}
 		);
@@ -70,23 +70,120 @@ class Dev {
 				{
 					type: 'list',
 					message: '请选择要更新的命令',
-					name: 'name',
+					name: 'command',
 					choices: [
 						{
 							name: `muc(${PROJECT_INFO['version']})`,
-							value: 'all',
+							value: ['muc', PROJECT_INFO['version']],
 						},
 						...subCommandsArr,
+						{
+							name: '不更新任何命令',
+							value: ['null'],
+						},
 					],
 				},
 			])
-			.then(answers => {
-				if (answers.name === 'all') {
-					this.updateMucVersion();
+			.then(lv1 => {
+				if (lv1.command[0] !== 'null') {
+					const oldVersion = lv1.command[1];
+					inquirer
+						.prompt([
+							{
+								type: 'list',
+								name: 'version',
+								message: `请选择新的 ${lv1.command[0]} 版本号：`,
+								choices: [
+									...this.getUpVersion(oldVersion),
+									{
+										name: '手动输入',
+										value: 'input',
+									},
+									{
+										name: '不更新版本',
+										value: oldVersion,
+									},
+								],
+							},
+							{
+								type: 'input',
+								name: 'input',
+								message: `请输入新的 ${lv1.command[0]} 版本号：`,
+								when: lv2 => lv2.version === 'input',
+							},
+						])
+						.then(lv2 => {
+							const upVersion =
+								lv2.version === 'input'
+									? lv2.input
+									: lv2.version;
+							if (lv1.command[0] === 'muc') {
+								this.updateMucVersion(upVersion);
+							} else {
+								this.updateSubVersion(
+									lv1.command[0],
+									upVersion
+								);
+							}
+						});
 				} else {
-					this.updateSubVersion(answers.name);
+					console.log('\n未更新任何命令\n');
 				}
 			});
+	}
+	/**
+	 * @description 获取新版本号
+	 * @param {string} oldVersion 旧版本号
+	 * @return {Array<string>} 新版本号
+	 */
+	getUpVersion(oldVersion) {
+		// 0.0.1 -> 0.0.2
+		const sVersion = oldVersion
+			.split('.')
+			.map((value, index) => {
+				if (index === 2) {
+					return Number(value) + 1;
+				}
+				return Number(value);
+			})
+			.join('.');
+		// 0.0.1 -> 0.1.0
+		const mVersion = oldVersion
+			.split('.')
+			.map((value, index) => {
+				if (index === 1) {
+					return Number(value) + 1;
+				}
+				if (index > 1) {
+					return 0;
+				}
+				return Number(value);
+			})
+			.join('.');
+		// 0.0.1 -> 1.0.0
+		const lVersion = oldVersion
+			.split('.')
+			.map((value, index) => {
+				if (index === 0) {
+					return Number(value) + 1;
+				}
+				return 0;
+			})
+			.join('.');
+		return [
+			{
+				name: sVersion,
+				value: sVersion,
+			},
+			{
+				name: mVersion,
+				value: mVersion,
+			},
+			{
+				name: lVersion,
+				value: lVersion,
+			},
+		];
 	}
 	/**
 	 * @description 检查版本号是否合法
@@ -108,83 +205,39 @@ class Dev {
 	}
 	/**
 	 * @description 更新 主命令 版本号
+	 * @param upVersion {string} 新的版本号
 	 */
-	updateMucVersion() {
-		let mucVersion = PROJECT_INFO.version;
-		inquirer
-			.prompt([
-				{
-					type: 'input',
-					message: `请输入新的 MuCli 版本号`,
-					name: 'version',
-					default: mucVersion,
-				},
-			])
-			.then(answers => {
-				const oldVersion = mucVersion;
-				if (!this.checkVersion(answers.version, oldVersion)) {
-					return;
-				}
-				this.updatePackage('all', answers.version);
-				if (answers.version !== oldVersion) {
-					console.log(
-						`\n版本号已更新 ${oldVersion} -> ${answers.version}`
-					);
-					console.log('请运行 npm install 更新依赖\n');
-				} else {
-					console.log(
-						`\n版本号未更新，当前 MuCli 版本为 ${oldVersion}\n`
-					);
-				}
-			});
+	updateMucVersion(upVersion) {
+		const oldVersion = PROJECT_INFO.version;
+		if (!this.checkVersion(upVersion, oldVersion)) {
+			return;
+		}
+		this.updatePackage('all', upVersion);
+		if (upVersion !== oldVersion) {
+			console.log(`\n版本号已更新 ${oldVersion} -> ${upVersion}`);
+			console.log('请运行 npm install 更新依赖\n');
+		} else {
+			console.log(`\n版本号未更新，当前 MuCli 版本为 ${oldVersion}\n`);
+		}
 	}
 	/**
 	 * @description 更新 子命令 版本号
 	 * @param name {String} 子命令名称
+	 * @param upVersion {string} 新的版本号
 	 */
-	updateSubVersion(name) {
+	updateSubVersion(name, upVersion) {
 		let subInfo = PROJECT_INFO['subversion'];
-		if (subInfo[name]) {
-			inquirer
-				.prompt([
-					{
-						type: 'input',
-						message: `请输入新的 ${name} 版本号`,
-						name: 'version',
-						default: subInfo[name],
-					},
-				])
-				.then(answers => {
-					const oldVersion = subInfo[name];
-					if (!this.checkVersion(answers.version, oldVersion)) {
-						return;
-					}
-					this.updatePackage(name, answers.version);
-					if (answers.version !== oldVersion) {
-						console.log(
-							`\n版本号已更新 ${oldVersion} -> ${answers.version}\n`
-						);
-					} else {
-						console.log(
-							`\n版本号未更新，当前 ${name} 版本号为 ${oldVersion}\n`
-						);
-					}
-				});
+		const oldVersion = subInfo[name];
+		if (!this.checkVersion(upVersion, oldVersion)) {
+			return;
+		}
+		this.updatePackage(name, upVersion);
+		if (upVersion !== oldVersion) {
+			console.log(`\n版本号已更新 ${oldVersion} -> ${upVersion}\n`);
 		} else {
-			inquirer
-				.prompt([
-					{
-						type: 'confirm',
-						message: '未找到该子命令，是否创建新的子命令？',
-						name: 'create',
-						default: true,
-					},
-				])
-				.then(answers => {
-					if (answers.create) {
-						this.createNew(name);
-					}
-				});
+			console.log(
+				`\n版本号未更新，当前 ${name} 版本号为 ${oldVersion}\n`
+			);
 		}
 	}
 	/**
