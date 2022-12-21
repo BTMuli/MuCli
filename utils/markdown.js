@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: markdown 文件相关操作
- * @update: 2022-12-15
+ * @update: 2022-12-21
  */
 
 /* Node */
@@ -39,7 +39,7 @@ class Markdown {
 	}
 	/**
 	 * @description 调用 Typora 打开文件
-	 * @param fileName 文件名称
+	 * @param fileName {string} 文件名称
 	 */
 	openTypora(fileName) {
 		this.typora.openFile(fileName);
@@ -170,9 +170,9 @@ class Markdown {
 	/* File 相关 */
 	/**
 	 * @description 创建新文件前的提示
-	 * @param fileName 文件名称
+	 * @param fileName {string} 文件名称
 	 */
-	promoteFile(fileName) {
+	promoteCreateFile(fileName) {
 		inquirer
 			.prompt([
 				{
@@ -234,6 +234,97 @@ class Markdown {
 			});
 	}
 	/**
+	 * @description 更新文件前的提示
+	 * @param fileName {string} 文件名称
+	 */
+	async promoteUpdateFile(fileName) {
+		const fileCheck = await this.mucFile.fileExist(fileName);
+		if (fileCheck) {
+			const hasHeader = await this.checkHeader(fileName);
+			inquirer
+				.prompt([
+					{
+						type: 'confirm',
+						message: `文件 ${fileName} 已存在，未检测到文件头，是否插入文件头？`,
+						name: 'insert',
+						default: true,
+						when: !hasHeader,
+					},
+					{
+						type: 'confirm',
+						message: `文件 ${fileName} 已存在，检测到文件头，是否更新文件头？`,
+						name: 'update',
+						default: true,
+						when: hasHeader,
+					},
+				])
+				.then(async answer => {
+					const title = fileName.replace('.md', '');
+					if (answer.insert) {
+						const label = this.checkLabel(title);
+						await inquirer
+							.prompt([
+								{
+									type: 'input',
+									message: '请输入作者',
+									name: 'author',
+									default: label.author,
+								},
+								{
+									type: 'input',
+									message: '请输入描述',
+									name: 'description',
+									default: label.description,
+								},
+							])
+							.then(async input => {
+								let mdModel = new MarkdownModel(
+									input.author,
+									input.description
+								);
+								await this.mucFile.insertLine(
+									fileName,
+									0,
+									mdModel.getHeader()
+								);
+							});
+					} else if (answer.update) {
+						let mdModel = new MarkdownModel('', '');
+						await this.mucFile.updateLine(
+							fileName,
+							10,
+							await mdModel.writeHeader(fileName)
+						);
+					}
+				});
+		} else {
+			inquirer
+				.prompt([
+					{
+						type: 'confirm',
+						message: `文件 ${fileName} 未存在，是否创建？`,
+						name: 'create',
+						default: false,
+					},
+				])
+				.then(async answer => {
+					if (answer.create) {
+						const title = fileName.replace('.md', '');
+						await this.promoteCreateFile(title);
+					}
+				});
+		}
+	}
+	/**
+	 * @description 检测文件头信息
+	 * @param fileName 文件名称
+	 * @returns {Promise<boolean>} 是否存在文件头信息
+	 */
+	async checkHeader(fileName) {
+		const contentRead = await this.mucFile.readLine(fileName, 10);
+		return !(contentRead.length !== 10 || contentRead[0] !== '---');
+	}
+	/**
 	 * @description 创建文件
 	 * @param {String} fileName 文件名
 	 * @param {String} author 作者
@@ -243,25 +334,70 @@ class Markdown {
 		let mdModel = new MarkdownModel(author, description);
 		let mdPath = fileName + '.md';
 		if (await this.mucFile.fileExist(mdPath)) {
+			const hasHeader = await this.checkHeader(mdPath);
 			inquirer
 				.prompt([
 					{
-						type: 'confirm',
-						message: `文件 ${mdPath} 已存在，是否覆盖？`,
-						name: 'choice',
-						default: false,
+						type: 'list',
+						message: `文件 ${mdPath} 已存在，未检测到文件头，执行以下操作：`,
+						name: 'action',
+						choices: [
+							{
+								name: '覆盖文件内容',
+								value: 'cover',
+							},
+							{
+								name: '插入文件头',
+								value: 'insert',
+							},
+						],
+						when: !hasHeader,
+						default: 'insert',
+					},
+					{
+						type: 'list',
+						message: `文件 ${mdPath} 已存在，检测到文件头，执行以下操作：`,
+						name: 'action',
+						choices: [
+							{
+								name: '覆盖文件内容',
+								value: 'cover',
+							},
+							{
+								name: '更新文件头',
+								value: 'update',
+							},
+							{
+								name: '不执行任何操作',
+								value: 'none',
+							},
+						],
+						when: hasHeader,
+						default: 'none',
 					},
 				])
 				.then(async answer => {
-					if (answer.choice) {
+					if (answer.action === 'cover') {
 						await this.mucFile.writeFile(
 							mdPath,
-							mdModel.getLabel()
+							mdModel.getHeader()
+						);
+					} else if (answer.action === 'insert') {
+						await this.mucFile.insertLine(
+							mdPath,
+							0,
+							mdModel.getHeader()
+						);
+					} else if (answer.action === 'update') {
+						await this.mucFile.updateLine(
+							mdPath,
+							10,
+							await mdModel.writeHeader(mdPath)
 						);
 					}
 				});
 		} else {
-			await this.mucFile.createFile(mdPath, mdModel.getLabel());
+			await this.mucFile.createFile(mdPath, mdModel.getHeader());
 		}
 	}
 	/* Label 相关 */

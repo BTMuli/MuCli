@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令，负责处理 markdown 文件
- * @update: 2021-12-14
+ * @update: 2021-12-21
  */
 
 /* Node */
@@ -33,7 +33,17 @@ markdown
 	.description('create a markdown file')
 	.action(options => {
 		let md = new Markdown();
-		md.promoteFile(options.name);
+		md.promoteCreateFile(options.name);
+	});
+
+/* 更新 markdown 文件头信息 */
+markdown
+	.command('update')
+	.option('-n, --name <name>', 'the name of the markdown file', 'README')
+	.description('update the header of the markdown file')
+	.action(async options => {
+		let md = new Markdown();
+		await md.promoteUpdateFile(options.name);
 	});
 
 /* Typora 相关 */
