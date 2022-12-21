@@ -1,11 +1,13 @@
 ---
-Date: 2022-09-29
-Update: 2022-12-14
 Author: 目棃
+Date: 2022-09-29
 Description: 说明文档
+Update: 2022-12-21
 ---
 
-> 本文档 [`Front-matter`](https://github.com/BTMuli/MuCli#FrontMatter) 由 [`MuCli`](https://github.com/BTMuli/MuCli) 自动生成
+> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
+> 
+> 更新于 `2022-12-21 12:58:15`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/workflow/status/btmuli/MuCli/MuCli%20Workflow?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -19,7 +21,9 @@ Description: 说明文档
 
 ## 适用平台
 
-本命令行因为是个人使用, **仅适用于 Win 平台的 `powershell`**
+本命令行针对 `Windows` 平台跟 `Linux` 平台进行了适配，但是后者没有经过测试。
+
+除了 `muc mmd typora`需要 `windows` 平台外，其他命令均可在 `Linux` 平台使用。
 
 ---
 
@@ -30,7 +34,6 @@ Description: 说明文档
 主 CLI 采用的是 `muc` 命令，其运行如下：
 
 ```text
-> muc -h
 Usage: muc [options] [command]
 
 A Node Cli for Personal Use by BTMUli.
@@ -61,16 +64,16 @@ Commands:
 
 ```text
 > muc -v
-0.6.1
+0.6.2
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc dev -sv
-0.1.5
+0.1.8
 > muc mmd -sv
-0.4.1
+0.6.0
 > muc pip -sv
 0.3.0
 ```
@@ -82,9 +85,9 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.6.1' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
-│   dev   │ '0.1.5' │  true  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.4.1' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   muc   │ '0.6.2' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.1.8' │  true  │ 'A SubCommand within MuCli for SubCommand' │
+│   mmd   │ '0.6.0' │  true  │  'A SubCommand within MuCli for Markdown'  │
 │   pip   │ '0.3.0' │  true  │    'A SubCommand within MuCli for pip'     │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
 ```
@@ -105,12 +108,17 @@ Options:
 
 Commands:
   new [options]      create a markdown file
+  update [options]   update the header of the markdown file
   typora [options]   get local typora path
   label [options]    add the template
   help [command]     display help for command
 ```
 
-目前主要功能就是两个：新建 markdown 文件和 Typora 软件相关。
+目前主要功能如下：
+
++ `new`：创建一个 Markdown 文件，支持自定义模板
++ `update`：更新 Markdown 文件的头部信息
++ `typora`：通过 Typora 进行相关操作
 
 markdown 文件支持模板，模板参数如下：
 
@@ -254,10 +262,10 @@ Options:
 
 ```markdown
 ---
-Date: 2022-09-29
-Update: 2022-12-06
 Author: 目棃
+Date: 2022-09-29
 Description: 说明文档
+Update: 2022-12-21
 ---
 ```
 

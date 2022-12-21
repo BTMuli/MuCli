@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 dev 相关配置
- * @update: 2022-12-13
+ * @update: 2022-12-14
  */
 
 /* MuCli */
@@ -15,30 +15,27 @@ class DevModel {
 		this.command = command;
 		this.description = desc;
 	}
-
 	/**
-	 * 字符串替换
+	 * @description 字符串替换
 	 * @param name
 	 * @return {string}
 	 */
 	transCommand(name) {
 		return name.slice(0, 1).toUpperCase() + name.slice(1).toLowerCase();
 	}
-
 	/**
-	 * 文件路径获取
+	 * @description 文件路径获取
 	 * @return {{cliPath: string, utilsPath: string, configPath: string}}
 	 */
 	getFilesPath() {
-		let fileName = this.name + '.js';
+		let fileName = this.command + '.js';
 		let cliPath = ROOT_PATH + '\\cli\\' + fileName;
 		let configPath = ROOT_PATH + '\\config\\' + fileName;
 		let utilsPath = ROOT_PATH + '\\utils\\' + fileName;
 		return { cliPath, configPath, utilsPath };
 	}
-
 	/**
-	 * 获取文件头部注释
+	 * @description 获取文件头部注释
 	 * @return {string}
 	 */
 	getFileHeader() {
@@ -54,7 +51,7 @@ class DevModel {
 		/* eslint-disable */
 	}
 	/**
-	 * 文件内容获取
+	 * @description 文件内容获取
 	 * @param key
 	 * @return {boolean|string}
 	 */
@@ -71,11 +68,11 @@ class DevModel {
 		}
 	}
 	/**
-	 * Cli 目录下的文件内容
+	 * @description Cli 目录下的文件内容
 	 * @return {string}
 	 */
 	getCliModel() {
-		const fileName = this.name + '.js';
+		const fileName = this.command + '.js';
 		const clsName = this.transCommand(this.name);
 		/* eslint-disable */
 		return (
@@ -87,7 +84,7 @@ class DevModel {
 			'import { PROJECT_INFO } from \'../config.js\';\n\n' +
             'const ' + this.name + ' = new Command();\n\n' +
 			'/* 版本管理 */\n' +
-			'const '+ clsName + 'Version = PROJECT_INFO[\'subversion\'][\'' + this.name + '\'];\n\n' +
+			'const '+ clsName + 'Version = PROJECT_INFO[\'subversion\'][\'' + this.command + '\'];\n\n' +
             '/* 基本信息 */\n' +
             this.name + '.name(\'' + this.command + '\')\n' +
             '\t.description(\'' + this.description + '\')\n' +
@@ -100,7 +97,7 @@ class DevModel {
 		/* eslint-disable */
 	}
 	/**
-	 * Config 目录下的文件内容
+	 * @description Config 目录下的文件内容
 	 * @return {string}
 	 */
 	getConfigModel() {
@@ -114,11 +111,11 @@ class DevModel {
 		/* eslint-disable */
 	}
 	/**
-	 * Utils 目录下的文件内容
+	 * @description Utils 目录下的文件内容
 	 * @return {string}
 	 */
 	getUtilsModel() {
-		let fileName = this.name + '.js';
+		let fileName = this.command + '.js';
 		let clsName = this.transCommand(this.name);
 		/* eslint-disable */
 		return (

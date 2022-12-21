@@ -25,7 +25,7 @@ class Pip {
 		this.mirrorInfo = new PipModel(mirrorUse, mirrorList);
 	}
 	/**
-	 * 测试镜像源
+	 * @description 测试镜像源
 	 * @param {String} mirror 镜像源名称
 	 */
 	async verifyMirror(mirror = undefined) {
@@ -134,7 +134,7 @@ class Pip {
 		}
 	}
 	/**
-	 * 安装包
+	 * @description 安装包
 	 * @param args
 	 */
 	install(args) {
@@ -156,14 +156,14 @@ class Pip {
 		exec(command);
 	}
 	/**
-	 * 查看镜像源
+	 * @description 查看镜像源
 	 */
 	listMirror() {
 		this.mirrorInfo.getUseMirror();
 		this.mirrorInfo.getMirrorList();
 	}
 	/**
-	 * 添加镜像源
+	 * @description 添加镜像源
 	 * @param {String} mirrorName 镜像源名称
 	 */
 	async addMirror(mirrorName) {
@@ -194,7 +194,7 @@ class Pip {
 		}
 	}
 	/**
-	 * 删除镜像源
+	 * @description 删除镜像源
 	 * @param {String} mirrorName 镜像源名称
 	 */
 	async deleteMirror(mirrorName) {
@@ -225,7 +225,7 @@ class Pip {
 		}
 	}
 	/**
-	 * 设置使用镜像源
+	 * @description 设置使用镜像源
 	 * @param {String} mirrorName 镜像源名称
 	 */
 	async setMirror(mirrorName) {
@@ -243,7 +243,7 @@ class Pip {
 		}
 	}
 	/**
-	 * 更新镜像源
+	 * @description 更新镜像源
 	 * @param {String} mirrorName 镜像源名称
 	 */
 	async updateMirror(mirrorName) {

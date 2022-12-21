@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 文件相关操作
- * @update: 2022-12-06
+ * @update: 2022-12-21
  */
 
 /* Node */
@@ -12,8 +12,8 @@ import path from 'node:path';
 
 class MucFile {
 	/**
-	 * 文件创建
-	 * @param inputPath 文件路径
+	 * @description 文件创建
+	 * @param {string} inputPath 文件路径
 	 * @param fileData 文件内容
 	 */
 	createFile(inputPath, fileData) {
@@ -38,9 +38,9 @@ class MucFile {
 		}
 	}
 	/**
-	 * 目录创建
-	 * @param dirPath 目录路径
-	 * @return boolean 是否创建成功
+	 * @description 目录创建
+	 * @param dirPath {string} 目录路径
+	 * @return {boolean} 是否创建成功
 	 */
 	createDir(dirPath) {
 		if (fs.existsSync(dirPath)) {
@@ -53,8 +53,8 @@ class MucFile {
 		}
 	}
 	/**
-	 * 文件覆写
-	 * @param filePath 文件路径
+	 * @description 文件覆写
+	 * @param filePath {string} 文件路径
 	 * @param fileData 文件内容
 	 */
 	writeFile(filePath, fileData) {
@@ -67,8 +67,8 @@ class MucFile {
 		});
 	}
 	/**
-	 * 文件存在检验
-	 * @param fileName 文件名称暨路径
+	 * @description 文件存在检验
+	 * @param fileName {string} 文件名称暨路径
 	 * @return {Promise<boolean>} 文件是否存在
 	 */
 	async fileExist(fileName) {
@@ -77,6 +77,85 @@ class MucFile {
 			return stat.isFile();
 		} catch (error) {
 			return false;
+		}
+	}
+	/**
+	 * @description 读取文件前 n 行
+	 * @param filePath {string} 文件路径
+	 * @param lineNum {int} 行数
+	 * @return {Promise<array<string>>} 文件内容
+	 */
+	async readLine(filePath, lineNum) {
+		try {
+			const fileData = await util.promisify(fs.readFile)(
+				filePath,
+				'utf-8'
+			);
+			const lineSeparator =
+				fileData.indexOf('\r\n') !== -1 ? '\r\n' : '\n';
+			let fileLine = fileData.split(lineSeparator);
+			const fileLineNum = fileLine.length;
+			return fileLineNum > lineNum
+				? fileLine.slice(0, lineNum)
+				: fileLine;
+		} catch (error) {
+			console.log(`\n文件 ${filePath} 读取失败!\n${error}\n`);
+		}
+	}
+	/**
+	 * @description 从文件第 n 行开始插入内容
+	 * @param filePath {string} 文件路径
+	 * @param lineNum {int} 行数
+	 * @param insertData {string} 插入内容
+	 * @return {Promise<boolean>} 是否插入成功
+	 */
+	async insertLine(filePath, lineNum, insertData) {
+		try {
+			const fileData = await util.promisify(fs.readFile)(
+				filePath,
+				'utf-8'
+			);
+			const lineSeparator =
+				fileData.indexOf('\r\n') !== -1 ? '\r\n' : '\n';
+			let fileLine = fileData.split(lineSeparator);
+			const fileLineNum = fileLine.length;
+			if (fileLineNum > lineNum) {
+				fileLine.splice(lineNum, 0, insertData + lineSeparator);
+				this.writeFile(filePath, fileLine.join(lineSeparator));
+				return true;
+			} else {
+				return false;
+			}
+		} catch (error) {
+			console.log(`\n文件 ${filePath} 读取失败!\n${error}\n`);
+		}
+	}
+	/**
+	 * @description 覆盖文件前 n 行
+	 * @param filePath {string} 文件路径
+	 * @param lineNum {int} 前 n 行
+	 * @param coverData {string} 文件内容
+	 * @return {Promise<boolean>} 是否覆盖成功
+	 */
+	async updateLine(filePath, lineNum, coverData) {
+		try {
+			const readData = await util.promisify(fs.readFile)(
+				filePath,
+				'utf-8'
+			);
+			const lineSeparator =
+				readData.indexOf('\r\n') !== -1 ? '\r\n' : '\n';
+			let fileLine = readData.split(lineSeparator);
+			const fileLineNum = fileLine.length;
+			if (fileLineNum > lineNum) {
+				fileLine.splice(0, lineNum, coverData);
+				this.writeFile(filePath, fileLine.join(lineSeparator));
+				return true;
+			} else {
+				return false;
+			}
+		} catch (error) {
+			console.log(`\n文件 ${filePath} 更新失败!\n${error}\n`);
 		}
 	}
 }
