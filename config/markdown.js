@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 mmd 相关模型
- * @update: 2021-12-14
+ * @update: 2021-12-21
  */
 
 /* Node */
@@ -29,10 +29,10 @@ class MarkdownModel {
 		/* eslint-disable */
 		return (
 			this.sign + '\n' +
+			'Author: ' + this.author + '\n' +
             'Date: ' + dateNow + '\n' +
-            'Update: ' + dateNow + '\n' +
-            'Author: ' + this.author + '\n' +
             'Description: ' + this.description + '\n' +
+			'Update: ' + dateNow + '\n' +
             this.sign + '\n' + '\n' +
             this.quote + '\n' +
             '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`'
