@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 文件相关操作
- * @update: 2022-12-14
+ * @update: 2022-12-21
  */
 
 /* Node */
@@ -77,6 +77,29 @@ class MucFile {
 			return stat.isFile();
 		} catch (error) {
 			return false;
+		}
+	}
+	/**
+	 * @description 读取文件前 n 行
+	 * @param filePath 文件路径
+	 * @param lineNum 行数
+	 * @return {Promise<array<string>>} 文件内容
+	 */
+	async readLine(filePath, lineNum) {
+		try {
+			const fileData = await util.promisify(fs.readFile)(
+				filePath,
+				'utf-8'
+			);
+			const lineSeparator =
+				fileData.indexOf('\r\n') !== -1 ? '\r\n' : '\n';
+			let fileLine = fileData.split(lineSeparator);
+			const fileLineNum = fileLine.length;
+			return fileLineNum > lineNum
+				? fileLine.slice(0, lineNum)
+				: fileLine;
+		} catch (error) {
+			console.log(`\n文件 ${filePath} 读取失败!\n${error}\n`);
 		}
 	}
 }
