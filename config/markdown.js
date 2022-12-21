@@ -10,6 +10,7 @@ import { format } from 'silly-datetime';
 
 class MarkdownModel {
 	sign = '---';
+	lineBreak = process.platform === 'win32' ? '\r\n' : '\n';
 	/* eslint-disable */
 	quote = (
 		'> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) ' +
@@ -26,18 +27,16 @@ class MarkdownModel {
 	 */
 	getLabel() {
 		const dateNow = format(new Date(), 'YYYY-MM-DD');
-		/* eslint-disable */
 		return (
-			this.sign + '\n' +
-			'Author: ' + this.author + '\n' +
-            'Date: ' + dateNow + '\n' +
-            'Description: ' + this.description + '\n' +
-			'Update: ' + dateNow + '\n' +
-            this.sign + '\n' + '\n' +
-            this.quote + '\n' +
-            '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`'
+			this.sign + this.lineBreak +
+			'Author: ' + this.author + this.lineBreak +
+            'Date: ' + dateNow + this.lineBreak +
+            'Description: ' + this.description + this.lineBreak +
+			'Update: ' + dateNow + this.lineBreak +
+            this.sign + this.lineBreak + this.lineBreak +
+            this.quote + this.lineBreak +
+            '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`' + this.lineBreak
 		);
-		/* eslint-disable */
 	}
 }
 
