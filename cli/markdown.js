@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令，负责处理 markdown 文件
- * @update: 2021-12-21
+ * @update: 2023-02-13
  */
 
 /* Node */
@@ -39,7 +39,7 @@ markdown
 /* 更新 markdown 文件头信息 */
 markdown
 	.command('update')
-	.option('-n, --name <name>', 'the name of the markdown file', 'README')
+	.option('-n, --name <name>', 'the name of the markdown file', 'README.md')
 	.description('update the header of the markdown file')
 	.action(async options => {
 		let md = new Markdown();

@@ -1,9 +1,9 @@
 {
     "name": "@btmuli/mucli",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "subversion": {
-        "dev": "0.1.8",
-        "mmd": "0.6.0",
+        "dev": "0.1.9",
+        "mmd": "0.6.2",
         "pip": "0.3.0"
     },
     "description": "个人用的 Node Cli",

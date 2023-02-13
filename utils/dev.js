@@ -2,11 +2,12 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 dev 的具体实现
- * @update: 2022-12-15
+ * @update: 2023-02-13
  */
 
 /* Node */
 import inquirer from 'inquirer';
+import { exec } from 'child_process';
 /* MuCli */
 import MucFile from './file.js';
 import DevModel from '../config/dev.js';
@@ -182,7 +183,32 @@ class Dev {
 		this.updatePackage('all', upVersion);
 		if (upVersion !== oldVersion) {
 			console.log(`\n版本号已更新 ${oldVersion} -> ${upVersion}`);
-			console.log('请运行 npm install 更新依赖\n');
+			inquirer
+				.prompt([
+					{
+						type: 'confirm',
+						name: 'install',
+						message: '是否运行 npm install 更新依赖？',
+						default: true,
+					},
+				])
+				.then(answers => {
+					if (answers.install) {
+						exec('npm install', async (err, stdout, stderr) => {
+							if (err) {
+								console.log(err);
+								return;
+							}
+							if (stderr) {
+								console.log(stderr);
+								return;
+							}
+							console.log(stdout);
+						});
+					} else {
+						console.log('\n请运行 npm install 更新依赖\n');
+					}
+				});
 		} else {
 			console.log(`\n版本号未更新，当前 MuCli 版本为 ${oldVersion}\n`);
 		}

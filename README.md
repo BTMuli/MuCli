@@ -2,14 +2,14 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2022-12-21
+Update: 2023-02-13
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2022-12-21 12:58:15`
+> 更新于 `2023-02-13 15:54:40`
 
-![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/workflow/status/btmuli/MuCli/MuCli%20Workflow?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
+![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
 ## 前言
 
@@ -64,16 +64,16 @@ Commands:
 
 ```text
 > muc -v
-0.6.2
+0.6.3
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc dev -sv
-0.1.8
+0.1.9
 > muc mmd -sv
-0.6.0
+0.6.2
 > muc pip -sv
 0.3.0
 ```
@@ -85,9 +85,9 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.6.2' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
-│   dev   │ '0.1.8' │  true  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.6.0' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   muc   │ '0.6.3' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.1.9' │  true  │ 'A SubCommand within MuCli for SubCommand' │
+│   mmd   │ '0.6.2' │  true  │  'A SubCommand within MuCli for Markdown'  │
 │   pip   │ '0.3.0' │  true  │    'A SubCommand within MuCli for pip'     │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
 ```

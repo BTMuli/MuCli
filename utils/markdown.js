@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: markdown 文件相关操作
- * @update: 2022-12-21
+ * @update: 2023-02-13
  */
 
 /* Node */
@@ -170,9 +170,18 @@ class Markdown {
 	/* File 相关 */
 	/**
 	 * @description 创建新文件前的提示
-	 * @param fileName {string} 文件名称
+	 * @param filePath {string} 文件路径
 	 */
-	promoteCreateFile(fileName) {
+	promoteCreateFile(filePath) {
+		let fileName = filePath.split('/').pop();
+		if (fileName.includes('.')) {
+			if(fileName.endsWith('.md')) {
+				fileName = fileName.replace(/\.md$/, '');
+			} else {
+				console.log('\n文件名不合法，文件名应以 .md 结尾');
+				return;
+			}
+		}
 		inquirer
 			.prompt([
 				{
@@ -201,7 +210,7 @@ class Markdown {
 						])
 						.then(async lv2 => {
 							await this.createFile(
-								lv1.title,
+								filePath,
 								lv2.author,
 								lv2.description
 							);
@@ -225,7 +234,7 @@ class Markdown {
 						])
 						.then(async lv3 => {
 							await this.createFile(
-								lv1.title,
+								filePath,
 								lv3.author,
 								lv3.description
 							);
@@ -238,6 +247,11 @@ class Markdown {
 	 * @param fileName {string} 文件名称
 	 */
 	async promoteUpdateFile(fileName) {
+		// 检测后缀
+		if (!fileName.endsWith('.md')) {
+			console.log('文件名不合法');
+			return;
+		}
 		const fileCheck = await this.mucFile.fileExist(fileName);
 		if (fileCheck) {
 			const hasHeader = await this.checkHeader(fileName);
