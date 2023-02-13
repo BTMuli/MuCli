@@ -2,7 +2,7 @@
  * @author: BTMuli<bt-muli@outlook.com>
  * @date: 2022-12-06
  * @description: 子命令 mmd 相关模型
- * @update: 2021-12-21
+ * @update: 2023-02-13
  */
 
 /* Node */
@@ -58,18 +58,26 @@ class MarkdownModel {
 	 */
 	async readHeader(fileName) {
 		const headContent = await new MucFile().readLine(fileName, 10);
-		return {
-			header: {
-				author: headContent[1].split(':')[1].trim(),
-				date: headContent[2].split(':')[1].trim(),
-				description: headContent[3].split(':')[1].trim(),
-				update: headContent[4].split(':')[1].trim(),
-			},
+		// 不确定 author date description update 顺序
+		const header = {
+			header: {},
 			quote: {
 				date: headContent[7].split('`')[3],
 				update: headContent[9].split('`')[1],
 			}
 		};
+		headContent.forEach((item) => {
+			if (item.includes('Author:')) {
+				header.header.author = item.split('Author: ')[1];
+			} else if (item.includes('Date:')) {
+				header.header.date = item.split('Date: ')[1];
+			} else if (item.includes('Description:')) {
+				header.header.description = item.split('Description: ')[1];
+			} else if (item.includes('Update:')) {
+				header.header.update = item.split('Update: ')[1];
+			}
+		});
+		return header;
 	}
 	/**
 	 * @description 更新文件FrontMatter
@@ -103,7 +111,7 @@ class MarkdownModel {
 			this.sign + this.lineBreak +
 			'Author: ' + labelUpdate.header.author + this.lineBreak +
             'Date: ' + labelUpdate.header.date + this.lineBreak +
-            'Description: ' + this.description + this.lineBreak +
+            'Description: ' + labelUpdate.header.description + this.lineBreak +
 			'Update: ' + labelUpdate.header.update + this.lineBreak +
             this.sign + this.lineBreak + this.lineBreak +
             this.quote + '`' + labelUpdate.quote.date + '`' + this.lineBreak +

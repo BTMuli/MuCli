@@ -238,6 +238,11 @@ class Markdown {
 	 * @param fileName {string} 文件名称
 	 */
 	async promoteUpdateFile(fileName) {
+		// 检测后缀
+		if (!fileName.endsWith('.md')) {
+			console.log('文件名不合法');
+			return;
+		}
 		const fileCheck = await this.mucFile.fileExist(fileName);
 		if (fileCheck) {
 			const hasHeader = await this.checkHeader(fileName);
