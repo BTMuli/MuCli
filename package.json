@@ -3,7 +3,7 @@
     "version": "0.6.2",
     "subversion": {
         "dev": "0.1.9",
-        "mmd": "0.6.1",
+        "mmd": "0.6.2",
         "pip": "0.3.0"
     },
     "description": "个人用的 Node Cli",
