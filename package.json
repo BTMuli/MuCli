@@ -2,7 +2,7 @@
     "name": "@btmuli/mucli",
     "version": "0.6.2",
     "subversion": {
-        "dev": "0.1.8",
+        "dev": "0.1.9",
         "mmd": "0.6.1",
         "pip": "0.3.0"
     },
