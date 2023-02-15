@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-13
+Update: 2023-02-15
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-02-13 15:54:40`
+> 更新于 `2023-02-15 14:58:43`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -45,6 +45,7 @@ Options:
 
 Commands:
   set [options]  change subcommand use status
+  update         update muc from upstream
   dev [options]  A SubCommand within MuCli for SubCommand
   mmd [options]  A SubCommand within MuCli for Markdown
   pip [options]  A SubCommand within MuCli for pip
@@ -53,6 +54,7 @@ Commands:
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
 
 + `set`：用于子命令的启用/禁用
++ `update`：用于检测上游版本更新
 + `list`：用于列出所有子命令
 + `mmd`：用于 Markdown 相关操作
 + `dev`：用于创建子命令及更新命令版本，**Just for Dev**。
@@ -64,7 +66,7 @@ Commands:
 
 ```text
 > muc -v
-0.6.3
+0.6.4
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -85,7 +87,7 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.6.3' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   muc   │ '0.6.4' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
 │   dev   │ '0.1.9' │  true  │ 'A SubCommand within MuCli for SubCommand' │
 │   mmd   │ '0.6.2' │  true  │  'A SubCommand within MuCli for Markdown'  │
 │   pip   │ '0.3.0' │  true  │    'A SubCommand within MuCli for pip'     │
@@ -265,7 +267,7 @@ Options:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2022-12-21
+Update: 2023-02-15
 ---
 ```
 

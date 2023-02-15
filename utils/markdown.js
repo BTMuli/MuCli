@@ -175,7 +175,7 @@ class Markdown {
 	promoteCreateFile(filePath) {
 		let fileName = filePath.split('/').pop();
 		if (fileName.includes('.')) {
-			if(fileName.endsWith('.md')) {
+			if (fileName.endsWith('.md')) {
 				fileName = fileName.replace(/\.md$/, '');
 			} else {
 				console.log('\n文件名不合法，文件名应以 .md 结尾');
