@@ -6,7 +6,7 @@
 
 /* Node */
 import axios from "axios";
-import { PipMirror } from "../utils/interface";
+import { PipMirror } from "utils/interface";
 
 export class MirrorModel {
 	name: string;

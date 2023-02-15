@@ -8,7 +8,7 @@
 import { format } from "silly-datetime";
 /* MuCli */
 import MucFile from "../utils/file";
-import { MmdFrontMatter } from "../utils/interface";
+import { MmdFrontMatter } from "utils/interface";
 
 class MarkdownModel {
 	sign: string;

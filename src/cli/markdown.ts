@@ -8,7 +8,7 @@
 import { Command } from "commander";
 /* MuCli */
 import Markdown from "../utils/markdown";
-import { PROJECT_INFO } from "../config";
+import { PROJECT_INFO } from "config";
 
 /* 版本管理 */
 const MmdVersion: string = PROJECT_INFO.subversion["mmd"];

@@ -7,7 +7,7 @@
  */
 
 /* MuCli */
-import MuCli from "./cli/index";
+import MuCli from "./cli";
 import Config from "./config/index";
 
 /* 加载配置文件 */

@@ -8,7 +8,7 @@
 import { Command } from "commander";
 /* MuCli */
 import Pip from "../utils/pip";
-import { PROJECT_INFO } from "../config";
+import { PROJECT_INFO } from "config";
 
 /* 版本管理 */
 const PipVersion: string = PROJECT_INFO.subversion["pip"];

@@ -9,7 +9,7 @@
 import { Command } from "commander";
 /* MuCli */
 import Dev from "../utils/dev";
-import { PROJECT_INFO } from "../config";
+import { PROJECT_INFO } from "config";
 
 /* 版本管理 */
 const DevVersion: string = PROJECT_INFO.subversion["dev"];

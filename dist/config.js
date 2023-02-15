@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 /* Project Root Path */
-export const ROOT_PATH = path.dirname(fileURLToPath(import.meta.url));
+export const ROOT_PATH = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 /* Project Package Info */
 export const PROJECT_INFO = JSON.parse(
 	await fs.readFileSync(path.join(ROOT_PATH, 'package.json'))

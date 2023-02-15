@@ -8,7 +8,7 @@
 import { exec } from "child_process";
 import { prompt } from "inquirer";
 /* MuCli */
-import { MirrorModel, PipModel } from "../config/pip";
+import { MirrorModel, PipModel } from "config/pip";
 import Config from "../config/index";
 import { PipConfig, PipMirror } from "./interface";
 

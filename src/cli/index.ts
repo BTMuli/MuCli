@@ -7,7 +7,7 @@
 /* Node */
 import { Command } from "commander";
 /* MuCli */
-import { PROJECT_INFO } from "../config";
+import { PROJECT_INFO } from "config";
 import Config, { COMMAND_LIST } from "../config/index";
 
 /* 版本管理 */

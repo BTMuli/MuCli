@@ -8,10 +8,10 @@
 import { dirname, join } from "path";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
-import { ProjPackageJson } from "./utils/interface";
+import { ProjPackageJson } from "utils/interface";
 
 /* 项目根目录 */
-export const ROOT_PATH: string = dirname(fileURLToPath(import.meta.url));
+export const ROOT_PATH: string =  dirname(dirname(fileURLToPath(import.meta.url)));
 /* 项目包信息 */
 export const PROJECT_INFO: ProjPackageJson = JSON.parse(
 	readFileSync(join(ROOT_PATH, "package.json")).toString()
