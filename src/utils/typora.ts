@@ -50,9 +50,11 @@ class Typora {
 	 */
 	showConfig(): void {
 		console.table([
-			{ system: platform() },
-			{ enable: this.enable },
-			{ path: this.path },
+			{
+				system: platform(),
+				enable: this.enable,
+				path: this.path,
+			},
 		]);
 	}
 
