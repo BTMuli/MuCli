@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-15
+Update: 2023-02-10
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-02-15 14:58:43`
+> 更新于 `2023-02-10 17:07:11`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -45,7 +45,6 @@ Options:
 
 Commands:
   set [options]  change subcommand use status
-  update         update muc from upstream
   dev [options]  A SubCommand within MuCli for SubCommand
   mmd [options]  A SubCommand within MuCli for Markdown
   pip [options]  A SubCommand within MuCli for pip
@@ -54,7 +53,6 @@ Commands:
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
 
 + `set`：用于子命令的启用/禁用
-+ `update`：用于检测上游版本更新
 + `list`：用于列出所有子命令
 + `mmd`：用于 Markdown 相关操作
 + `dev`：用于创建子命令及更新命令版本，**Just for Dev**。
@@ -66,16 +64,16 @@ Commands:
 
 ```text
 > muc -v
-0.6.4
+0.6.2
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc dev -sv
-0.1.9
+0.1.8
 > muc mmd -sv
-0.6.2
+0.6.0
 > muc pip -sv
 0.3.0
 ```
@@ -87,9 +85,9 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.6.4' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
-│   dev   │ '0.1.9' │  true  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.6.2' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   muc   │ '0.6.2' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.1.8' │  true  │ 'A SubCommand within MuCli for SubCommand' │
+│   mmd   │ '0.6.0' │  true  │  'A SubCommand within MuCli for Markdown'  │
 │   pip   │ '0.3.0' │  true  │    'A SubCommand within MuCli for pip'     │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
 ```
@@ -267,7 +265,7 @@ Options:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-15
+Update: 2022-12-21
 ---
 ```
 
@@ -308,7 +306,7 @@ Update: 2023-02-15
 /* 忽略某段代码 */
 /* eslint-disable */
 // [code block]
-/* eslint-disable */
+/* eslint-enable */
 
 /* 忽略某行代码 */
 // [code line] // eslint-disable-line
