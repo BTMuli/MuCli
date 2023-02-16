@@ -1,25 +1,23 @@
 {
-"compileOnSave": true,
+  "compileOnSave": true,
   "compilerOptions": {
     "target": "ES2018",
     "module": "esnext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "inlineSourceMap":true,
+    "inlineSourceMap": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "outDir": "lib",
+    "outDir": "dist",
     "baseUrl": "./",
-    "paths": {
-      "*": ["src/*"]
-    }
+    "paths": {}
   },
   "exclude": [
-    "lib",
+    "dist",
     "node_modules"
   ]
 }

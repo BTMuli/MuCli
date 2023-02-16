@@ -6,8 +6,8 @@
 
 /* MuCli */
 import MucYaml from "../utils/yaml";
-import { ROOT_PATH } from "config";
-import { MucConfig } from "utils/interface";
+import { ROOT_PATH } from "../config";
+import { MucConfig } from "../utils/interface";
 /* SubCommand */
 import dev from "../cli/dev";
 import markdown from "../cli/markdown";

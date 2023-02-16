@@ -6,7 +6,7 @@
 
 /* Node */
 import axios from "axios";
-import { PipMirror } from "utils/interface";
+import { PipMirror } from "../utils/interface";
 
 export class MirrorModel {
 	name: string;
@@ -33,7 +33,7 @@ export class MirrorModel {
 		if (url === undefined) {
 			url = this.url;
 		}
-		let time = 0;
+		let time: number;
 		try {
 			const startTime: number = new Date().getTime();
 			await axios.get(url, {

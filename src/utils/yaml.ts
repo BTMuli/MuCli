@@ -8,7 +8,7 @@
 import { load, stringify } from "yamljs";
 /* MuCli */
 import MucFile from "./file";
-import { ROOT_PATH } from "config";
+import { ROOT_PATH } from "../config";
 
 class MucYaml {
 	configPath: string;

@@ -5,8 +5,8 @@
  */
 
 /* MuCli */
-import { ROOT_PATH } from "config";
-import { DevFilesPath } from "utils/interface";
+import { ROOT_PATH } from "../config";
+import { DevFilesPath } from "../utils/interface";
 
 class DevModel {
 	author: string;

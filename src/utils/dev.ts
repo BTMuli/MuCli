@@ -9,7 +9,7 @@ import { prompt } from "inquirer";
 /* MuCli */
 import MucFile from "./file";
 import DevModel from "../config/dev";
-import { PROJECT_INFO, ROOT_PATH } from "config";
+import { PROJECT_INFO, ROOT_PATH } from "../config";
 import { DevFilesPath, ProjPackageJson } from "./interface";
 
 class Dev {
