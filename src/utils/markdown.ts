@@ -593,7 +593,7 @@ class Markdown {
 						const mdModel: MarkdownModel = new MarkdownModel();
 						await this.mucFile.updateLine(
 							fileName,
-							0,
+							10,
 							await mdModel.writeHeader(fileName)
 						);
 					}
