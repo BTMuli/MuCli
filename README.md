@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-10
+Update: 2023-02-16
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-02-10 17:07:11`
+> 更新于 `2023-02-16 15:59:30`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -45,6 +45,8 @@ Options:
 
 Commands:
   set [options]  change subcommand use status
+  update         update muc from upstream
+  build          build ts file
   dev [options]  A SubCommand within MuCli for SubCommand
   mmd [options]  A SubCommand within MuCli for Markdown
   pip [options]  A SubCommand within MuCli for pip
@@ -53,6 +55,8 @@ Commands:
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
 
 + `set`：用于子命令的启用/禁用
++ `update`：用于查找上游更新
++ `build`：用于开发环境，负责编译本地的 `ts` 文件
 + `list`：用于列出所有子命令
 + `mmd`：用于 Markdown 相关操作
 + `dev`：用于创建子命令及更新命令版本，**Just for Dev**。
@@ -64,18 +68,18 @@ Commands:
 
 ```text
 > muc -v
-0.6.2
+0.7.0
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc dev -sv
-0.1.8
+0.2.0
 > muc mmd -sv
-0.6.0
+0.7.0
 > muc pip -sv
-0.3.0
+0.4.0
 ```
 
 当然，你也可以通过 `muc -l` 来查看所有命令的版本及其可用性，如下：
@@ -85,10 +89,10 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.6.2' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
-│   dev   │ '0.1.8' │  true  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.6.0' │  true  │  'A SubCommand within MuCli for Markdown'  │
-│   pip   │ '0.3.0' │  true  │    'A SubCommand within MuCli for pip'     │
+│   muc   │ '0.7.0' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.2.0' │  true  │ 'A SubCommand within MuCli for SubCommand' │
+│   mmd   │ '0.7.0' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   pip   │ '0.4.0' │  true  │    'A SubCommand within MuCli for pip'     │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
 ```
 
@@ -156,6 +160,7 @@ Options:
   -n, --name [name]  the name of the markdown file
   -i, --info         get the path of Typora
   -s, --set [path]   set the path of Typora
+  -t, --test         test the config of Typora
   -h, --help         display help for command
 ```
 
@@ -265,7 +270,7 @@ Options:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2022-12-21
+Update: 2023-02-16
 ---
 ```
 
@@ -280,16 +285,16 @@ Update: 2022-12-21
 相关安装包如下：
 
 ```yaml
-"eslint": "^8.25.0",
-"eslint-config-prettier": "^8.5.0",
-"eslint-plugin-json": "^3.1.0",
-"eslint-plugin-prettier": "^4.2.1",
+"@typescript-eslint/eslint-plugin": "^5.51.0"
+"@typescript-eslint/parser": "^5.51.0"
+"eslint": "^8.25.0"
+"eslint-config-prettier": "^8.5.0"
+"eslint-plugin-json": "^3.1.0"
+"eslint-plugin-prettier": "^4.2.1"
 "prettier": "^2.7.1"
 ```
 
 相关配置文件如下：
-
-> 参考：[prettier/eslint-plugin-prettier: ESLint plugin for Prettier formatting (github.com)](https://github.com/prettier/eslint-plugin-prettier)
 
 + [`.eslintignore`](.eslintignore)：Eslint 忽略文件，类似于 [`.gitignore`](.gitignore)
 + [`.eslintrc.json`](.eslintrc.json)：Eslint 主配置文件

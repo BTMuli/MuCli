@@ -1,18 +1,19 @@
 {
     "name": "@btmuli/mucli",
-    "version": "0.6.4",
+    "version": "0.7.0",
     "subversion": {
-        "dev": "0.1.9",
-        "mmd": "0.6.2",
-        "pip": "0.3.0"
+        "dev": "0.2.0",
+        "mmd": "0.7.0",
+        "pip": "0.4.0",
+        "test": "0.0.1"
     },
     "description": "个人用的 Node Cli",
     "type": "module",
     "main": "index.js",
     "scripts": {
         "build": "rollup -c",
-        "lint-all": "eslint --ext .ts,.json ./src",
-        "lint-fix": "eslint --ext .ts,.json ./src --fix"
+        "lint-all": "eslint --ext .ts,.json,.js ./",
+        "lint-fix": "eslint --ext .ts,.json,.js ./ --fix"
     },
     "bin": {
         "muc": "./dist/index.js"
