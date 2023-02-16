@@ -453,10 +453,19 @@ class Markdown {
 
 	/**
 	 * @description 创建新文件前的提示
-	 * @param {string} fileName 文件名
+	 * @param {string} filePath 文件路径
 	 * @return {void}
 	 */
-	promptCreateFile(fileName: string): void {
+	promptCreateFile(filePath: string): void {
+		let fileName: string = filePath.split("/").pop();
+		if (fileName.includes(".")) {
+			if (fileName.endsWith(".md")) {
+				fileName = fileName.replace(".md", "");
+			} else {
+				console.log("\n文件名不合法，文件名应以 .md 结尾");
+				return;
+			}
+		}
 		inquirer
 			.prompt([
 				{
@@ -485,7 +494,7 @@ class Markdown {
 						])
 						.then(async lv2 => {
 							await this.createFile(
-								lv1.title,
+								filePath,
 								lv2.author,
 								lv2.description
 							);
@@ -509,7 +518,7 @@ class Markdown {
 						])
 						.then(async lv2 => {
 							await this.createFile(
-								lv1.title,
+								filePath,
 								lv2.author,
 								lv2.description
 							);
