@@ -30,7 +30,7 @@ class Dev {
 		}
 		new MucFile().writeFile(
 			`${ROOT_PATH}\\package.json`,
-			JSON.stringify(projInfo, null, 2)
+			JSON.stringify(projInfo, null, 4)
 		);
 	}
 
