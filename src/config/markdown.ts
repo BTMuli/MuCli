@@ -112,7 +112,7 @@ class MarkdownModel {
 			this.sign + this.lineBreak +
 			'Author: ' + labelUpdate.header.author + this.lineBreak +
             'Date: ' + labelUpdate.header.date + this.lineBreak +
-            'Description: ' + this.description + this.lineBreak +
+            'Description: ' + labelUpdate.header.description + this.lineBreak +
 			'Update: ' + labelUpdate.header.update + this.lineBreak +
             this.sign + this.lineBreak + this.lineBreak +
             this.quote + '`' + labelUpdate.quote.date + '`' + this.lineBreak +
