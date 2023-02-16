@@ -58,18 +58,34 @@ class MarkdownModel {
 	 */
 	async readHeader(fileName: string): Promise<MmdFrontMatter> {
 		const headContent = await new MucFile().readLine(fileName, 10);
-		return {
+		// 不确定 FrontMatter 中的各属性排序
+		const headerRead: MmdFrontMatter = {
 			header: {
-				author: headContent[1].split(":")[1].trim(),
-				date: headContent[2].split(":")[1].trim(),
-				description: headContent[3].split(":")[1].trim(),
-				update: headContent[4].split(":")[1].trim(),
+				author: "",
+				date: "",
+				description: "",
+				update: "",
 			},
 			quote: {
 				date: headContent[7].split("`")[3],
 				update: headContent[9].split("`")[1],
 			},
 		};
+		headContent.forEach(item => {
+			if (item.includes("Author")) {
+				headerRead.header.author = item.split(":")[1].trim();
+			}
+			if (item.includes("Date")) {
+				headerRead.header.date = item.split(":")[1].trim();
+			}
+			if (item.includes("Description")) {
+				headerRead.header.description = item.split(":")[1].trim();
+			}
+			if (item.includes("Update")) {
+				headerRead.header.update = item.split(":")[1].trim();
+			}
+		});
+		return headerRead;
 	}
 
 	/**

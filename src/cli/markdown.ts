@@ -38,7 +38,7 @@ markdown
 /* 更新 markdown 文件头信息 */
 markdown
 	.command("update")
-	.option("-n, --name <name>", "the name of the markdown file", "README")
+	.option("-n, --name <name>", "the name of the markdown file", "README.md")
 	.description("update the header of the markdown file")
 	.action(async options => {
 		const md: Markdown = new Markdown();

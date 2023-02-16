@@ -524,6 +524,11 @@ class Markdown {
 	 * @return {Promise<void>}
 	 */
 	async promptUpdateFile(fileName: string): Promise<void> {
+		// 检测后缀
+		if (!fileName.endsWith(".md")) {
+			console.log("文件名不合法");
+			return;
+		}
 		const fileCheck: boolean = await this.mucFile.fileExist(fileName);
 		if (fileCheck) {
 			const hasHeader: boolean = await this.checkHeader(fileName);
