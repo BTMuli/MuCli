@@ -10,7 +10,7 @@ import { exec } from "child_process";
 import axios from "axios";
 import inquirer from "inquirer";
 /* MuCli */
-import { PROJECT_INFO } from "../config";
+import { PROJECT_INFO, ROOT_PATH } from "../config";
 import Config, { COMMAND_LIST } from "../config/index";
 
 /* 版本管理 */
@@ -35,7 +35,7 @@ MuCli.option("-l, --list", "list all commands").action(options => {
 		};
 		COMMAND_LIST.forEach(command => {
 			commandList[command.name()] = {
-				version: command.version,
+				version: PROJECT_INFO.subversion[command.name()],
 				enable: muc.commandUse(command),
 				description: command.description(),
 			};
@@ -102,6 +102,24 @@ MuCli.command("update")
 			} else {
 				console.log(`已是最新版本`);
 			}
+		});
+	});
+
+/* 编译 ts 文件 */
+MuCli.command("build")
+	.description("build ts file")
+	.action(() => {
+		// 获取当前目录
+		exec(`cd ${ROOT_PATH} && rollup -c`, (err, stdout, stderr) => {
+			if (err) {
+				console.log(err);
+				return;
+			}
+			if (stderr) {
+				console.log(stderr);
+				return;
+			}
+			console.log(stdout);
 		});
 	});
 
