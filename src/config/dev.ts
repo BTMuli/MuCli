@@ -39,9 +39,9 @@ class DevModel {
 	getFilesPath(): DevFilesPath {
 		const fileName: string = this.command + ".ts";
 		return {
-			cliPath: `${ROOT_PATH}\\cli\\${fileName}`,
-			utilsPath: `${ROOT_PATH}\\utils\\${fileName}`,
-			configPath: `${ROOT_PATH}\\config\\${fileName}`,
+			cliPath: `${ROOT_PATH}\\src\\cli\\${fileName}`,
+			utilsPath: `${ROOT_PATH}\\src\\utils\\${fileName}`,
+			configPath: `${ROOT_PATH}\\src\\config\\${fileName}`,
 		};
 	}
 

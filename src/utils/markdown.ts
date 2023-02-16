@@ -5,7 +5,7 @@
  */
 
 /* Node */
-import { prompt } from "inquirer";
+import inquirer from "inquirer";
 import { exec } from "child_process";
 /* MuCli */
 import MarkdownModel from "../config/markdown";
@@ -64,53 +64,55 @@ class Markdown {
 	 */
 	modifyTypora(): void {
 		this.showTypora();
-		prompt([
-			{
-				type: "checkbox",
-				name: "typora",
-				message: "请选择要修改的配置项",
-				choices: [
-					{
-						name: "Typora 可用性",
-						value: "enable",
-					},
-					{
-						name: "Typora 配置文件路径",
-						value: "path",
-					},
-				],
-			},
-			{
-				type: "confirm",
-				name: "enable",
-				message: `确认修改可用性？（当前${
-					this.typora.enable ? "可用" : "不可用"
-				}）`,
-				when: answers => answers.typora.includes("enable"),
-				default: true,
-			},
-			{
-				type: "input",
-				name: "path",
-				message: "请输入 Typora 配置文件路径",
-				when: answers => answers.typora.includes("path"),
-				default: this.typora.path,
-			},
-		]).then(answers => {
-			if (answers.typora.length === 0) {
-				console.log("\n未对Typora配置进行修改。");
-			} else {
-				if (answers.typora.includes("enable")) {
-					this.typora.enable = !this.typora.enable;
+		inquirer
+			.prompt([
+				{
+					type: "checkbox",
+					name: "typora",
+					message: "请选择要修改的配置项",
+					choices: [
+						{
+							name: "Typora 可用性",
+							value: "enable",
+						},
+						{
+							name: "Typora 配置文件路径",
+							value: "path",
+						},
+					],
+				},
+				{
+					type: "confirm",
+					name: "enable",
+					message: `确认修改可用性？（当前${
+						this.typora.enable ? "可用" : "不可用"
+					}）`,
+					when: answers => answers.typora.includes("enable"),
+					default: true,
+				},
+				{
+					type: "input",
+					name: "path",
+					message: "请输入 Typora 配置文件路径",
+					when: answers => answers.typora.includes("path"),
+					default: this.typora.path,
+				},
+			])
+			.then(answers => {
+				if (answers.typora.length === 0) {
+					console.log("\n未对Typora配置进行修改。");
+				} else {
+					if (answers.typora.includes("enable")) {
+						this.typora.enable = !this.typora.enable;
+					}
+					if (answers.typora.includes("path")) {
+						this.typora.path = answers.path;
+					}
+					this.typora.saveConfig();
+					console.log("\nTypora 配置修改成功");
 				}
-				if (answers.typora.includes("path")) {
-					this.typora.path = answers.path;
-				}
-				this.typora.saveConfig();
-				console.log("\nTypora 配置修改成功");
-			}
-			this.showTypora();
-		});
+				this.showTypora();
+			});
 	}
 
 	/**
@@ -118,71 +120,73 @@ class Markdown {
 	 * @return {void}
 	 */
 	operaTypora(): void {
-		prompt([
-			{
-				type: "list",
-				name: "typora",
-				message: "请选择要进行的操作",
-				choices: [
-					{
-						name: "初始化 Typora 配置",
-						value: "init",
-					},
-					{
-						name: "检测 Typora 配置",
-						value: "test",
-					},
-					{
-						name: "查看 Typora 配置",
-						value: "show",
-					},
-					{
-						name: "修改 Typora 配置",
-						value: "modify",
-					},
-					{
-						name: "查看 muc mmd typora 命令说明",
-						value: "help",
-					},
-					{
-						name: "退出",
-						value: "exit",
-					},
-				],
-			},
-		]).then(answers => {
-			switch (answers.typora) {
-				case "init":
-					this.typora.initConfig();
-					break;
-				case "test":
-					this.testTypora();
-					break;
-				case "show":
-					this.showTypora();
-					break;
-				case "modify":
-					this.modifyTypora();
-					break;
-				case "help":
-					exec("muc mmd typora -h", (error, stdout, stderr) => {
-						if (error) {
-							console.log(error);
-							return;
-						}
-						if (stderr) {
-							console.log(stderr);
-							return;
-						}
-						if (stdout) {
-							console.log(stdout);
-						}
-					});
-					break;
-				case "exit":
-					break;
-			}
-		});
+		inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "typora",
+					message: "请选择要进行的操作",
+					choices: [
+						{
+							name: "初始化 Typora 配置",
+							value: "init",
+						},
+						{
+							name: "检测 Typora 配置",
+							value: "test",
+						},
+						{
+							name: "查看 Typora 配置",
+							value: "show",
+						},
+						{
+							name: "修改 Typora 配置",
+							value: "modify",
+						},
+						{
+							name: "查看 muc mmd typora 命令说明",
+							value: "help",
+						},
+						{
+							name: "退出",
+							value: "exit",
+						},
+					],
+				},
+			])
+			.then(answers => {
+				switch (answers.typora) {
+					case "init":
+						this.typora.initConfig();
+						break;
+					case "test":
+						this.testTypora();
+						break;
+					case "show":
+						this.showTypora();
+						break;
+					case "modify":
+						this.modifyTypora();
+						break;
+					case "help":
+						exec("muc mmd typora -h", (error, stdout, stderr) => {
+							if (error) {
+								console.log(error);
+								return;
+							}
+							if (stderr) {
+								console.log(stderr);
+								return;
+							}
+							if (stdout) {
+								console.log(stdout);
+							}
+						});
+						break;
+					case "exit":
+						break;
+				}
+			});
 	}
 
 	/* Label 相关 */
@@ -232,44 +236,52 @@ class Markdown {
 			console.log(`Label ${fileName} 已存在`);
 			return;
 		} else {
-			prompt([
-				{
-					type: "input",
-					name: "author",
-					message: "请输入作者",
-					default: this.label.default.author,
-				},
-				{
-					type: "input",
-					name: "description",
-					message: "请输入描述",
-					default: this.label_default.description,
-				},
-			]).then(label => {
-				const labelGet: MmdLabel = {
-					author: label.author,
-					description: label.description,
-					filename: fileName,
-				};
-				console.log(labelGet);
-				prompt([
+			inquirer
+				.prompt([
 					{
-						type: "confirm",
-						name: "create",
-						message: `是否创建 Label ${fileName}`,
-						default: false,
+						type: "input",
+						name: "author",
+						message: "请输入作者",
+						default: this.label.default.author,
 					},
-				]).then(answers => {
-					if (answers.create) {
-						let labelCustom: Array<MmdLabel> = this.label.custom;
-						if (labelCustom === undefined || labelCustom === null) {
-							labelCustom = [];
-						}
-						labelCustom.push(labelGet);
-						this.changeLabel(labelCustom);
-					}
+					{
+						type: "input",
+						name: "description",
+						message: "请输入描述",
+						default: this.label_default.description,
+					},
+				])
+				.then(label => {
+					const labelGet: MmdLabel = {
+						author: label.author,
+						description: label.description,
+						filename: fileName,
+					};
+					console.log(labelGet);
+					inquirer
+						.prompt([
+							{
+								type: "confirm",
+								name: "create",
+								message: `是否创建 Label ${fileName}`,
+								default: false,
+							},
+						])
+						.then(answers => {
+							if (answers.create) {
+								let labelCustom: Array<MmdLabel> =
+									this.label.custom;
+								if (
+									labelCustom === undefined ||
+									labelCustom === null
+								) {
+									labelCustom = [];
+								}
+								labelCustom.push(labelGet);
+								this.changeLabel(labelCustom);
+							}
+						});
 				});
-			});
 		}
 	}
 
@@ -287,18 +299,20 @@ class Markdown {
 			if (labelCheck.author !== undefined) {
 				console.log(labelCheck);
 			} else {
-				prompt([
-					{
-						type: "confirm",
-						name: "create",
-						message: `Label ${fileName} 不存在，是否创建？`,
-						default: false,
-					},
-				]).then(answers => {
-					if (answers.create) {
-						this.addLabel(fileName);
-					}
-				});
+				inquirer
+					.prompt([
+						{
+							type: "confirm",
+							name: "create",
+							message: `Label ${fileName} 不存在，是否创建？`,
+							default: false,
+						},
+					])
+					.then(answers => {
+						if (answers.create) {
+							this.addLabel(fileName);
+						}
+					});
 			}
 		}
 	}
@@ -314,22 +328,24 @@ class Markdown {
 			console.log(`Label ${fileName} 不存在`);
 			return;
 		}
-		prompt([
-			{
-				type: "confirm",
-				name: "delete",
-				message: `是否删除 Label ${fileName}`,
-				default: false,
-			},
-		]).then(answers => {
-			if (answers.delete) {
-				let labelCustom: Array<MmdLabel> = this.label.custom;
-				labelCustom = labelCustom.filter((label: MmdLabel) => {
-					return label.filename !== fileName;
-				});
-				this.changeLabel(labelCustom);
-			}
-		});
+		inquirer
+			.prompt([
+				{
+					type: "confirm",
+					name: "delete",
+					message: `是否删除 Label ${fileName}`,
+					default: false,
+				},
+			])
+			.then(answers => {
+				if (answers.delete) {
+					let labelCustom: Array<MmdLabel> = this.label.custom;
+					labelCustom = labelCustom.filter((label: MmdLabel) => {
+						return label.filename !== fileName;
+					});
+					this.changeLabel(labelCustom);
+				}
+			});
 	}
 
 	/* File 相关 */
@@ -363,71 +379,73 @@ class Markdown {
 		const mdPath: string = fileName + ".md";
 		if (await this.mucFile.fileExist(mdPath)) {
 			const hasHeader: boolean = await this.checkHeader(mdPath);
-			prompt([
-				{
-					type: "list",
-					name: "action",
-					message: `文件 ${mdPath} 已存在，未检测到文件头，执行以下操作：`,
-					choices: [
-						{
-							name: "覆盖",
-							value: "cover",
-						},
-						{
-							name: "插入文件头",
-							value: "insert",
-						},
-					],
-					when: !hasHeader,
-					default: "insert",
-				},
-				{
-					type: "list",
-					name: "action",
-					message: `文件 ${mdPath} 已存在，检测到文件头，执行以下操作：`,
-					choices: [
-						{
-							name: "覆盖",
-							value: "cover",
-						},
-						{
-							name: "更新文件头",
-							value: "update",
-						},
-						{
-							name: "不执行任何操作",
-							value: "none",
-						},
-					],
-					when: hasHeader,
-					default: "none",
-				},
-			]).then(async answer => {
-				switch (answer.action) {
-					case "cover":
-						await this.mucFile.writeFile(
-							mdPath,
-							mdModel.getHeader()
-						);
-						break;
-					case "insert":
-						await this.mucFile.insertLine(
-							mdPath,
-							0,
-							mdModel.getHeader()
-						);
-						break;
-					case "update":
-						await this.mucFile.updateLine(
-							mdPath,
-							0,
-							await mdModel.writeHeader(mdPath)
-						);
-						break;
-					case "none":
-						break;
-				}
-			});
+			inquirer
+				.prompt([
+					{
+						type: "list",
+						name: "action",
+						message: `文件 ${mdPath} 已存在，未检测到文件头，执行以下操作：`,
+						choices: [
+							{
+								name: "覆盖",
+								value: "cover",
+							},
+							{
+								name: "插入文件头",
+								value: "insert",
+							},
+						],
+						when: !hasHeader,
+						default: "insert",
+					},
+					{
+						type: "list",
+						name: "action",
+						message: `文件 ${mdPath} 已存在，检测到文件头，执行以下操作：`,
+						choices: [
+							{
+								name: "覆盖",
+								value: "cover",
+							},
+							{
+								name: "更新文件头",
+								value: "update",
+							},
+							{
+								name: "不执行任何操作",
+								value: "none",
+							},
+						],
+						when: hasHeader,
+						default: "none",
+					},
+				])
+				.then(async answer => {
+					switch (answer.action) {
+						case "cover":
+							await this.mucFile.writeFile(
+								mdPath,
+								mdModel.getHeader()
+							);
+							break;
+						case "insert":
+							await this.mucFile.insertLine(
+								mdPath,
+								0,
+								mdModel.getHeader()
+							);
+							break;
+						case "update":
+							await this.mucFile.updateLine(
+								mdPath,
+								0,
+								await mdModel.writeHeader(mdPath)
+							);
+							break;
+						case "none":
+							break;
+					}
+				});
 		} else {
 			await this.mucFile.writeFile(mdPath, mdModel.getHeader());
 		}
@@ -439,59 +457,65 @@ class Markdown {
 	 * @return {void}
 	 */
 	promptCreateFile(fileName: string): void {
-		prompt([
-			{
-				type: "input",
-				name: "title",
-				message: "请输入文件名称",
-				default: fileName || this.label_default.filename,
-			},
-		]).then(async lv1 => {
-			if (lv1.title === this.label_default.filename) {
-				await prompt([
-					{
-						type: "input",
-						name: "author",
-						message: "请输入作者",
-						default: this.label_default.author,
-					},
-					{
-						type: "input",
-						name: "description",
-						message: "请输入描述",
-						default: this.label_default.description,
-					},
-				]).then(async lv2 => {
-					await this.createFile(
-						lv1.title,
-						lv2.author,
-						lv2.description
-					);
-				});
-			} else {
-				const label = this.checkLabel(lv1.title);
-				await prompt([
-					{
-						type: "input",
-						name: "author",
-						message: "请输入作者",
-						default: label.author,
-					},
-					{
-						type: "input",
-						name: "description",
-						message: "请输入描述",
-						default: label.description,
-					},
-				]).then(async lv2 => {
-					await this.createFile(
-						lv1.title,
-						lv2.author,
-						lv2.description
-					);
-				});
-			}
-		});
+		inquirer
+			.prompt([
+				{
+					type: "input",
+					name: "title",
+					message: "请输入文件名称",
+					default: fileName || this.label_default.filename,
+				},
+			])
+			.then(async lv1 => {
+				if (lv1.title === this.label_default.filename) {
+					await inquirer
+						.prompt([
+							{
+								type: "input",
+								name: "author",
+								message: "请输入作者",
+								default: this.label_default.author,
+							},
+							{
+								type: "input",
+								name: "description",
+								message: "请输入描述",
+								default: this.label_default.description,
+							},
+						])
+						.then(async lv2 => {
+							await this.createFile(
+								lv1.title,
+								lv2.author,
+								lv2.description
+							);
+						});
+				} else {
+					const label = this.checkLabel(lv1.title);
+					await inquirer
+						.prompt([
+							{
+								type: "input",
+								name: "author",
+								message: "请输入作者",
+								default: label.author,
+							},
+							{
+								type: "input",
+								name: "description",
+								message: "请输入描述",
+								default: label.description,
+							},
+						])
+						.then(async lv2 => {
+							await this.createFile(
+								lv1.title,
+								lv2.author,
+								lv2.description
+							);
+						});
+				}
+			});
 	}
 
 	/**
@@ -503,72 +527,79 @@ class Markdown {
 		const fileCheck: boolean = await this.mucFile.fileExist(fileName);
 		if (fileCheck) {
 			const hasHeader: boolean = await this.checkHeader(fileName);
-			prompt([
-				{
-					type: "confirm",
-					name: "insert",
-					message: `文件 ${fileName} 未检测到文件头，是否插入文件头？`,
-					when: !hasHeader,
-					default: true,
-				},
-				{
-					type: "confirm",
-					name: "update",
-					message: `文件 ${fileName} 已存在，是否更新文件头？`,
-					when: hasHeader,
-					default: true,
-				},
-			]).then(async answer => {
-				const title = fileName.replace(/\.md$/, "");
-				if (answer.insert) {
-					const label: MmdLabel = this.checkLabel(title);
-					await prompt([
-						{
-							type: "input",
-							name: "author",
-							message: "请输入作者",
-							default: label.author,
-						},
-						{
-							type: "input",
-							name: "description",
-							message: "请输入描述",
-							default: label.description,
-						},
-					]).then(async input => {
-						const mdModel: MarkdownModel = new MarkdownModel(
-							input.author,
-							input.description
-						);
-						await this.mucFile.insertLine(
+			inquirer
+				.prompt([
+					{
+						type: "confirm",
+						name: "insert",
+						message: `文件 ${fileName} 未检测到文件头，是否插入文件头？`,
+						when: !hasHeader,
+						default: true,
+					},
+					{
+						type: "confirm",
+						name: "update",
+						message: `文件 ${fileName} 已存在，是否更新文件头？`,
+						when: hasHeader,
+						default: true,
+					},
+				])
+				.then(async answer => {
+					const title = fileName.replace(/\.md$/, "");
+					if (answer.insert) {
+						const label: MmdLabel = this.checkLabel(title);
+						await inquirer
+							.prompt([
+								{
+									type: "input",
+									name: "author",
+									message: "请输入作者",
+									default: label.author,
+								},
+								{
+									type: "input",
+									name: "description",
+									message: "请输入描述",
+									default: label.description,
+								},
+							])
+							.then(async input => {
+								const mdModel: MarkdownModel =
+									new MarkdownModel(
+										input.author,
+										input.description
+									);
+								await this.mucFile.insertLine(
+									fileName,
+									0,
+									mdModel.getHeader()
+								);
+							});
+					} else if (answer.update) {
+						const mdModel: MarkdownModel = new MarkdownModel();
+						await this.mucFile.updateLine(
 							fileName,
 							0,
-							mdModel.getHeader()
+							await mdModel.writeHeader(fileName)
 						);
-					});
-				} else if (answer.update) {
-					const mdModel: MarkdownModel = new MarkdownModel();
-					await this.mucFile.updateLine(
-						fileName,
-						0,
-						await mdModel.writeHeader(fileName)
-					);
-				}
-			});
+					}
+				});
 		} else {
-			prompt([
-				{
-					type: "confirm",
-					name: "create",
-					message: `文件 ${fileName} 不存在，是否创建文件？`,
-					default: false,
-				},
-			]).then(async answer => {
-				if (answer.create) {
-					const title = fileName.replace(/\.md$/, "");
-					await this.promptCreateFile(title);
-				}
-			});
+			inquirer
+				.prompt([
+					{
+						type: "confirm",
+						name: "create",
+						message: `文件 ${fileName} 不存在，是否创建文件？`,
+						default: false,
+					},
+				])
+				.then(async answer => {
+					if (answer.create) {
+						const title = fileName.replace(/\.md$/, "");
+						await this.promptCreateFile(title);
+					}
+				});
 		}
 	}
 }

@@ -10,9 +10,9 @@
     "type": "module",
     "main": "index.js",
     "scripts": {
-        "build": "rollup -cw",
-        "lint-all": "eslint --ext .ts,.json ./",
-        "lint-fix": "eslint --ext .ts,.json ./ --fix"
+        "build": "rollup -c",
+        "lint-all": "eslint --ext .ts,.json ./src",
+        "lint-fix": "eslint --ext .ts,.json ./src --fix"
     },
     "bin": {
         "muc": "./dist/index.js"

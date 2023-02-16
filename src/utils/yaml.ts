@@ -5,7 +5,7 @@
  */
 
 /* Node */
-import { load, stringify } from "yamljs";
+import yamljs from "yamljs";
 /* MuCli */
 import MucFile from "./file";
 import { ROOT_PATH } from "../config";
@@ -18,7 +18,7 @@ class MucYaml {
 		if (path === undefined) {
 			this.configPath = ROOT_PATH + "\\config_default\\config.yml";
 		} else {
-			this.configPath = path;
+			this.configPath = ROOT_PATH + path;
 		}
 		this.mucFile = new MucFile();
 	}
@@ -32,7 +32,7 @@ class MucYaml {
 		if (filePath === undefined) {
 			filePath = this.configPath;
 		}
-		return load(filePath);
+		return yamljs.load(filePath);
 	}
 
 	/**
@@ -78,7 +78,7 @@ class MucYaml {
 					}
 			  })
 			: (yamlData[args][itemKey] = itemValue);
-		this.mucFile.writeFile(filePath, stringify(yamlData, 4));
+		this.mucFile.writeFile(filePath, yamljs.stringify(yamlData, 4));
 	}
 }
 

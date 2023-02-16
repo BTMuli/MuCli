@@ -6,7 +6,7 @@
 
 /* Node */
 import { exec } from "child_process";
-import { prompt } from "inquirer";
+import inquirer from "inquirer";
 /* MuCli */
 import { MirrorModel, PipModel } from "../config/pip";
 import Config from "../config/index";
@@ -79,7 +79,7 @@ class Pip {
 	 */
 	async addMirror(mirrorName: string): Promise<void> {
 		if (!this.mirrorInfo.mirrorExist(mirrorName)) {
-			const mirror = await prompt([
+			const mirror = await inquirer.prompt([
 				{
 					type: "input",
 					name: "name",
@@ -112,25 +112,27 @@ class Pip {
 	 */
 	async deleteMirror(mirrorName: string): Promise<void> {
 		if (this.mirrorInfo.mirrorExist(mirrorName)) {
-			prompt([
-				{
-					type: "confirm",
-					name: "confirm",
-					message: `是否删除镜像源 ${mirrorName}？`,
-					default: false,
-				},
-			]).then(async answer => {
-				if (answer.confirm) {
-					await this.mirrorInfo.deleteMirror(mirrorName);
-					console.log(`正在更新配置文件...`);
-					this.pipConfig.changeConfig(
-						["pip"],
-						"mirrorList",
-						this.mirrorInfo.mirrorList
-					);
-					console.log(`镜像源 ${mirrorName} 删除成功！`);
-				}
-			});
+			inquirer
+				.prompt([
+					{
+						type: "confirm",
+						name: "confirm",
+						message: `是否删除镜像源 ${mirrorName}？`,
+						default: false,
+					},
+				])
+				.then(async answer => {
+					if (answer.confirm) {
+						await this.mirrorInfo.deleteMirror(mirrorName);
+						console.log(`正在更新配置文件...`);
+						this.pipConfig.changeConfig(
+							["pip"],
+							"mirrorList",
+							this.mirrorInfo.mirrorList
+						);
+						console.log(`镜像源 ${mirrorName} 删除成功！`);
+					}
+				});
 		} else {
 			console.log(`镜像源 ${mirrorName} 不存在！`);
 		}
@@ -144,18 +146,20 @@ class Pip {
 	async verifyMirror(mirror: string = undefined) {
 		if (mirror !== undefined) {
 			if (!this.mirrorInfo.mirrorExist(mirror)) {
-				prompt([
-					{
-						type: "confirm",
-						name: "confirm",
-						message: `镜像源 ${mirror} 不存在，是否添加？`,
-						default: false,
-					},
-				]).then(async answer => {
-					if (answer.confirm) {
-						await this.addMirror(mirror);
-					}
-				});
+				inquirer
+					.prompt([
+						{
+							type: "confirm",
+							name: "confirm",
+							message: `镜像源 ${mirror} 不存在，是否添加？`,
+							default: false,
+						},
+					])
+					.then(async answer => {
+						if (answer.confirm) {
+							await this.addMirror(mirror);
+						}
+					});
 			} else {
 				await this.mirrorInfo.testMirror(mirror);
 			}
@@ -198,45 +202,51 @@ class Pip {
 				`\n最快镜像源：${mirrorFastest.name}，${mirrorFastest.url}，耗时：${mirrorFastest.time}ms\n`
 			);
 			if (mirrorFastest.name !== mirrorUse.name) {
-				await prompt([
+				await inquirer
+					.prompt([
+						{
+							type: "confirm",
+							name: "confirm",
+							message: `是否切换到 ${mirrorFastest.name} 镜像源？`,
+							default: false,
+						},
+					])
+					.then(async answer => {
+						if (answer.confirm) {
+							await this.mirrorInfo.setMirrorUse(
+								mirrorFastest.name
+							);
+						}
+						this.pipConfig.changeConfig(
+							["pip"],
+							"mirrorList",
+							this.mirrorInfo.mirrorList
+						);
+					});
+			}
+			await inquirer
+				.prompt([
 					{
 						type: "confirm",
 						name: "confirm",
-						message: `是否切换到 ${mirrorFastest.name} 镜像源？`,
+						message: "是否更新配置文件？",
 						default: false,
 					},
-				]).then(async answer => {
+				])
+				.then(async answer => {
 					if (answer.confirm) {
-						await this.mirrorInfo.setMirrorUse(mirrorFastest.name);
+						mirrorListTest.map((mirror: PipMirror) => {
+							delete mirror.time;
+						});
+						console.log("\n正在更新配置文件...");
+						this.pipConfig.changeConfig(
+							["pip"],
+							"mirrorList",
+							mirrorListTest
+						);
+						console.log("\n更新配置文件成功!\n");
 					}
-					this.pipConfig.changeConfig(
-						["pip"],
-						"mirrorList",
-						this.mirrorInfo.mirrorList
-					);
 				});
-			}
-			await prompt([
-				{
-					type: "confirm",
-					name: "confirm",
-					message: "是否更新配置文件？",
-					default: false,
-				},
-			]).then(async answer => {
-				if (answer.confirm) {
-					mirrorListTest.map((mirror: PipMirror) => {
-						delete mirror.time;
-					});
-					console.log("\n正在更新配置文件...");
-					this.pipConfig.changeConfig(
-						["pip"],
-						"mirrorList",
-						mirrorListTest
-					);
-					console.log("\n更新配置文件成功!\n");
-				}
-			});
 		}
 	}
 
@@ -270,25 +280,29 @@ class Pip {
 			console.log(`\n镜像源 ${mirror} 不存在！\n`);
 			return;
 		}
-		prompt([
-			{
-				type: "input",
-				name: "url",
-				message: "请输入镜像源地址：",
-				default: this.mirrorInfo.mirrorList.find((item: PipMirror) => {
-					return item.name === mirror;
-				}).url,
-			},
-		]).then(async answer => {
-			await this.mirrorInfo.updateMirror(mirror, answer.url);
-			console.log("正在更新配置文件...");
-			this.pipConfig.changeConfig(
-				["pip"],
-				"mirrorList",
-				this.mirrorInfo.mirrorList
-			);
-			console.log("更新配置文件成功！");
-		});
+		inquirer
+			.prompt([
+				{
+					type: "input",
+					name: "url",
+					message: "请输入镜像源地址：",
+					default: this.mirrorInfo.mirrorList.find(
+						(item: PipMirror) => {
+							return item.name === mirror;
+						}
+					).url,
+				},
+			])
+			.then(async answer => {
+				await this.mirrorInfo.updateMirror(mirror, answer.url);
+				console.log("正在更新配置文件...");
+				this.pipConfig.changeConfig(
+					["pip"],
+					"mirrorList",
+					this.mirrorInfo.mirrorList
+				);
+				console.log("更新配置文件成功！");
+			});
 	}
 }
 

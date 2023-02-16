@@ -14,7 +14,8 @@
     "declaration": true,
     "outDir": "dist",
     "baseUrl": "./",
-    "paths": {}
+    "paths": {},
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "dist",

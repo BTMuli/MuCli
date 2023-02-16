@@ -5,7 +5,7 @@
  */
 
 /* Node */
-import { prompt } from "inquirer";
+import inquirer from "inquirer";
 /* MuCli */
 import MucFile from "./file";
 import DevModel from "../config/dev";
@@ -40,37 +40,39 @@ class Dev {
 	 */
 	createNew(name): void {
 		const mucFile: MucFile = new MucFile();
-		prompt([
-			{
-				type: "input",
-				message: "请输入子命令名称",
-				name: "name",
-				default: name || "test",
-			},
-			{
-				type: "input",
-				message: "请输入子命令",
-				name: "command",
-				default: name || "test",
-			},
-			{
-				type: "input",
-				message: "请输入子命令描述",
-				name: "description",
-				default: `A SubCommand within MuCli for ${name || "test"}`,
-			},
-		]).then(async answers => {
-			const dev: DevModel = new DevModel(
-				answers.name,
-				answers.command,
-				answers.description
-			);
-			const paths: DevFilesPath = dev.getFilesPath();
-			await mucFile.writeFile(paths.cliPath, dev.getCliModel());
-			await mucFile.writeFile(paths.utilsPath, dev.getUtilsModel());
-			await mucFile.writeFile(paths.configPath, dev.getConfigModel());
-			this.updatePackage(answers.command, "0.0.1");
-		});
+		inquirer
+			.prompt([
+				{
+					type: "input",
+					message: "请输入子命令名称",
+					name: "name",
+					default: name || "test",
+				},
+				{
+					type: "input",
+					message: "请输入子命令",
+					name: "command",
+					default: name || "test",
+				},
+				{
+					type: "input",
+					message: "请输入子命令描述",
+					name: "description",
+					default: `A SubCommand within MuCli for ${name || "test"}`,
+				},
+			])
+			.then(async answers => {
+				const dev: DevModel = new DevModel(
+					answers.name,
+					answers.command,
+					answers.description
+				);
+				const paths: DevFilesPath = dev.getFilesPath();
+				await mucFile.writeFile(paths.cliPath, dev.getCliModel());
+				await mucFile.writeFile(paths.utilsPath, dev.getUtilsModel());
+				await mucFile.writeFile(paths.configPath, dev.getConfigModel());
+				this.updatePackage(answers.command, "0.0.1");
+			});
 	}
 
 	/**
@@ -167,62 +169,66 @@ class Dev {
 					value: [key, PROJECT_INFO.subversion[key]],
 				};
 			});
-		prompt([
-			{
-				type: "list",
-				message: "请选择要更新的命令",
-				name: "command",
-				choices: [
-					{
-						name: `muc(${PROJECT_INFO.version})`,
-						value: ["muc", PROJECT_INFO.version],
-					},
-					...subCommandArr,
-					{
-						name: "不更新任何命令",
-						value: ["null"],
-					},
-				],
-			},
-		]).then(lv1 => {
-			if (lv1.command[0] === "null") {
-				console.log("\n未更新任何命令\n");
-				return;
-			}
-			const oldVersion: string = lv1.command[1];
-			prompt([
+		inquirer
+			.prompt([
 				{
 					type: "list",
-					message: `请选择新的 ${lv1.command[0]} 版本号`,
-					name: "version",
+					message: "请选择要更新的命令",
+					name: "command",
 					choices: [
-						...this.getUpVersion(oldVersion),
 						{
-							name: "手动输入",
-							value: "input",
+							name: `muc(${PROJECT_INFO.version})`,
+							value: ["muc", PROJECT_INFO.version],
 						},
+						...subCommandArr,
 						{
-							name: "不更新",
-							value: oldVersion,
+							name: "不更新任何命令",
+							value: ["null"],
 						},
 					],
 				},
-				{
-					type: "input",
-					name: "input",
-					message: `请输入新的 ${lv1.command[0]} 版本号:`,
-					when: lv2 => lv2.version === "input",
-				},
-			]).then(lv2 => {
-				const upVersion: string =
-					lv2.version === "input" ? lv2.input : lv2.version;
-				if (lv1.command[0] === "muc") {
-					this.updateMucVersion(upVersion);
-				} else {
-					this.updateSubVersion(lv1.command[0], upVersion);
+			])
+			.then(lv1 => {
+				if (lv1.command[0] === "null") {
+					console.log("\n未更新任何命令\n");
+					return;
 				}
+				const oldVersion: string = lv1.command[1];
+				inquirer
+					.prompt([
+						{
+							type: "list",
+							message: `请选择新的 ${lv1.command[0]} 版本号`,
+							name: "version",
+							choices: [
+								...this.getUpVersion(oldVersion),
+								{
+									name: "手动输入",
+									value: "input",
+								},
+								{
+									name: "不更新",
+									value: oldVersion,
+								},
+							],
+						},
+						{
+							type: "input",
+							name: "input",
+							message: `请输入新的 ${lv1.command[0]} 版本号:`,
+							when: lv2 => lv2.version === "input",
+						},
+					])
+					.then(lv2 => {
+						const upVersion: string =
+							lv2.version === "input" ? lv2.input : lv2.version;
+						if (lv1.command[0] === "muc") {
+							this.updateMucVersion(upVersion);
+						} else {
+							this.updateSubVersion(lv1.command[0], upVersion);
+						}
+					});
 			});
-		});
 	}
 }
 

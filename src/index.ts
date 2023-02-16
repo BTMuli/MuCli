@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 项目入口文件
