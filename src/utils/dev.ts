@@ -6,6 +6,7 @@
 
 /* Node */
 import inquirer from "inquirer";
+import { exec } from "child_process";
 /* MuCli */
 import MucFile from "./file";
 import DevModel from "../config/dev";
@@ -119,7 +120,7 @@ class Dev {
 	}
 
 	/**
-	 * @description 更新朱命令版本号
+	 * @description 更新主命令版本号
 	 * @param upVersion {string} 新版本号
 	 * @return {void}
 	 */
@@ -131,7 +132,32 @@ class Dev {
 		this.updatePackage("all", upVersion);
 		if (upVersion !== oldVersion) {
 			console.log(`\n版本号已更新 ${oldVersion} -> ${upVersion}`);
-			console.log("请运行 npm install 更新依赖\n");
+			inquirer
+				.prompt([
+					{
+						type: "confirm",
+						name: "install",
+						message: "是否立即更新依赖？",
+						default: true,
+					},
+				])
+				.then(answers => {
+					if (answers.install) {
+						exec("npm install", (err, stdout, stderr) => {
+							if (err) {
+								console.log(err);
+								return;
+							}
+							if (stderr) {
+								console.log(stderr);
+								return;
+							}
+							console.log(stdout);
+						});
+					} else {
+						console.log("\n请手动执行 npm install 更新依赖\n");
+					}
+				});
 		} else {
 			console.log(`\n版本号未更新，当前 MuCli 版本为 ${oldVersion}\n`);
 		}
