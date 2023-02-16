@@ -18,7 +18,6 @@ class Dev {
 	 * @description 更新/新增 package.json 中的子命令
 	 * @param name {string} 子命令名称
 	 * @param version {string} 子命令版本
-	 * @todo 待测试
 	 * @return {void}
 	 */
 	updatePackage(name: string, version: string): void {

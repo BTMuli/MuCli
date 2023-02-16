@@ -1,6 +1,9 @@
 # Node JS lib
 node_modules
 
+# output dir
+dist
+
 # Config yaml dir
 config_default
 

@@ -33,7 +33,6 @@ class DevModel {
 
 	/**
 	 * @description 文件路径获取
-	 * @todo ts版本需测试
 	 * @return {DevFilesPath} 文件路径相关接口
 	 */
 	getFilesPath(): DevFilesPath {
@@ -52,49 +51,48 @@ class DevModel {
 	getFileHeader(): string {
 		/* eslint-disable */
 		return (
-			'/**\n' +
-			` * @author ${this.author}\n` +
-			` * @description ${this.description}\n` +
-			` * @version 0.0.1\n` +
-			' */\n\n'
+			'/**\r\n' +
+			` * @author ${this.author}\r\n` +
+			` * @description ${this.description}\r\n` +
+			` * @version 0.0.1\r\n` +
+			' */\r\n\r\n'
 		);
 		/* eslint-enable */
 	}
 
 	/**
 	 * @description Cli 目录下的文件内容
-	 * @todo 需测试
 	 * @return {string} 文件内容
 	 */
 	getCliModel(): string {
-		const fileName: string = this.command + ".ts";
+		const fileName: string = this.command;
 		const clsName: string = this.transCommand(this.name);
 		/* eslint-disable */
 		return (
 			this.getFileHeader() +
-			'/* Node */\n' +
-			'import { Command } from "commander";\n' +
-			'/* MuCli */\n' +
-			`import { PROJECT_INFO } from "../config";\n` +
-			'import ' + clsName + ' from "../utils/' + fileName + '";\n\n' +
-			'const ' + this.name + ':' + clsName + ' = new ' + clsName + '();\n\n' +
-			'/* 版本管理 */\n' +
-			'const '+ clsName + 'Version:string = PROJECT_INFO["subversion"]["' + this.command + '";\n\n' +
-			'/* 基本信息 */\n' +
-			this.name + '.name("' + this.command + '")\n' +
-			'\t.description("' + this.description + '")\n' +
-			'\t.version(' + clsName + 'Version)\n' +
-			'\t\t"-sv, --subversion",\n' +
-			'\t\t"output the subversion of MuCli-' + clsName + '"\n' +
-			'\t);\n\n' +
-			'export default ' + this.name + ';\n'
+			'/* Node */\r\n' +
+			'import { Command } from "commander";\r\n' +
+			'/* MuCli */\r\n' +
+			`import { PROJECT_INFO } from "../config";\r\n` +
+			'// import ' + clsName + ' from "../utils/' + fileName + '";\r\n\r\n' +
+			'/* 版本管理 */\r\n' +
+			'const '+ clsName + 'Version: string = PROJECT_INFO["subversion"]["' + this.command + '"];\r\n\r\n' +
+			'const ' + this.name + ': Command = new Command();\r\n\r\n' +
+			'/* 基本信息 */\r\n' +
+			this.name + '.name("' + this.command + '")\r\n' +
+			'\t.description("' + this.description + '")\r\n' +
+			'\t.version(\r\n' +
+			'\t\t' + clsName + 'Version,\r\n' +
+			'\t\t"-sv, --subversion",\r\n' +
+			'\t\t"output the subversion of MuCli-' + clsName + '"\r\n' +
+			'\t);\r\n\r\n' +
+			'export default ' + this.name + ';\r\n'
 		);
 		/* eslint-enable */
 	}
 
 	/**
 	 * @description Utils 目录下的文件内容
-	 * @todo 需测试
 	 * @return {string} 文件内容
 	 */
 	getUtilsModel(): string {
@@ -103,20 +101,19 @@ class DevModel {
 		/* eslint-disable */
 		return (
 			this.getFileHeader() +
-			'/* Node */\n' +
-			'import { prompt } from "inquirer";\n' +
-			'/* MuCli */\n' +
-			'import MucFile from "./file";\n' +
-			'import ' + clsName + 'Model from "../config/' + fileName + '";\n\n' +
-			'class ' + clsName + ' {}\n\n' +
-			'export default ' + clsName + ';\n'
+			'/* Node */\r\n' +
+			'// import inquirer from "inquirer";\r\n' +
+			'/* MuCli */\r\n' +
+			'// import MucFile from "./file";\r\n' +
+			'// import ' + clsName + 'Model from "../config/' + fileName + '";\r\n\r\n' +
+			'class ' + clsName + ' {}\r\n\r\n' +
+			'export default ' + clsName + ';\r\n'
 		);
 		/* eslint-enable */
 	}
 
 	/**
 	 * @description Config 目录下的文件内容
-	 * @todo 需测试
 	 * @return {string} 文件内容
 	 */
 	getConfigModel(): string {
@@ -124,8 +121,8 @@ class DevModel {
 		/* eslint-disable */
 		return (
 			this.getFileHeader() +
-			'class ' + clsName + 'Model{}\n\n' +
-			'export default ' + clsName + 'Model;\n'
+			'class ' + clsName + 'Model {}\r\n\r\n' +
+			'export default ' + clsName + 'Model;\r\n'
 		);
 		/* eslint-enable */
 	}
