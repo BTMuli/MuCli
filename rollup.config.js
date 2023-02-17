@@ -10,8 +10,11 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
 import terser from "@rollup/plugin-terser";
 import typescript2 from "rollup-plugin-typescript2";
-import { dependencies } from "./package.json";
+import { readFileSync } from "node:fs";
 
+const dependencies = JSON.parse(
+	readFileSync("package.json", "utf8")
+).dependencies;
 const external = Object.keys(dependencies || "");
 const globals = external.reduce((prev, current) => {
 	const newPrev = prev;
