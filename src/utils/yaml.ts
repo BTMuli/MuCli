@@ -26,9 +26,9 @@ class MucYaml {
 	/**
 	 * @description 读取 yaml 文件
 	 * @param filePath {string} 文件路径
-	 * @return {object} 文件内容
+	 * @return {any} 文件内容
 	 */
-	readYaml(filePath: string = undefined): object {
+	readYaml(filePath: string = undefined): any {
 		if (filePath === undefined) {
 			filePath = this.configPath;
 		}
@@ -67,14 +67,14 @@ class MucYaml {
 			filePath = this.configPath;
 		}
 		const yamlData = this.readYaml(filePath);
-		let yamlRead = this.readYaml(filePath);
+		let yamlRead = yamlData;
 		if (typeof args !== "string") {
 			yamlRead = this.readYamlDetail(yamlData, args);
 			yamlRead[itemKey] = itemValue;
 		} else {
 			yamlRead[args][itemKey] = itemValue;
 		}
-		this.mucFile.coverFile(filePath, yamljs.stringify(yamlRead, 4));
+		this.mucFile.coverFile(filePath, yamljs.stringify(yamlData, 4));
 	}
 }
 
