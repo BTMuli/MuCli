@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description markdown 文件相关操作
- * @version 0.7.0
+ * @version 0.7.1
  */
 
 /* Node */
@@ -199,9 +199,9 @@ class Markdown {
 	checkLabel(fileName: string): MmdLabel {
 		const customLabel: Array<MmdLabel> = this.label.custom;
 		const defaultLabel: MmdLabel = {
-			author: this.label.default.author,
-			description: fileName,
 			filename: fileName,
+			author: undefined,
+			description: fileName,
 		};
 		// 判断是否为空
 		if (customLabel === null) {
@@ -423,10 +423,7 @@ class Markdown {
 				.then(async answer => {
 					switch (answer.action) {
 						case "cover":
-							await this.mucFile.writeFile(
-								mdPath,
-								mdModel.getHeader()
-							);
+							this.mucFile.coverFile(mdPath, mdModel.getHeader());
 							break;
 						case "insert":
 							await this.mucFile.insertLine(
@@ -447,7 +444,7 @@ class Markdown {
 					}
 				});
 		} else {
-			await this.mucFile.writeFile(mdPath, mdModel.getHeader());
+			this.mucFile.createFile(mdPath, mdModel.getHeader());
 		}
 	}
 

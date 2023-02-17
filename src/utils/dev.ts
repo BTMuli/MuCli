@@ -27,7 +27,7 @@ class Dev {
 		} else {
 			projInfo.subversion[name] = version;
 		}
-		new MucFile().writeFile(
+		new MucFile().coverFile(
 			`${ROOT_PATH}\\package.json`,
 			JSON.stringify(projInfo, null, 4)
 		);
@@ -68,9 +68,9 @@ class Dev {
 					answers.description
 				);
 				const paths: DevFilesPath = dev.getFilesPath();
-				await mucFile.writeFile(paths.cliPath, dev.getCliModel());
-				await mucFile.writeFile(paths.utilsPath, dev.getUtilsModel());
-				await mucFile.writeFile(paths.configPath, dev.getConfigModel());
+				await mucFile.coverFile(paths.cliPath, dev.getCliModel());
+				await mucFile.coverFile(paths.utilsPath, dev.getUtilsModel());
+				await mucFile.coverFile(paths.configPath, dev.getConfigModel());
 				this.updatePackage(answers.command, "0.0.1");
 			});
 	}

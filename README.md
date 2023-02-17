@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-16
+Update: 2023-02-17
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-02-16 15:59:30`
+> 更新于 `2023-02-17 17:25:21`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -47,7 +47,6 @@ Commands:
   set [options]  change subcommand use status
   update         update muc from upstream
   build          build ts file
-  dev [options]  A SubCommand within MuCli for SubCommand
   mmd [options]  A SubCommand within MuCli for Markdown
   pip [options]  A SubCommand within MuCli for pip
 ```
@@ -59,7 +58,7 @@ Commands:
 + `build`：用于开发环境，负责编译本地的 `ts` 文件
 + `list`：用于列出所有子命令
 + `mmd`：用于 Markdown 相关操作
-+ `dev`：用于创建子命令及更新命令版本，**Just for Dev**。
++ `dev`：用于创建子命令及更新命令版本，**默认关闭**。
 + `pip`：用于 pip 相关操作
 
 ### 查看版本
@@ -68,7 +67,7 @@ Commands:
 
 ```text
 > muc -v
-0.7.0
+0.7.1
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -77,7 +76,7 @@ Commands:
 > muc dev -sv
 0.2.0
 > muc mmd -sv
-0.7.0
+0.7.1
 > muc pip -sv
 0.4.0
 ```
@@ -89,9 +88,9 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.7.0' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
-│   dev   │ '0.2.0' │  true  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.7.0' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   muc   │ '0.7.1' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.2.0' │ false  │ 'A SubCommand within MuCli for SubCommand' │
+│   mmd   │ '0.7.1' │  true  │  'A SubCommand within MuCli for Markdown'  │
 │   pip   │ '0.4.0' │  true  │    'A SubCommand within MuCli for pip'     │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
 ```
@@ -127,8 +126,8 @@ Commands:
 markdown 文件支持模板，模板参数如下：
 
 ```yaml
-author: [author]
 filename: [filename]
+author: [author]
 description: [description]
 ```
 
@@ -270,7 +269,7 @@ Options:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-16
+Update: 2023-02-17
 ---
 ```
 

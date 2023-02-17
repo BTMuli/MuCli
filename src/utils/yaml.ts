@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description yaml 文件解析及相关操作
- * @version 0.7.0
+ * @version 0.7.1
  */
 
 /* Node */
@@ -38,7 +38,7 @@ class MucYaml {
 	/**
 	 * @description 读取具体配置
 	 * @param yamlData {object} yaml 文件内容
-	 * @param args {string[]} 配置路径
+	 * @param args { string[] } 配置路径
 	 * @return {object} 配置内容
 	 */
 	readYamlDetail(yamlData: object, args: string[]): object {
@@ -67,18 +67,14 @@ class MucYaml {
 			filePath = this.configPath;
 		}
 		const yamlData = this.readYaml(filePath);
-		// 修改属性值
 		let yamlRead = yamlData;
-		typeof args !== "string"
-			? args?.forEach((arg: string, index: number) => {
-					if (index === args.length - 1) {
-						yamlRead[arg][itemKey] = itemValue;
-					} else {
-						yamlRead = yamlRead[arg];
-					}
-			  })
-			: (yamlData[args][itemKey] = itemValue);
-		this.mucFile.writeFile(filePath, yamljs.stringify(yamlData, 4));
+		if (typeof args !== "string") {
+			yamlRead = this.readYamlDetail(yamlData, args);
+			yamlRead[itemKey] = itemValue;
+		} else {
+			yamlRead[args][itemKey] = itemValue;
+		}
+		this.mucFile.coverFile(filePath, yamljs.stringify(yamlData, 4));
 	}
 }
 

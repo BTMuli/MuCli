@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 涉及到的 interface
- * @version 0.7.0
+ * @version 0.7.1
  */
 
 /**
@@ -102,7 +102,7 @@ export interface MmdTyporaConfig {
 
 /**
  * @description Mmd markdown 模板对应的 interface
- * @version 0.7.0
+ * @version 0.7.1
  * @interface MmdLabel
  * @property {string} author 作者
  * @property {string} filename 文件名
@@ -110,8 +110,8 @@ export interface MmdTyporaConfig {
  * @return {MmdLabel} Mmd markdown 模板对应的 interface
  */
 export interface MmdLabel {
-	author: string;
 	filename: string;
+	author: string;
 	description: string;
 }
 

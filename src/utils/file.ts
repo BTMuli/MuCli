@@ -1,11 +1,18 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 文件操作相关
- * @version 0.7.0
+ * @version 0.7.1
  */
 
 /* Node */
-import { existsSync, mkdirSync, stat, writeFile, readFile } from "fs";
+import {
+	existsSync,
+	mkdirSync,
+	stat,
+	readFile,
+	writeFile,
+	writeFileSync,
+} from "fs";
 import { dirname } from "path";
 import { promisify } from "util";
 
@@ -60,14 +67,9 @@ class MucFile {
 	 * @param fileData {string} 文件内容
 	 * @return {void}
 	 */
-	writeFile(filePath: string, fileData: string): void {
-		writeFile(filePath, fileData, err => {
-			if (err) {
-				console.log(`\n文件 ${filePath} 写入失败！\n${err}\n`);
-			} else {
-				console.log(`\n文件 ${filePath} 写入成功！\n`);
-			}
-		});
+	coverFile(filePath: string, fileData: string): void {
+		writeFileSync(filePath, fileData);
+		console.log(`\n文件 ${filePath} 写入成功！\n`);
 	}
 
 	/**
@@ -126,7 +128,7 @@ class MucFile {
 			const fileLineNum = fileLine.length;
 			if (fileLineNum >= lineNum) {
 				fileLine.splice(lineNum, 0, insertData + lineSeparator);
-				this.writeFile(filePath, fileLine.join(lineSeparator));
+				this.coverFile(filePath, fileLine.join(lineSeparator));
 				return true;
 			} else {
 				console.log(`\n文件 ${filePath} 行数不足！\n`);
@@ -159,7 +161,7 @@ class MucFile {
 			const fileLineNum = fileLine.length;
 			if (fileLineNum >= lineNum) {
 				fileLine.splice(0, lineNum, coverData);
-				this.writeFile(filePath, fileLine.join(lineSeparator));
+				this.coverFile(filePath, fileLine.join(lineSeparator));
 				return true;
 			} else {
 				console.log(`\n文件 ${filePath} 行数不足！\n`);
