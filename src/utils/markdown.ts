@@ -423,10 +423,7 @@ class Markdown {
 				.then(async answer => {
 					switch (answer.action) {
 						case "cover":
-							await this.mucFile.writeFile(
-								mdPath,
-								mdModel.getHeader()
-							);
+							this.mucFile.coverFile(mdPath, mdModel.getHeader());
 							break;
 						case "insert":
 							await this.mucFile.insertLine(
@@ -447,7 +444,7 @@ class Markdown {
 					}
 				});
 		} else {
-			await this.mucFile.writeFile(mdPath, mdModel.getHeader());
+			this.mucFile.createFile(mdPath, mdModel.getHeader());
 		}
 	}
 
