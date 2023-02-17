@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令，负责处理 markdown 文件
- * @version 0.7.0
+ * @version 0.7.2
  */
 
 /* Node */
@@ -98,6 +98,8 @@ markdown
 			md.delLabel(options.delete);
 		} else if (options.add) {
 			md.addLabel(options.add);
+		} else {
+			md.operaLabel();
 		}
 	});
 

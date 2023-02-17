@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description markdown 文件相关操作
- * @version 0.7.1
+ * @version 0.7.2
  */
 
 /* Node */
@@ -203,6 +203,10 @@ class Markdown {
 			author: undefined,
 			description: fileName,
 		};
+		// 判断是否是默认模板
+		if (fileName === this.label.default.filename) {
+			return this.label.default;
+		}
 		// 判断是否为空
 		if (customLabel === null) {
 			return defaultLabel;
@@ -293,11 +297,16 @@ class Markdown {
 	getLabel(fileName = "all"): void {
 		const label = this.label;
 		if (fileName === "all") {
-			console.log(label);
+			let labelsInfo = [];
+			labelsInfo.push(label.default);
+			if (label.custom !== undefined && label.custom !== null) {
+				labelsInfo = labelsInfo.concat(label.custom);
+			}
+			console.table(labelsInfo);
 		} else {
 			const labelCheck: MmdLabel = this.checkLabel(fileName);
 			if (labelCheck.author !== undefined) {
-				console.log(labelCheck);
+				console.table(labelCheck);
 			} else {
 				inquirer
 					.prompt([
@@ -348,6 +357,109 @@ class Markdown {
 			});
 	}
 
+	/**
+	 * @description 操作中转
+	 * @return {void}
+	 */
+	operaLabel(): void {
+		inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "label",
+					message: "请选择要进行的操作",
+					choices: [
+						{
+							name: "查看所有 Label",
+							value: "get",
+						},
+						{
+							name: "查询 Label",
+							value: "check",
+						},
+						{
+							name: "创建 Label",
+							value: "add",
+						},
+						{
+							name: "删除 Label",
+							value: "del",
+						},
+						{
+							name: "查看 muc mmd label 命令说明",
+							value: "help",
+						},
+						{
+							name: "退出",
+							value: "exit",
+						},
+					],
+				},
+			])
+			.then(lv1 => {
+				if (lv1.label === "exit") {
+					return;
+				}
+				if (lv1.label === "help") {
+					exec("muc mmd typora -h", (error, stdout, stderr) => {
+						if (error) {
+							console.log(error);
+							return;
+						}
+						if (stderr) {
+							console.log(stderr);
+							return;
+						}
+						if (stdout) {
+							console.log(stdout);
+						}
+					});
+					return;
+				}
+				if (lv1.label === "get") {
+					this.getLabel("all");
+					return;
+				}
+				inquirer
+					.prompt([
+						{
+							type: "input",
+							name: "fileName",
+							message: "请输入要查询的 Label",
+							when: lv1.label === "check",
+						},
+						{
+							type: "input",
+							name: "fileName",
+							message: "请输入要创建的 Label",
+							when: lv1.label === "add",
+						},
+						{
+							type: "input",
+							name: "fileName",
+							message: "请输入要删除的 Label",
+						},
+					])
+					.then(lv2 => {
+						if (lv2.fileName === "") {
+							console.log("输入不能为空");
+							return;
+						}
+						switch (lv1.label) {
+							case "check":
+								this.getLabel(lv2.fileName);
+								break;
+							case "add":
+								this.addLabel(lv2.fileName);
+								break;
+							case "del":
+								this.delLabel(lv2.fileName);
+								break;
+						}
+					});
+			});
+	}
+
 	/* File 相关 */
 
 	/**
@@ -365,26 +477,30 @@ class Markdown {
 
 	/**
 	 * @description 创建新文件
-	 * @param {string} fileName 文件名
+	 * @param {string} filePath 文件路径
 	 * @param {string} author 作者
 	 * @param {string} description 描述
 	 * @return {Promise<void>}
 	 */
 	async createFile(
-		fileName: string,
+		filePath: string,
 		author: string,
 		description: string
 	): Promise<void> {
+		// 分隔符可能是 / 或者 \
+		let fileName: string;
+		filePath.includes("\\")
+			? (fileName = filePath.split("\\").pop())
+			: (fileName = filePath.split("/").pop());
 		const mdModel: MarkdownModel = new MarkdownModel(author, description);
-		const mdPath: string = fileName + ".md";
-		if (await this.mucFile.fileExist(mdPath)) {
-			const hasHeader: boolean = await this.checkHeader(mdPath);
+		if (await this.mucFile.fileExist(filePath)) {
+			const hasHeader: boolean = await this.checkHeader(filePath);
 			inquirer
 				.prompt([
 					{
 						type: "list",
 						name: "action",
-						message: `文件 ${mdPath} 已存在，未检测到文件头，执行以下操作：`,
+						message: `文件 ${fileName} 已存在，未检测到文件头，执行以下操作：`,
 						choices: [
 							{
 								name: "覆盖",
@@ -401,7 +517,7 @@ class Markdown {
 					{
 						type: "list",
 						name: "action",
-						message: `文件 ${mdPath} 已存在，检测到文件头，执行以下操作：`,
+						message: `文件 ${fileName} 已存在，检测到文件头，执行以下操作：`,
 						choices: [
 							{
 								name: "覆盖",
@@ -423,20 +539,23 @@ class Markdown {
 				.then(async answer => {
 					switch (answer.action) {
 						case "cover":
-							this.mucFile.coverFile(mdPath, mdModel.getHeader());
+							this.mucFile.coverFile(
+								filePath,
+								mdModel.getHeader()
+							);
 							break;
 						case "insert":
 							await this.mucFile.insertLine(
-								mdPath,
+								filePath,
 								0,
 								mdModel.getHeader()
 							);
 							break;
 						case "update":
 							await this.mucFile.updateLine(
-								mdPath,
+								filePath,
 								0,
-								await mdModel.writeHeader(mdPath)
+								await mdModel.writeHeader(fileName)
 							);
 							break;
 						case "none":
@@ -444,7 +563,7 @@ class Markdown {
 					}
 				});
 		} else {
-			this.mucFile.createFile(mdPath, mdModel.getHeader());
+			this.mucFile.createFile(filePath, mdModel.getHeader());
 		}
 	}
 
@@ -454,7 +573,11 @@ class Markdown {
 	 * @return {void}
 	 */
 	promptCreateFile(filePath: string): void {
-		let fileName: string = filePath.split("/").pop();
+		// 分隔符可能是 / 或者 \
+		let fileName: string;
+		filePath.includes("\\")
+			? (fileName = filePath.split("\\").pop())
+			: (fileName = filePath.split("/").pop());
 		if (fileName.includes(".")) {
 			if (fileName.endsWith(".md")) {
 				fileName = fileName.replace(".md", "");
@@ -463,81 +586,64 @@ class Markdown {
 				return;
 			}
 		}
+		if (!fileName.includes(".")) {
+			filePath = filePath + ".md";
+		}
+		const label = this.checkLabel(fileName);
 		inquirer
 			.prompt([
 				{
 					type: "input",
 					name: "title",
 					message: "请输入文件名称",
-					default: fileName || this.label_default.filename,
+					default: fileName,
+				},
+				{
+					type: "input",
+					name: "author",
+					message: "请输入作者",
+					default: label.author || this.label_default.author,
+				},
+				{
+					type: "input",
+					name: "description",
+					message: "请输入描述",
+					default: label.description,
 				},
 			])
-			.then(async lv1 => {
-				if (lv1.title === this.label_default.filename) {
-					await inquirer
-						.prompt([
-							{
-								type: "input",
-								name: "author",
-								message: "请输入作者",
-								default: this.label_default.author,
-							},
-							{
-								type: "input",
-								name: "description",
-								message: "请输入描述",
-								default: this.label_default.description,
-							},
-						])
-						.then(async lv2 => {
-							await this.createFile(
-								filePath,
-								lv2.author,
-								lv2.description
-							);
-						});
-				} else {
-					const label = this.checkLabel(lv1.title);
-					await inquirer
-						.prompt([
-							{
-								type: "input",
-								name: "author",
-								message: "请输入作者",
-								default: label.author,
-							},
-							{
-								type: "input",
-								name: "description",
-								message: "请输入描述",
-								default: label.description,
-							},
-						])
-						.then(async lv2 => {
-							await this.createFile(
-								filePath,
-								lv2.author,
-								lv2.description
-							);
-						});
-				}
+			.then(async answers => {
+				await this.createFile(
+					filePath,
+					answers.author,
+					answers.description
+				);
 			});
 	}
 
 	/**
 	 * @description 更新文件前的提示
-	 * @param {string} fileName 文件名
+	 * @param {string} filePath 文件路径
 	 * @return {Promise<void>}
 	 */
-	async promptUpdateFile(fileName: string): Promise<void> {
-		// 检测后缀
-		if (!fileName.endsWith(".md")) {
-			console.log("文件名不合法");
-			return;
+	async promptUpdateFile(filePath: string): Promise<void> {
+		// 分隔符可能是 / 或者 \
+		let fileName: string;
+		filePath.includes("\\")
+			? (fileName = filePath.split("\\").pop())
+			: (fileName = filePath.split("/").pop());
+		if (fileName.includes(".")) {
+			if (fileName.endsWith(".md")) {
+				fileName = fileName.replace(".md", "");
+			} else {
+				console.log("\n文件名不合法，文件名应以 .md 结尾");
+				return;
+			}
+		} else {
+			filePath = filePath + ".md";
 		}
-		const fileCheck: boolean = await this.mucFile.fileExist(fileName);
+		const fileCheck: boolean = await this.mucFile.fileExist(filePath);
 		if (fileCheck) {
-			const hasHeader: boolean = await this.checkHeader(fileName);
+			const hasHeader: boolean = await this.checkHeader(filePath);
 			inquirer
 				.prompt([
 					{
@@ -556,9 +662,8 @@ class Markdown {
 					},
 				])
 				.then(async answer => {
-					const title = fileName.replace(/\.md$/, "");
 					if (answer.insert) {
-						const label: MmdLabel = this.checkLabel(title);
+						const label: MmdLabel = this.checkLabel(fileName);
 						await inquirer
 							.prompt([
 								{
@@ -581,7 +686,7 @@ class Markdown {
 										input.description
 									);
 								await this.mucFile.insertLine(
-									fileName,
+									filePath,
 									0,
 									mdModel.getHeader()
 								);
@@ -589,7 +694,7 @@ class Markdown {
 					} else if (answer.update) {
 						const mdModel: MarkdownModel = new MarkdownModel();
 						await this.mucFile.updateLine(
-							fileName,
+							filePath,
 							10,
 							await mdModel.writeHeader(fileName)
 						);
@@ -607,8 +712,7 @@ class Markdown {
 				])
 				.then(async answer => {
 					if (answer.create) {
-						const title = fileName.replace(/\.md$/, "");
-						await this.promptCreateFile(title);
+						await this.promptCreateFile(filePath);
 					}
 				});
 		}
