@@ -5,14 +5,7 @@
  */
 
 /* Node */
-import {
-	existsSync,
-	mkdirSync,
-	readFile,
-	stat,
-	writeFile,
-	writeFileSync,
-} from "fs";
+import { existsSync, mkdirSync, readFile, stat, writeFile, rename } from "fs";
 import { dirname } from "path";
 import { promisify } from "util";
 
@@ -66,8 +59,20 @@ class FileBase {
 	 * @return {void}
 	 */
 	updateFile(filePath: string, fileData: string): void {
-		// 异步写入会异常清空文件，暂时使用同步写入
-		writeFileSync(filePath, fileData);
+		// 将文件写入到 filePath.new 中
+		writeFile(`${filePath}.new`, fileData, err => {
+			if (err) {
+				console.log(`\n文件 ${filePath} 覆写失败！\n${err}`);
+			} else {
+				// 将 filePath.new 重命名为 filePath
+				rename(`${filePath}.new`, filePath, err => {
+					if (err) {
+						console.log(`\n文件 ${filePath} 覆写失败！\n${err}`);
+					}
+				});
+				console.log(`\n文件 ${filePath} 覆写成功！`);
+			}
+		});
 	}
 
 	/**
