@@ -19,23 +19,35 @@ import { Config as ConfigBase } from "./index";
 export interface Config extends ConfigBase {
 	enable: boolean;
 	name: string;
-	mirrorUse: string;
-	mirrorList: Array<Mirror>;
+	mirror: Mirror;
+}
+
+/**
+ * @description 单个镜像源对应的 interface
+ * @version 0.4.1
+ * @interface MirrorSingle
+ * @property {string} name 镜像源名称
+ * @property {string} url 镜像源地址
+ * @property {boolean} usable 是否可用
+ * @property {undefined | number} time 响应时间
+ * @return {MirrorSingle} 镜像源对应的 interface
+ */
+export interface MirrorSingle {
+	name: string;
+	url: string;
+	usable: boolean;
+	time: undefined | number;
 }
 
 /**
  * @description 镜像源对应的 interface
  * @version 0.4.1
  * @interface Mirror
- * @property {string} name 镜像源名称
- * @property {string} url 镜像源地址
- * @property {boolean} usable 是否可用
- * @property {undefined | number} time 响应时间
+ * @property {string} current 当前使用的镜像源
+ * @property {Array<MirrorSingle>} list 镜像源列表
  * @return {Mirror} 镜像源对应的 interface
  */
 export interface Mirror {
-	name: string;
-	url: string;
-	usable: boolean;
-	time: undefined | number;
+	current: string;
+	list: Array<MirrorSingle>;
 }
