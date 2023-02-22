@@ -35,9 +35,12 @@ class ConfigBase {
 	 * @description 读取具体配置
 	 * @param configData {Config} 配置文件内容
 	 * @param args {string[]} 配置路径
-	 * @return {object} 配置内容
+	 * @return {object|string|boolean} 配置内容
 	 */
-	readConfigDetail(configData: Config, args: string[]): object {
+	readConfigDetail(
+		configData: Config,
+		args: string[]
+	): object | string | boolean {
 		return this.yamlTool.readYamlDetail(configData, args);
 	}
 
@@ -52,7 +55,7 @@ class ConfigBase {
 		configData: Config,
 		args: string[],
 		value: object | string | boolean
-	): object {
+	): Config {
 		return this.yamlTool.changeYaml(configData, args, value);
 	}
 

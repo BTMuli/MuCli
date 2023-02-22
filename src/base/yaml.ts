@@ -41,9 +41,12 @@ class YamlBase {
 	 * @description 读取具体配置
 	 * @param yamlData {Config} yaml 文件内容
 	 * @param args {string[]} 配置路径
-	 * @return {object} 配置内容
+	 * @return {object|string|boolean} 配置内容
 	 */
-	readYamlDetail(yamlData: Config, args: string[]): object {
+	readYamlDetail(
+		yamlData: Config,
+		args: string[]
+	): object | string | boolean {
 		let yamlRead: object = yamlData;
 		args.map((arg: string) => {
 			yamlRead = yamlRead[arg];
