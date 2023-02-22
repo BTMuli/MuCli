@@ -12,20 +12,13 @@ import { Config as ConfigBase } from "./index";
  * @interface Config
  * @property {boolean} enable 是否启用
  * @property {string} name command 名称
- * @property { default: Label; custom: Array<Label> } label markdown 模板
- * 		@property {Label} default 默认模板
- * 		@property {Array<Label>} custom 自定义模板
- * @property {TyporaConfig} typora typora 配置
+ * @property {Label} label 模板
  * @return {Config} 配置文件对应的 interface
  */
 export interface Config extends ConfigBase {
 	name: string;
 	enable: boolean;
-	label: {
-		default: Label;
-		custom: Array<Label>;
-	};
-	typora: TyporaConfig;
+	label: Label;
 }
 
 /**
@@ -56,29 +49,29 @@ export interface FrontMatter {
 }
 
 /**
- * @description typora 配置文件对应的 interface
+ * @description 单个模板对应的 interface
  * @version 0.7.3
- * @interface TyporaConfig
- * @property {boolean} enable 是否启用
- * @property {string} path typora 配置文件路径
- * @return {TyporaConfig} typora 配置文件对应的 interface
- */
-export interface TyporaConfig {
-	enable: boolean;
-	path: string;
-}
-
-/**
- * @description markdown 模板对应的 interface
- * @version 0.7.3
- * @interface Label
+ * @interface LabelSingle
  * @property {string} author 作者
  * @property {string} filename 文件名
  * @property {string} description 描述
- * @return {Label} markdown 模板对应的 interface
+ * @return {LabelSingle} 单个模板对应的 interface
  */
-export interface Label {
+export interface LabelSingle {
 	filename: string;
 	author: string;
 	description: string;
+}
+
+/**
+ * @description 模板对应的 interface
+ * @version 0.7.3
+ * @interface Label
+ * @property {LabelSingle} default 默认模板
+ * @property {Array<LabelSingle>} custom 自定义模板
+ * @return {Label} 模板对应的 interface
+ */
+export interface Label {
+	default: LabelSingle;
+	custom: Array<LabelSingle>;
 }
