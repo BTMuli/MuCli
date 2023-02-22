@@ -1,14 +1,14 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令，负责处理 pip 镜像相关操作
- * @version 0.4.0
+ * @version 0.4.1
  */
 
 /* Node */
 import { Command } from "commander";
 /* MuCli */
 import Pip from "../utils/pip";
-import { PROJECT_INFO } from "../config";
+import { PROJECT_INFO } from "../index";
 
 /* 版本管理 */
 const PipVersion: string = PROJECT_INFO.subversion["pip"];
@@ -65,7 +65,7 @@ pip.command("mirror")
 			await pip.setMirrorUse(options.set);
 		} else if (options.update) {
 			await pip.updateMirror(options.update);
-		} else if (options.list) {
+		} else {
 			await pip.showMirror();
 		}
 	});

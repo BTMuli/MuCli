@@ -24,7 +24,7 @@ const globals = external.reduce((prev, current) => {
 }, {});
 
 const defaultConfig = {
-	input: "./src/index.ts",
+	input: "./src/app.ts",
 	output: {
 		file: "./dist/index.js",
 		format: "esm",

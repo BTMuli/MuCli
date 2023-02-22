@@ -1,64 +1,36 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 配置相关
- * @version 0.7.0
+ * @version 0.7.2
  */
 
-/* MuCli */
-import MucYaml from "../utils/yaml";
-import { ROOT_PATH } from "../config";
-import { MucConfig } from "../utils/interface";
+/* Node */
+import { Command } from "commander";
+/* MuCli Base */
+import ConfigBase from "../base/config";
+/* MuCli Interface */
+import { Config } from "../interface/muc";
 /* SubCommand */
 import dev from "../cli/dev";
-import markdown from "../cli/markdown";
+import markdown from "../cli/mmd";
 import pip from "../cli/pip";
-import { Command } from "commander";
+import typora from "../cli/typora";
+
 /* 项目命令列表 */
-export const COMMAND_LIST = [dev, markdown, pip];
+export const COMMAND_LIST = [dev, markdown, pip, typora];
 
-class Config {
-	configPath: string;
-	mucYaml: MucYaml;
-
-	constructor(path: string = undefined) {
-		if (path === undefined) {
-			path = "\\config_default\\config.yml";
-		}
-		this.configPath = ROOT_PATH + path;
-		this.mucYaml = new MucYaml(path);
-	}
-
-	/**
-	 * @description 读取配置文件
-	 * @return {MucConfig} 配置文件
-	 */
-	readConfig(): MucConfig {
-		return this.mucYaml.readYaml();
-	}
-
-	/**
-	 * @description 读取子配置
-	 * @param args {string[]|string} 配置路径
-	 * @return {any} 配置内容
-	 */
-	readConfigDetail(args: string[] | string): any {
-		let configRead: MucConfig = this.readConfig();
-		typeof args !== "string"
-			? args?.map((arg: string) => {
-					configRead = configRead[arg];
-			  })
-			: (configRead = configRead[args]);
-		return configRead;
-	}
-
+class ConfigMuc extends ConfigBase {
 	/**
 	 * @description 加载校验
 	 * @param command {Command} commander 实例
 	 * @return {boolean} 是否加载
 	 */
 	commandUse(command: Command): boolean {
-		const cmdConfig: object = this.readConfigDetail(command.name());
-		return cmdConfig["enable"];
+		const commandEnable: object | string | boolean = this.readConfigDetail(
+			this.readConfig(),
+			[command.name(), "enable"]
+		);
+		return commandEnable === true;
 	}
 
 	/**
@@ -67,7 +39,7 @@ class Config {
 	 * @return {void}
 	 */
 	loadConfig(program: Command): void {
-		COMMAND_LIST.map((command: any) => {
+		COMMAND_LIST.map((command: Command) => {
 			if (this.commandUse(command)) {
 				program.addCommand(command);
 			}
@@ -75,15 +47,14 @@ class Config {
 	}
 
 	/**
-	 * @description 修改配置文件
-	 * @param name {string[]|string} 配置路径
-	 * @param target {string} 配置目标
-	 * @param value {string|boolean} 配置值
+	 * @description 当 config 文件不存在时，加载备份文件
 	 * @return {void}
 	 */
-	changeConfig(name: string[] | string, target: string, value: any): void {
-		const commandPath: string = this.mucYaml.configPath;
-		this.mucYaml.changeYaml(commandPath, name, target, value);
+	loadBackupConfig(): void {
+		console.log("配置文件不存在，加载备份文件...");
+		const backupData: Config = this.readConfig(this.backupPath);
+		this.saveConfig(backupData, this.configPath);
+		console.log("备份文件加载成功！\n请重新运行命令。");
 	}
 
 	/**
@@ -101,17 +72,29 @@ class Config {
 			targetList.includes(target) &&
 			(commandList.includes(name) || name === "all")
 		) {
+			let configData: Config = JSON.parse(
+				JSON.stringify(this.readConfig())
+			);
 			if (name === "all") {
 				commandList.map((command: string) => {
-					this.changeConfig(command, "enable", target === "on");
+					configData = this.changeConfig(
+						configData,
+						[command, "enable"],
+						target === "on"
+					);
 				});
 			} else {
-				this.changeConfig(name, "enable", target === "on");
+				configData = this.changeConfig(
+					configData,
+					[name, "enable"],
+					target === "on"
+				);
 			}
+			this.saveConfig(configData);
 		} else {
 			console.log("参数错误");
 		}
 	}
 }
 
-export default Config;
+export default ConfigMuc;

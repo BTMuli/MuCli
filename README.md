@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-17
+Update: 2023-02-22
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-02-17 17:25:21`
+> 更新于 `2023-02-22 22:51:59`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -39,16 +39,18 @@ Usage: muc [options] [command]
 A Node Cli for Personal Use by BTMUli.
 
 Options:
-  -v, --version  output the version number
-  -l, --list     list all commands
-  -h, --help     display help for command
+  -v, --version     output the version number
+  -l, --list        list all commands
+  -h, --help        display help for command
 
 Commands:
-  set [options]  change subcommand use status
-  update         update muc from upstream
-  build          build ts file
-  mmd [options]  A SubCommand within MuCli for Markdown
-  pip [options]  A SubCommand within MuCli for pip
+  set [options]     change subcommand use status
+  update            update muc from upstream
+  build             build ts file
+  backup            backup config file
+  mmd [options]     A SubCommand within MuCli for Markdown
+  pip [options]     A SubCommand within MuCli for pip
+  typora [options]  A SubCommand within MuCli for Typora
 ```
 
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
@@ -56,10 +58,11 @@ Commands:
 + `set`：用于子命令的启用/禁用
 + `update`：用于查找上游更新
 + `build`：用于开发环境，负责编译本地的 `ts` 文件
-+ `list`：用于列出所有子命令
++ `backup`：用于备份配置文件，在配置文件错误清空时会从备份文件中恢复
 + `mmd`：用于 Markdown 相关操作
 + `dev`：用于创建子命令及更新命令版本，**默认关闭**。
 + `pip`：用于 pip 相关操作
++ `typora`：用于 Typora 相关操作
 
 ### 查看版本
 
@@ -67,18 +70,20 @@ Commands:
 
 ```text
 > muc -v
-0.7.1
+0.7.2
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc dev -sv
-0.2.0
+0.2.1
 > muc mmd -sv
-0.7.1
+0.7.3
 > muc pip -sv
-0.4.0
+0.4.1
+> muc typora -sv
+0.7.3
 ```
 
 当然，你也可以通过 `muc -l` 来查看所有命令的版本及其可用性，如下：
@@ -88,14 +93,16 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.7.1' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
-│   dev   │ '0.2.0' │ false  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.7.1' │  true  │  'A SubCommand within MuCli for Markdown'  │
-│   pip   │ '0.4.0' │  true  │    'A SubCommand within MuCli for pip'     │
+│   muc   │ '0.7.2' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.2.1' │ false  │ 'A SubCommand within MuCli for SubCommand' │
+│   mmd   │ '0.7.3' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   pip   │ '0.4.1' │  true  │    'A SubCommand within MuCli for pip'     │
+│ typora  │ '0.7.3' │  true  │   'A SubCommand within MuCli for Typora'   │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
+
 ```
 
-### MuCli-Markdown
+## MuCli-Markdown
 
 对应的是上面的 `mmd` 命令：
 
@@ -112,16 +119,16 @@ Options:
 Commands:
   new [options]      create a markdown file
   update [options]   update the header of the markdown file
-  typora [options]   get local typora path
   label [options]    add the template
   help [command]     display help for command
+
 ```
 
 目前主要功能如下：
 
 + `new`：创建一个 Markdown 文件，支持自定义模板
 + `update`：更新 Markdown 文件的头部信息
-+ `typora`：通过 Typora 进行相关操作
++ `label`：管理 Markdown 模板
 
 markdown 文件支持模板，模板参数如下：
 
@@ -147,24 +154,6 @@ Options:
   -h, --help           display help for command
 ```
 
-Typora 相关操作如下：
-
-```shell
-> muc mmd typora -h
-Usage: muc mmd typora [options]
-
-get local typora path
-
-Options:
-  -n, --name [name]  the name of the markdown file
-  -i, --info         get the path of Typora
-  -s, --set [path]   set the path of Typora
-  -t, --test         test the config of Typora
-  -h, --help         display help for command
-```
-
----
-
 ### MuCli-Dev
 
 对应的是上面的 `dev` 命令：
@@ -180,14 +169,12 @@ Options:
   -h, --help         display help for command
 
 Commands:
-  new [options]      create a new command
-  update             update a command version
+  new [options]
+  update             update the version of a command
   help [command]     display help for command
 ```
 
 其中，`new` 命令用于创建新的子命令，`update` 命令用于更新命令版本。
-
----
 
 ## MuCli-Pip
 
@@ -256,7 +243,37 @@ Options:
   -h, --help         display help for command
 ```
 
----
+## MuCli-Typora
+
+对应的是上面的 `typora` 命令：
+
+```text
+> muc typora -h
+Usage: muc typora [options] [command]
+
+A SubCommand within MuCli for Typora
+
+Options:
+  -sv, --subversion  output the subversion of MuCli-Typora
+  -h, --help         display help for command
+
+Commands:
+  init               init the config of Typora
+  open [options]     open file with Typora
+  info               get local typora path
+  set [options]      set the path of Typora
+  test               test the config of Typora
+  help [command]     display help for command
+```
+
+这是将之前 Mmd-Typora 的功能单独拆分出来，目前支持的功能如下：
+
++ `init`：初始化 Typora 的配置文件
++ `open`：打开文件
++ `info`：获取本地 Typora 的路径
++ `set`：设置 Typora 的路径
++ `test`：测试 Typora 的配置
++ `help`：帮助
 
 ## FrontMatter
 
@@ -269,7 +286,7 @@ Options:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-17
+Update: 2023-02-22
 ---
 ```
 

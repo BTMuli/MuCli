@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 主命令文件
- * @version 0.7.0
+ * @version 0.7.2
  */
 
 /* Node */
@@ -10,8 +10,8 @@ import { exec } from "child_process";
 import axios from "axios";
 import inquirer from "inquirer";
 /* MuCli */
-import { PROJECT_INFO, ROOT_PATH } from "../config";
-import Config, { COMMAND_LIST } from "../config/index";
+import { PROJECT_INFO, ROOT_PATH } from "../index";
+import ConfigMuc, { COMMAND_LIST } from "../config/index";
 
 /* 版本管理 */
 const MuCliVersion: string = PROJECT_INFO.version;
@@ -26,7 +26,7 @@ MuCli.name("muc")
 /* 查看子命令信息 */
 MuCli.option("-l, --list", "list all commands").action(options => {
 	if (options.list) {
-		const muc: Config = new Config();
+		const muc: ConfigMuc = new ConfigMuc();
 		const commandList = [];
 		commandList["muc"] = {
 			version: MuCliVersion,
@@ -51,10 +51,10 @@ MuCli.command("set")
 	.option("-n, --name <name>", "see and set [name]", "all")
 	.option("-t, --target <status>", "set [target] to [status]", "on")
 	.description("change subcommand use status")
-	.action(options => {
-		const muc = new Config();
+	.action(async options => {
+		const muc: ConfigMuc = new ConfigMuc();
 		/* 更新配置 */
-		muc.transConfig(options.name, options.target);
+		await muc.transConfig(options.name, options.target);
 		/* 读取配置 */
 		muc.loadConfig(MuCli);
 	});
@@ -121,6 +121,30 @@ MuCli.command("build")
 			}
 			console.log(stdout);
 		});
+	});
+
+/* 配置备份 */
+MuCli.command("backup")
+	.description("backup config file")
+	.action(() => {
+		const muc: ConfigMuc = new ConfigMuc();
+		inquirer
+			.prompt([
+				{
+					type: "confirm",
+					name: "backup",
+					message: "是否备份配置文件？（文件将备份到 backup.yml )",
+					default: true,
+				},
+			])
+			.then(answer => {
+				if (answer.backup) {
+					muc.backupConfig();
+					console.log(`已备份配置文件`);
+				} else {
+					console.log(`已取消备份`);
+				}
+			});
 	});
 
 export default MuCli;

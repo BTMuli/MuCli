@@ -10,39 +10,20 @@ mmd:
             filename: README
             description: 说明文档
         custom: null
-    typora:
-        enable: true
-        path: 'E:\SoftWares\Typora\Typora.exe'
 pip:
     enable: true
     name: pip
-    mirrorUse: 中国科学技术大学
-    mirrorList:
-        -
-            name: 163
-            url: 'https://mirrors.163.com/pypi/simple/'
-            usable: false
-        -
-            name: 中国科学技术大学
-            url: 'https://pypi.mirrors.ustc.edu.cn/simple/'
-            usable: true
-        -
-            name: douban
-            url: 'https://pypi.douban.com/simple/'
-            usable: true
-        -
-            name: 南京大学
-            url: 'https://mirrors.nju.edu.cn/pypi/web/simple/'
-            usable: true
-        -
-            name: 山东理工大学
-            url: 'https://pypi.sdutlinux.org/'
-            usable: true
-        -
-            name: 清华大学
-            url: 'https://pypi.tuna.tsinghua.edu.cn/simple/'
-            usable: true
-        -
-            name: aliyun
-            url: 'https://mirrors.aliyun.com/pypi/simple/'
-            usable: true
+    mirror:
+        current: 中国科学技术大学
+        list:
+            - {name: 163, url: 'https://mirrors.163.com/pypi/simple/', usable: true}
+            - {name: 中国科学技术大学, url: 'https://pypi.mirrors.ustc.edu.cn/simple/', usable: true}
+            - {name: douban, url: 'https://pypi.douban.com/simple/', usable: false}
+            - {name: 南京大学, url: 'https://mirrors.nju.edu.cn/pypi/web/simple/', usable: false}
+            - {name: 山东理工大学, url: 'https://pypi.sdutlinux.org/', usable: true}
+            - {name: 清华大学, url: 'https://pypi.tuna.tsinghua.edu.cn/simple/', usable: false}
+            - {name: aliyun, url: 'https://mirrors.aliyun.com/pypi/simple/', usable: false}
+typora:
+    enable: true
+    name: typora
+    path: 'E:\SoftWares\Typora\Typora.exe'
