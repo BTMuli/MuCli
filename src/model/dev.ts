@@ -41,6 +41,7 @@ class ModelDev {
 			cliPath: `${ROOT_PATH}\\src\\cli\\${fileName}`,
 			utilsPath: `${ROOT_PATH}\\src\\utils\\${fileName}`,
 			configPath: `${ROOT_PATH}\\src\\config\\${fileName}`,
+			interPath: `${ROOT_PATH}\\src\\interface\\${fileName}`,
 		};
 	}
 
@@ -125,6 +126,31 @@ class ModelDev {
       'export default ' + clsName + 'Model;\r\n'
     );
     /* eslint-enable */
+	}
+
+	/**
+	 * @description Interface 目录下的文件内容
+	 * @return {string} 文件内容
+	 */
+	getInterModel(): string {
+		/* eslint-disable */
+		return (
+			this.getFileHeader() +
+			'import { Config as ConfigBase } from "./index";\r\n\r\n' +
+			'/**\r\n' +
+			' * @description 配置文件对应的 interface\r\n' +
+			' * @version 0.0.1\r\n' +
+			' * @interface Config\r\n' +
+			' * @property {string} name command 名称\r\n' +
+			' * @property {boolean} enable 是否启用\r\n' +
+			' * @return {Config} 配置文件对应的 interface\r\n' +
+			' */\r\n' +
+			'export interface Config extends ConfigBase {\r\n' +
+			'\tname: string;\r\n' +
+			'\tenable: boolean;\r\n' +
+			'}\r\n'
+		);
+		/* eslint-enable */
 	}
 }
 

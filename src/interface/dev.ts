@@ -26,10 +26,12 @@ export interface Config extends ConfigBase {
  * @property {string} cliPath cli 文件夹路径
  * @property {string} utilsPath utils 文件夹路径
  * @property {string} configPath config 文件夹路径
+ * @property {string} interPath interface 文件夹路径
  * @return {FilesPath} 文件路径相关接口
  */
 export interface FilesPath {
 	cliPath: string;
 	utilsPath: string;
 	configPath: string;
+	interPath: string;
 }

@@ -75,6 +75,7 @@ class Dev {
 					paths.configPath,
 					dev.getConfigModel()
 				);
+				await mucFile.updateFile(paths.interPath, dev.getInterModel());
 				this.updatePackage(answers.command, "0.0.1");
 			});
 	}
