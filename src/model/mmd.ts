@@ -8,9 +8,9 @@
 import { format } from "silly-datetime";
 /* MuCli */
 import MucFile from "../utils/file";
-import { MmdFrontMatter } from "../utils/interface";
+import { FrontMatter } from "../interface/mmd";
 
-class MarkdownModel {
+class ModelMmd {
 	sign: string;
 	lineBreak: string;
 	quote: string;
@@ -21,11 +21,11 @@ class MarkdownModel {
 		this.sign = "---";
 		this.lineBreak = process.platform === "win32" ? "\r\n" : "\n";
 		/* eslint-disable */
-		this.quote = (
-			'> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) ' +
-			'由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于'
-		);
-		/* eslint-enable */
+    this.quote = (
+      '> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) ' +
+      '由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于'
+    );
+    /* eslint-enable */
 		this.author = author;
 		this.description = description;
 	}
@@ -37,29 +37,29 @@ class MarkdownModel {
 	getHeader(): string {
 		const dateNow: string = format(new Date(), "YYYY-MM-DD");
 		/* eslint-disable */
-		return (
-			this.sign + this.lineBreak +
-			'Author: ' + this.author + this.lineBreak +
-            'Date: ' + dateNow + this.lineBreak +
-            'Description: ' + this.description + this.lineBreak +
-			'Update: ' + dateNow + this.lineBreak +
-            this.sign + this.lineBreak + this.lineBreak +
-            this.quote + '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`' + this.lineBreak +
-			'> ' + this.lineBreak +
-			'> 更新于 `' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`'
-		);
-		/* eslint-enable */
+    return (
+      this.sign + this.lineBreak +
+      'Author: ' + this.author + this.lineBreak +
+      'Date: ' + dateNow + this.lineBreak +
+      'Description: ' + this.description + this.lineBreak +
+      'Update: ' + dateNow + this.lineBreak +
+      this.sign + this.lineBreak + this.lineBreak +
+      this.quote + '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`' + this.lineBreak +
+      '> ' + this.lineBreak +
+      '> 更新于 `' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`'
+    );
+    /* eslint-enable */
 	}
 
 	/**
 	 * @description 读取 FrontMatter (确定已存在)
 	 * @param {string} fileName 文件名
-	 * @return {Promise<MmdFrontMatter>} FrontMatter
+	 * @return {Promise<FrontMatter>} FrontMatter
 	 */
-	async readHeader(fileName: string): Promise<MmdFrontMatter> {
+	async readHeader(fileName: string): Promise<FrontMatter> {
 		const headContent = await new MucFile().readLine(fileName, 10);
 		// 不确定 FrontMatter 中的各属性排序
-		const headerRead: MmdFrontMatter = {
+		const headerRead: FrontMatter = {
 			header: {
 				author: "",
 				date: "",
@@ -91,9 +91,9 @@ class MarkdownModel {
 	/**
 	 * @description 更新 FrontMatter
 	 * @param {string} fileName 文件名
-	 * @return {Promise<MmdFrontMatter>} FrontMatter
+	 * @return {Promise<FrontMatter>} FrontMatter
 	 */
-	async updateHeader(fileName: string): Promise<MmdFrontMatter> {
+	async updateHeader(fileName: string): Promise<FrontMatter> {
 		const headRead = await this.readHeader(fileName);
 		headRead.header.update = format(new Date(), "YYYY-MM-DD");
 		headRead.quote.update = format(new Date(), "YYYY-MM-DD HH:mm:ss");
@@ -106,21 +106,21 @@ class MarkdownModel {
 	 * @return {Promise<string>} 写入内容
 	 */
 	async writeHeader(fileName: string): Promise<string> {
-		const labelUpdate: MmdFrontMatter = await this.updateHeader(fileName);
+		const labelUpdate: FrontMatter = await this.updateHeader(fileName);
 		/* eslint-disable */
-		return (
-			this.sign + this.lineBreak +
-			'Author: ' + labelUpdate.header.author + this.lineBreak +
-            'Date: ' + labelUpdate.header.date + this.lineBreak +
-            'Description: ' + labelUpdate.header.description + this.lineBreak +
-			'Update: ' + labelUpdate.header.update + this.lineBreak +
-            this.sign + this.lineBreak + this.lineBreak +
-            this.quote + '`' + labelUpdate.quote.date + '`' + this.lineBreak +
-			'> ' + this.lineBreak +
-			'> 更新于 `' + labelUpdate.quote.update + '`'
-		);
-		/* eslint-enable */
+    return (
+      this.sign + this.lineBreak +
+      'Author: ' + labelUpdate.header.author + this.lineBreak +
+      'Date: ' + labelUpdate.header.date + this.lineBreak +
+      'Description: ' + labelUpdate.header.description + this.lineBreak +
+      'Update: ' + labelUpdate.header.update + this.lineBreak +
+      this.sign + this.lineBreak + this.lineBreak +
+      this.quote + '`' + labelUpdate.quote.date + '`' + this.lineBreak +
+      '> ' + this.lineBreak +
+      '> 更新于 `' + labelUpdate.quote.update + '`'
+    );
+    /* eslint-enable */
 	}
 }
 
-export default MarkdownModel;
+export default ModelMmd;

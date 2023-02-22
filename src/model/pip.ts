@@ -1,20 +1,20 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 pip 相关模型
- * @version 0.4.0
+ * @version 0.4.1
  */
 
 /* Node */
 import axios from "axios";
-import { PipMirror } from "../utils/interface";
+import { Mirror } from "../interface/pip";
 
-export class MirrorModel {
+export class ModelMirror {
 	name: string;
 	url: string;
 	usable: boolean;
 	time: undefined | number;
 
-	constructor(mirror: PipMirror) {
+	constructor(mirror: Mirror) {
 		this.name = mirror.name;
 		this.url = mirror.url;
 		if (mirror.usable !== undefined) {
@@ -58,31 +58,31 @@ export class MirrorModel {
 	}
 }
 
-export class PipModel {
+export class ModelPip {
 	mirrorUse: string;
-	mirrorList: PipMirror[];
+	mirrorList: Mirror[];
 
-	constructor(mirrorUse: string, mirrorList: PipMirror[]) {
+	constructor(mirrorUse: string, mirrorList: Mirror[]) {
 		this.mirrorUse = mirrorUse;
 		this.mirrorList = mirrorList;
 	}
 
 	/**
 	 * @description 获取所有镜像信息
-	 * @return {Array<MirrorModel>} 镜像信息列表
+	 * @return {Array<ModelMirror>} 镜像信息列表
 	 */
-	getMirrorList(): Array<MirrorModel> {
+	getMirrorList(): Array<ModelMirror> {
 		return this.mirrorList.map(mirror => {
-			return new MirrorModel(mirror);
+			return new ModelMirror(mirror);
 		});
 	}
 
 	/**
 	 * @description 获取当前使用的镜像信息
-	 * @return {MirrorModel} 当前使用的镜像
+	 * @return {ModelMirror} 当前使用的镜像
 	 */
-	getMirrorUse(): MirrorModel {
-		return new MirrorModel(
+	getMirrorUse(): ModelMirror {
+		return new ModelMirror(
 			this.mirrorList.find(mirror => {
 				return mirror.name === this.mirrorUse;
 			})
@@ -105,7 +105,7 @@ export class PipModel {
 	 * @return {boolean} 是否存在
 	 */
 	mirrorExist(name: string): boolean {
-		const mirror: PipMirror = this.mirrorList.find(mirror => {
+		const mirror: Mirror = this.mirrorList.find(mirror => {
 			return mirror.name === name;
 		});
 		return mirror !== undefined;
@@ -136,7 +136,7 @@ export class PipModel {
 			console.log(`镜像 ${name} 已存在`);
 			return;
 		}
-		const mirror = new MirrorModel({
+		const mirror = new ModelMirror({
 			name: name,
 			url: url,
 			usable: undefined,
@@ -185,7 +185,7 @@ export class PipModel {
 			console.log(`镜像 ${name} 不存在`);
 			return;
 		}
-		const mirrorModel = new MirrorModel({
+		const mirrorModel = new ModelMirror({
 			name: name,
 			url: url,
 			usable: undefined,
@@ -196,7 +196,7 @@ export class PipModel {
 			console.log(`镜像 ${name} 不可用`);
 			return;
 		}
-		const mirror: PipMirror = this.mirrorList.find(mirror => {
+		const mirror: Mirror = this.mirrorList.find(mirror => {
 			return mirror.name === name;
 		});
 		mirror.url = url;
@@ -214,10 +214,10 @@ export class PipModel {
 			console.log(`镜像 ${name} 不存在`);
 			return -1;
 		}
-		const mirror: PipMirror = this.mirrorList.find(mirror => {
+		const mirror: Mirror = this.mirrorList.find(mirror => {
 			return mirror.name === name;
 		});
-		const mirrorModel = new MirrorModel(mirror);
+		const mirrorModel = new ModelMirror(mirror);
 		const timeTest: number = await mirrorModel.verifyMirror();
 		if (timeTest === -1 || timeTest >= 2000) {
 			console.log(`镜像 ${name} 不可用`);
