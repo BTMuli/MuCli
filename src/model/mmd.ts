@@ -1,13 +1,13 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 mmd 相关模型
- * @version 0.7.0
+ * @version 0.7.3
  */
 
 /* Node */
 import { format } from "silly-datetime";
 /* MuCli */
-import MucFile from "../utils/file";
+import FileBase from "../base/file";
 import { FrontMatter } from "../interface/mmd";
 
 class ModelMmd {
@@ -57,7 +57,7 @@ class ModelMmd {
 	 * @return {Promise<FrontMatter>} FrontMatter
 	 */
 	async readHeader(fileName: string): Promise<FrontMatter> {
-		const headContent = await new MucFile().readLine(fileName, 10);
+		const headContent = await new FileBase().readLine(fileName, 10);
 		// 不确定 FrontMatter 中的各属性排序
 		const headerRead: FrontMatter = {
 			header: {
