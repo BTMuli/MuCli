@@ -5,7 +5,14 @@
  */
 
 /* Node */
-import { existsSync, mkdirSync, readFile, stat, writeFile } from "fs";
+import {
+	existsSync,
+	mkdirSync,
+	readFile,
+	stat,
+	writeFile,
+	writeFileSync,
+} from "fs";
 import { dirname } from "path";
 import { promisify } from "util";
 
@@ -58,16 +65,9 @@ class FileBase {
 	 * @param fileData {string} 文件内容
 	 * @return {void}
 	 */
-	async updateFile(filePath: string, fileData: string): Promise<void> {
-		console.log(`\n文件 ${filePath} 更新成功！`);
-		console.log(fileData);
-		await writeFile(filePath, fileData, err => {
-			if (err) {
-				console.log(`\n文件 ${filePath} 更新失败！${err}`);
-			} else {
-				console.log(`\n文件 ${filePath} 更新成功！`);
-			}
-		});
+	updateFile(filePath: string, fileData: string): void {
+		// 异步写入会异常清空文件，暂时使用同步写入
+		writeFileSync(filePath, fileData);
 	}
 
 	/**
