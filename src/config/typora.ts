@@ -25,7 +25,9 @@ class ConfigTypora extends ConfigBase {
 	 * @return {void}
 	 */
 	saveTyporaConfig(enable: boolean, path: string): void {
-		let configData: ConfigMuc = this.readConfig();
+		let configData: ConfigMuc = JSON.parse(
+			JSON.stringify(this.readConfig())
+		);
 		configData = this.changeConfig(
 			configData,
 			["typora", "enable"],

@@ -7,7 +7,7 @@
 /* MuCli Base */
 import ConfigBase from "../base/config";
 /* MuCli Interface */
-import { Config, Mirror, MirrorSingle } from "../interface/pip";
+import { Mirror, Config } from "../interface/pip";
 import { Config as ConfigMuc } from "../interface/muc";
 
 class ConfigPip extends ConfigBase {
@@ -21,28 +21,15 @@ class ConfigPip extends ConfigBase {
 
 	/**
 	 * @description 保存配置
-	 * @param {Array<MirrorSingle>} mirror 镜像源列表
-	 * @param {string} current 当前使用的镜像源
+	 * @param {Mirror} mirror 镜像源配置
 	 * @return {void}
 	 */
-	saveMirrorConfig(
-		mirror: Array<MirrorSingle>,
-		current: string = undefined
-	): void {
-		let configData: ConfigMuc = this.readConfig();
-		if (current === undefined) {
-			configData = this.changeConfig(
-				configData,
-				["pip", "mirror", "list"],
-				mirror
-			);
-		} else {
-			configData = this.changeConfig(
-				configData,
-				["pip", "mirror", "current"],
-				current
-			);
-		}
+	saveMirrorConfig(mirror: Mirror): void {
+		let configData: ConfigMuc = JSON.parse(
+			JSON.stringify(this.readConfig())
+		);
+		configData = this.changeConfig(configData, ["pip", "mirror"], mirror);
+		console.log(configData);
 		this.saveConfig(configData);
 	}
 }

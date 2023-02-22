@@ -65,7 +65,7 @@ pip.command("mirror")
 			await pip.setMirrorUse(options.set);
 		} else if (options.update) {
 			await pip.updateMirror(options.update);
-		} else if (options.list) {
+		} else {
 			await pip.showMirror();
 		}
 	});

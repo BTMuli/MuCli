@@ -6,7 +6,7 @@
 
 /* Node */
 import axios from "axios";
-import { MirrorSingle } from "../interface/pip";
+import { Mirror, MirrorSingle } from "../interface/pip";
 
 export class ModelMirror {
 	name: string;
@@ -59,12 +59,23 @@ export class ModelMirror {
 }
 
 export class ModelPip {
-	mirrorUse: string;
-	mirrorList: MirrorSingle[];
+	current: string;
+	list: MirrorSingle[];
 
-	constructor(mirrorUse: string, mirrorList: MirrorSingle[]) {
-		this.mirrorUse = mirrorUse;
-		this.mirrorList = mirrorList;
+	constructor(mirror: Mirror) {
+		this.current = mirror.current;
+		this.list = mirror.list;
+	}
+
+	/**
+	 * @description 获取所有配置信息
+	 * @return {Mirror} 配置信息
+	 */
+	getConfig(): Mirror {
+		return {
+			current: this.current,
+			list: this.list,
+		};
 	}
 
 	/**
@@ -72,7 +83,7 @@ export class ModelPip {
 	 * @return {Array<ModelMirror>} 镜像信息列表
 	 */
 	getMirrorList(): Array<ModelMirror> {
-		return this.mirrorList.map(mirror => {
+		return this.list.map(mirror => {
 			return new ModelMirror(mirror);
 		});
 	}
@@ -82,11 +93,12 @@ export class ModelPip {
 	 * @return {ModelMirror} 当前使用的镜像
 	 */
 	getMirrorUse(): ModelMirror {
-		return new ModelMirror(
-			this.mirrorList.find(mirror => {
-				return mirror.name === this.mirrorUse;
-			})
-		);
+		this.list.find(mirror => {
+			if (mirror.name.toString() === this.current) {
+				return new ModelMirror(mirror);
+			}
+		});
+		return undefined;
 	}
 
 	/**
@@ -102,13 +114,15 @@ export class ModelPip {
 	/**
 	 * @description 检测镜像源是否存在
 	 * @param {string} name 镜像名称
-	 * @return {boolean} 是否存在
+	 * @return {MirrorSingle|false} 镜像信息
 	 */
-	mirrorExist(name: string): boolean {
-		const mirror: MirrorSingle = this.mirrorList.find(mirror => {
-			return mirror.name === name;
-		});
-		return mirror !== undefined;
+	mirrorExist(name: string): MirrorSingle | false {
+		for (let i = 0; i < this.list.length; i++) {
+			if (this.list[i].name.toString() === name) {
+				return this.list[i];
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -117,11 +131,12 @@ export class ModelPip {
 	 * @return {void}
 	 */
 	setMirrorUse(name: string): void {
-		if (!this.mirrorExist(name)) {
+		const mirrorGet = this.mirrorExist(name);
+		if (mirrorGet === false) {
 			console.log(`镜像 ${name} 不存在`);
 			return;
 		}
-		this.mirrorUse = name;
+		this.current = name;
 		console.log(`当前使用的镜像已设置为：${name}`);
 	}
 
@@ -129,10 +144,10 @@ export class ModelPip {
 	 * @description 添加镜像
 	 * @param {string} name 镜像名称
 	 * @param {string} url 镜像地址
-	 * @return {Promise<MirrorSingle[]>}
+	 * @return {Promise<void>}
 	 */
 	async addMirror(name: string, url: string): Promise<MirrorSingle[]> {
-		if (this.mirrorExist(name)) {
+		if (this.mirrorExist(name) !== false) {
 			console.log(`镜像 ${name} 已存在`);
 			return;
 		}
@@ -147,43 +162,41 @@ export class ModelPip {
 			console.log(`镜像 ${name} 不可用`);
 			return;
 		}
-		this.mirrorList.push({
+		this.list.push({
 			name: name,
 			url: url,
 			usable: true,
 			time: undefined,
 		});
 		console.log(`镜像 ${name} 已添加，耗时 ${timeTest} ms`);
-		return this.mirrorList;
 	}
 
 	/**
 	 * @description 删除镜像
 	 * @param {string} name 镜像名称
-	 * @return {MirrorSingle[]}
+	 * @return {void}
 	 */
 	deleteMirror(name: string): MirrorSingle[] {
-		if (!this.mirrorExist(name)) {
+		if (this.mirrorExist(name) === false) {
 			console.log(`镜像 ${name} 不存在`);
 			return;
 		}
-		this.mirrorList.splice(
-			this.mirrorList.findIndex(mirror => {
+		this.list.splice(
+			this.list.findIndex(mirror => {
 				return mirror.name === name;
 			}, 1)
 		);
 		console.log(`镜像 ${name} 已删除`);
-		return this.mirrorList;
 	}
 
 	/**
 	 * @description 更新镜像
 	 * @param {string} name 镜像名称
 	 * @param {string} url 镜像地址
-	 * @return {Promise<MirrorSingle[]>}
+	 * @return {Promise<void>}
 	 */
 	async updateMirror(name: string, url: string): Promise<MirrorSingle[]> {
-		if (!this.mirrorExist(name)) {
+		if (this.mirrorExist(name) === false) {
 			console.log(`镜像 ${name} 不存在`);
 			return;
 		}
@@ -198,35 +211,27 @@ export class ModelPip {
 			console.log(`镜像 ${name} 不可用`);
 			return;
 		}
-		const mirror: MirrorSingle = this.mirrorList.find(mirror => {
+		const mirror: MirrorSingle = this.list.find(mirror => {
 			return mirror.name === name;
 		});
 		mirror.url = url;
 		mirror.usable = true;
 		console.log(`镜像 ${name} 已更新，耗时 ${timeTest} ms`);
-		return this.mirrorList;
 	}
 
 	/**
 	 * @description 测试特定镜像
-	 * @param {string} name 镜像名称
+	 * @param {MirrorSingle} mirror 镜像信息
 	 * @return {Promise<number>} 耗时
 	 */
-	async testMirror(name: string): Promise<number> {
-		if (!this.mirrorExist(name)) {
-			console.log(`镜像 ${name} 不存在`);
-			return -1;
-		}
-		const mirror: MirrorSingle = this.mirrorList.find(mirror => {
-			return mirror.name === name;
-		});
+	async testMirror(mirror: MirrorSingle): Promise<number> {
 		const mirrorModel = new ModelMirror(mirror);
 		const timeTest: number = await mirrorModel.verifyMirror();
-		if (timeTest === -1 || timeTest >= 2000) {
-			console.log(`镜像 ${name} 不可用`);
+		if (timeTest === -1 || timeTest >= 5000) {
+			console.log(`镜像 ${mirror.name.toString()} 不可用`);
 			return -1;
 		}
-		console.log(`镜像 ${name} 可用，耗时 ${timeTest} ms`);
+		console.log(`镜像 ${mirror.name.toString()} 可用，耗时 ${timeTest} ms`);
 		return timeTest;
 	}
 }

@@ -25,7 +25,9 @@ class ConfigMmd extends ConfigBase {
 	 * @return {void}
 	 */
 	saveMmdConfig(label: Label): void {
-		let configData: ConfigMuc = this.readConfig();
+		let configData: ConfigMuc = JSON.parse(
+			JSON.stringify(this.readConfig())
+		);
 		configData = this.changeConfig(configData, ["mmd", "label"], label);
 		this.saveConfig(configData);
 	}
