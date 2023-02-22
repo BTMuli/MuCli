@@ -45,4 +45,5 @@ pip:
             usable: true
 typora:
     enable: true
+    name: typora
     path: 'E:\SoftWares\Typora\Typora.exe'

@@ -8,22 +8,22 @@
 import inquirer from "inquirer";
 import { exec } from "child_process";
 /* MuCli Base */
+import FileBase from "../base/file";
 import ModelMmd from "../model/mmd";
 import ConfigMmd from "../config/mmd";
-import FileBase from "../base/file";
 /* MuCli Interface */
 import { Config, Label, LabelSingle } from "../interface/mmd";
 
 class Mmd {
 	config: ConfigMmd;
 	label: Label;
-	mucFile: FileBase;
+	file: FileBase;
 
 	constructor() {
 		const mmdConfig: Config = new ConfigMmd().readConfig().mmd;
 		this.config = new ConfigMmd();
 		this.label = mmdConfig.label;
-		this.mucFile = new FileBase();
+		this.file = this.config.yamlTool.fileTool;
 	}
 
 	/**
@@ -53,19 +53,6 @@ class Mmd {
 			}
 		});
 		return defaultLabel;
-	}
-
-	/**
-	 * @description 修改 Label
-	 * @param {Array<LabelSingle>} customLabel Label 信息
-	 * @return {void}
-	 */
-	changeLabel(customLabel: Array<LabelSingle>): void {
-		this.config.changeConfig(
-			this.config.readConfig(),
-			["mmd", "label", "custom"],
-			customLabel
-		);
 	}
 
 	/**
@@ -121,7 +108,8 @@ class Mmd {
 									labelCustom = [];
 								}
 								labelCustom.push(labelGet);
-								this.changeLabel(labelCustom);
+								this.label.custom = labelCustom;
+								this.config.saveMmdConfig(this.label);
 							}
 						});
 				});
@@ -191,7 +179,8 @@ class Mmd {
 					labelCustom = labelCustom.filter((label: LabelSingle) => {
 						return label.filename !== fileName;
 					});
-					this.changeLabel(labelCustom);
+					this.label.custom = labelCustom;
+					this.config.saveMmdConfig(this.label);
 				}
 			});
 	}
@@ -307,7 +296,7 @@ class Mmd {
 	 * @return {Promise<boolean>} 是否存在 FrontMatter 信息
 	 */
 	async checkHeader(fileName: string): Promise<boolean> {
-		const contentRead: Array<string> = await this.mucFile.readLine(
+		const contentRead: Array<string> = await this.file.readLine(
 			fileName,
 			10
 		);
@@ -332,7 +321,7 @@ class Mmd {
 			? (fileName = filePath.split("\\").pop())
 			: (fileName = filePath.split("/").pop());
 		const mdModel: ModelMmd = new ModelMmd(author, description);
-		if (await this.mucFile.fileExist(filePath)) {
+		if (await this.file.fileExist(filePath)) {
 			const hasHeader: boolean = await this.checkHeader(filePath);
 			inquirer
 				.prompt([
@@ -378,20 +367,17 @@ class Mmd {
 				.then(async answer => {
 					switch (answer.action) {
 						case "cover":
-							this.mucFile.updateFile(
-								filePath,
-								mdModel.getHeader()
-							);
+							this.file.updateFile(filePath, mdModel.getHeader());
 							break;
 						case "insert":
-							await this.mucFile.insertLine(
+							await this.file.insertLine(
 								filePath,
 								0,
 								mdModel.getHeader()
 							);
 							break;
 						case "update":
-							await this.mucFile.updateLine(
+							await this.file.updateLine(
 								filePath,
 								0,
 								await mdModel.writeHeader(fileName)
@@ -402,7 +388,7 @@ class Mmd {
 					}
 				});
 		} else {
-			this.mucFile.createFile(filePath, mdModel.getHeader());
+			this.file.createFile(filePath, mdModel.getHeader());
 		}
 	}
 
@@ -480,7 +466,7 @@ class Mmd {
 		} else {
 			filePath = filePath + ".md";
 		}
-		const fileCheck: boolean = await this.mucFile.fileExist(filePath);
+		const fileCheck: boolean = await this.file.fileExist(filePath);
 		if (fileCheck) {
 			const hasHeader: boolean = await this.checkHeader(filePath);
 			inquirer
@@ -523,7 +509,7 @@ class Mmd {
 									input.author,
 									input.description
 								);
-								await this.mucFile.insertLine(
+								await this.file.insertLine(
 									filePath,
 									0,
 									mdModel.getHeader()
@@ -531,7 +517,7 @@ class Mmd {
 							});
 					} else if (answer.update) {
 						const mdModel: ModelMmd = new ModelMmd();
-						await this.mucFile.updateLine(
+						await this.file.updateLine(
 							filePath,
 							10,
 							await mdModel.writeHeader(fileName)

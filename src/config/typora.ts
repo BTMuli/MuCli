@@ -26,9 +26,12 @@ class ConfigTypora extends ConfigBase {
 	 */
 	saveTyporaConfig(enable: boolean, path: string): void {
 		let configData: ConfigMuc = this.readConfig();
-		this.typora.enable = enable;
-		this.typora.path = path;
-		configData = this.changeConfig(configData, ["typora"], this.typora);
+		const typora: Config = {
+			enable: enable,
+			name: "typora",
+			path: path,
+		};
+		configData = this.changeConfig(configData, ["typora"], typora);
 		this.saveConfig(configData);
 	}
 }
