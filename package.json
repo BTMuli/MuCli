@@ -1,11 +1,11 @@
 {
     "name": "@btmuli/mucli",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "subversion": {
-        "dev": "0.2.0",
-        "mmd": "0.7.2",
-        "pip": "0.4.0",
-        "typora": "0.7.2"
+        "dev": "0.2.1",
+        "mmd": "0.7.3",
+        "pip": "0.4.1",
+        "typora": "0.7.3"
     },
     "description": "个人用的 Node Cli",
     "type": "module",
@@ -46,16 +46,16 @@
         "@rollup/plugin-node-resolve": "^15.0.1",
         "@rollup/plugin-terser": "^0.4.0",
         "@types/inquirer": "^9.0.3",
-        "@types/node": "^18.13.0",
+        "@types/node": "^18.14.0",
         "@types/yamljs": "^0.2.31",
-        "@typescript-eslint/eslint-plugin": "^5.52.0",
-        "@typescript-eslint/parser": "^5.52.0",
+        "@typescript-eslint/eslint-plugin": "^5.53.0",
+        "@typescript-eslint/parser": "^5.53.0",
         "eslint": "^8.34.0",
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-json": "^3.1.0",
         "eslint-plugin-prettier": "^4.2.1",
         "prettier": "^2.8.4",
-        "rollup": "^3.15.0",
+        "rollup": "^3.17.2",
         "rollup-plugin-typescript2": "^0.34.1"
     }
 }
