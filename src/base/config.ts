@@ -11,6 +11,7 @@ import { Config } from "../interface/muc";
 
 class ConfigBase {
 	configPath: string;
+	backupPath: string;
 	defaultPath: string;
 	yamlTool: YamlBase;
 
@@ -21,14 +22,19 @@ class ConfigBase {
 			path = this.defaultPath;
 		}
 		this.configPath = ROOT_PATH + path;
+		this.backupPath = this.configPath.replace("config.yml", "backup.yml");
 	}
 
 	/**
 	 * @description 读取配置文件
+	 * @param configPath {string} 配置文件路径
 	 * @return {Config} 配置文件
 	 */
-	readConfig(): Config {
-		return this.yamlTool.readYaml();
+	readConfig(configPath: string = undefined): Config {
+		if (configPath === undefined) {
+			configPath = this.configPath;
+		}
+		return this.yamlTool.readYaml(configPath);
 	}
 
 	/**
@@ -62,10 +68,23 @@ class ConfigBase {
 	/**
 	 * @description 保存配置文件
 	 * @param configData {Config} 配置内容
+	 * @param configPath {string} 配置文件路径
 	 * @return {void}
 	 */
-	saveConfig(configData: Config): void {
-		this.yamlTool.saveYaml(configData);
+	saveConfig(configData: Config, configPath: string = undefined): void {
+		if (configPath === undefined) {
+			configPath = this.configPath;
+		}
+		this.yamlTool.saveYaml(configData, configPath);
+	}
+
+	/**
+	 * @description 备份配置文件
+	 * @return {void}
+	 */
+	backupConfig(): void {
+		const backupData: Config = this.readConfig(this.configPath);
+		this.saveConfig(backupData, this.backupPath);
 	}
 }
 

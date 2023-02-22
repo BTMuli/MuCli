@@ -80,10 +80,14 @@ class YamlBase {
 	/**
 	 * @description 保存 yaml 文件
 	 * @param yamlData {Config} yaml 文件内容
+	 * @param yamlPath {string} 文件路径
 	 * @return {void}
 	 */
-	saveYaml(yamlData: Config): void {
-		this.fileTool.updateFile(this.yamlPath, yamljs.stringify(yamlData, 4));
+	saveYaml(yamlData: Config, yamlPath: string = undefined): void {
+		if (yamlPath === undefined) {
+			yamlPath = this.yamlPath;
+		}
+		this.fileTool.updateFile(yamlPath, yamljs.stringify(yamlData, 4));
 	}
 }
 

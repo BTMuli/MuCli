@@ -43,6 +43,17 @@ class ConfigMuc extends ConfigBase {
 	}
 
 	/**
+	 * @description 当 config 文件不存在时，加载备份文件
+	 * @return {void}
+	 */
+	loadBackupConfig(): void {
+		console.log("配置文件不存在，加载备份文件...");
+		const backupData: Config = this.readConfig(this.backupPath);
+		this.saveConfig(backupData, this.configPath);
+		console.log("备份文件加载成功！\n请重新运行命令。");
+	}
+
+	/**
 	 * @description 修改命令可用性
 	 * @param name {string} 命令名称
 	 * @param target {string} 配置目标

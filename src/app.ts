@@ -8,10 +8,17 @@
 
 /* MuCli */
 import MuCli from "./cli/index";
-import Config from "./config/index";
+import ConfigMuc from "./config/index";
 
-/* 加载配置文件 */
-new Config().loadConfig(MuCli);
+const muc: ConfigMuc = new ConfigMuc();
 
-/* 解析命令行参数 */
-MuCli.parse(process.argv);
+try {
+	/* 加载配置文件 */
+	muc.loadConfig(MuCli);
+	/* 解析命令行参数 */
+	MuCli.parse(process.argv);
+} catch (error) {
+	console.log("配置文件加载失败！");
+	/* 加载备份配置文件 */
+	muc.loadBackupConfig();
+}
