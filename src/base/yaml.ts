@@ -28,9 +28,9 @@ class YamlBase {
 	/**
 	 * @description 读取 yaml 文件
 	 * @param yamlPath {string} 文件路径
-	 * @return {Config | object} 文件内容
+	 * @return {Config} 文件内容
 	 */
-	readYaml(yamlPath: string = undefined): Config | object {
+	readYaml(yamlPath: string = undefined): Config {
 		if (yamlPath === undefined) {
 			yamlPath = this.yamlPath;
 		}
@@ -40,7 +40,7 @@ class YamlBase {
 	/**
 	 * @description 读取具体配置
 	 * @param yamlData {Config} yaml 文件内容
-	 * @param args { string[] } 配置路径
+	 * @param args {string[]} 配置路径
 	 * @return {object} 配置内容
 	 */
 	readYamlDetail(yamlData: Config, args: string[]): object {
