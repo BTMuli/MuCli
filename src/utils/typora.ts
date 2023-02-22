@@ -9,46 +9,16 @@ import { platform } from "os";
 import inquirer from "inquirer";
 import { exec, execFile } from "child_process";
 import { resolve } from "path";
-/* MuCli */
-import Config from "../config/index";
-import { Config as ConfigMuc } from "../interface/muc";
-import { TyporaConfig } from "../interface/mmd";
+/* MuCli Base */
+import ConfigTypora from "../config/typora";
 
 class Typora {
-	config: Config;
-	enable: boolean;
-	path: string;
+	system: string;
+	config: ConfigTypora;
 
-	constructor(typora: TyporaConfig) {
-		this.config = new Config();
-		this.enable = typora.enable;
-		this.path = typora.path;
-	}
-
-	/**
-	 * @description 获取配置文件
-	 * @return {TyporaConfig} 配置文件
-	 */
-	getConfig(): TyporaConfig {
-		return {
-			enable: this.enable,
-			path: this.path,
-		};
-	}
-
-	/**
-	 * @description 保存配置到配置文件
-	 * @return {void}
-	 */
-	saveConfig(): void {
-		const typoraInfo: TyporaConfig = this.getConfig();
-		let configData: ConfigMuc = this.config.readConfig();
-		configData = this.config.changeConfig(
-			configData,
-			["mmd", "typora"],
-			typoraInfo
-		);
-		this.config.saveConfig(configData);
+	constructor() {
+		this.config = new ConfigTypora();
+		this.system = platform();
 	}
 
 	/**
@@ -56,45 +26,54 @@ class Typora {
 	 * @return {void}
 	 */
 	showConfig(): void {
+		console.log("当前配置：");
 		console.table([
 			{
-				system: platform(),
-				enable: this.enable,
-				path: this.path,
+				system: this.system,
+				enable: this.config.typora.enable,
+				path: this.config.typora.path,
 			},
 		]);
 	}
 
 	/**
-	 * @description 修改配置
-	 * @param enable {boolean} 是否启用
-	 * @param path {string} typora 路径
+	 * @description 设置 typora 路径
+	 * @param {string} path typora 路径
+	 * @todo 需要经过测试
 	 * @return {void}
 	 */
-	changeConfig(enable: boolean, path: string = undefined): void {
-		console.log("\n正在更新配置文件...");
-		this.enable = enable;
-		this.path = path === undefined ? this.path : path;
-		this.saveConfig();
-		console.log("\n更新配置文件成功！");
+	setPath(path: string = undefined): void {
 		this.showConfig();
-	}
-
-	/**
-	 * @description 手动输入 typora 路径
-	 * @return {void}
-	 */
-	manualTypora(): void {
 		inquirer
 			.prompt([
 				{
 					type: "input",
 					name: "path",
 					message: "请输入 Typora 的路径",
+					default: path || this.config.typora.path,
 				},
 			])
 			.then(answers => {
-				this.changeConfig(true, answers.path);
+				console.log("所输入的路径为：", answers.path);
+				console.log("尝试打开 Typora...");
+				execFile(answers.path, (error, stdout, stderr) => {
+					if (error) {
+						console.log("error:", error);
+						console.log("打开 Typora 失败！");
+						return;
+					}
+					if (stderr) {
+						console.log("stderr:", stderr);
+						console.log("打开 Typora 失败！");
+						return;
+					}
+					console.log("stdout:", stdout);
+					console.log("打开 Typora 成功！");
+					console.log("保存配置文件...");
+					this.config.saveTyporaConfig(true, answers.path);
+					console.log("保存配置文件成功！");
+				});
+				this.showConfig();
 			});
 	}
 
@@ -128,7 +107,7 @@ class Typora {
 					])
 					.then(answers => {
 						if (answers.confirm) {
-							this.manualTypora();
+							this.setPath();
 						}
 					});
 			}
@@ -142,9 +121,9 @@ class Typora {
 						message:
 							"检测到本地 Typora 路径与配置文件不一致，是否更新配置文件？\n" +
 							`当前路径：${typoraPath}\n` +
-							`配置文件路径：${this.path}`,
+							`配置文件路径：${this.config.typora.path}`,
 						default: true,
-						when: () => typoraPath !== this.path,
+						when: () => typoraPath !== this.config.typora.path,
 					},
 					{
 						type: "confirm",
@@ -152,17 +131,27 @@ class Typora {
 						message:
 							"检测到本地 Typora 路径与配置文件一致，是否启用 Typora？\n" +
 							`当前路径：${typoraPath}\n` +
-							`配置文件路径：${this.path}`,
+							`配置文件路径：${this.config.typora.path}`,
 						default: true,
-						when: () => typoraPath === this.path,
+						when: () => typoraPath === this.config.typora.path,
 					},
 				])
 				.then(answers => {
 					if (answers.path) {
-						this.changeConfig(true, typoraPath);
+						console.log("保存配置文件...");
+						this.config.saveTyporaConfig(true, typoraPath);
+						console.log("保存配置文件成功！");
+						console.log(
+							"请使用 muc typora test 检查配置是否正确。"
+						);
 					}
 					if (answers.enable) {
-						this.changeConfig(true);
+						console.log("保存配置文件...");
+						this.config.saveTyporaConfig(true, "");
+						console.log("保存配置文件成功！");
+						console.log(
+							"请使用 muc typora test 检查配置是否正确。"
+						);
 					}
 				});
 		});
@@ -173,7 +162,6 @@ class Typora {
 	 * @return {void}
 	 */
 	initConfig(): void {
-		const system = platform();
 		inquirer
 			.prompt([
 				{
@@ -198,14 +186,15 @@ class Typora {
 							value: "windows",
 						},
 					],
-					default: system === "win32" ? "notInstall" : "notWindows",
+					default:
+						this.system === "win32" ? "notInstall" : "notWindows",
 				},
 			])
 			.then(answersF => {
 				switch (answersF.typora) {
 					case "none":
 						// 非 Windows 系统，未安装 Typora
-						this.changeConfig(false, "");
+						this.config.saveTyporaConfig(false, "");
 						break;
 					case "notWindows":
 						// 非 Windows 系统，已安装 Typora
@@ -221,7 +210,7 @@ class Typora {
 							])
 							.then(answersS => {
 								if (answersS.check) {
-									this.manualTypora();
+									this.setPath();
 								}
 							});
 						break;
@@ -246,7 +235,7 @@ class Typora {
 										"安装完成后，重新运行本命令行工具"
 									);
 								} else {
-									this.changeConfig(false, "");
+									this.config.saveTyporaConfig(false, "");
 								}
 							});
 						break;
@@ -278,10 +267,9 @@ class Typora {
 	 * @description 检测配置是否正确
 	 * @return {void}
 	 */
-	verifyConfig(): void {
-		const system = platform();
+	testConfig(): void {
 		this.showConfig();
-		if (system === "win32" && this.enable === false) {
+		if (this.system === "win32" && this.config.typora.enable === false) {
 			inquirer
 				.prompt([
 					{
@@ -296,7 +284,10 @@ class Typora {
 						this.findTypora();
 					}
 				});
-		} else if (system !== "win32" && this.enable === true) {
+		} else if (
+			this.system !== "win32" &&
+			this.config.typora.enable === true
+		) {
 			inquirer
 				.prompt([
 					{
@@ -309,7 +300,7 @@ class Typora {
 				])
 				.then(answers => {
 					if (answers.enable) {
-						this.changeConfig(false);
+						this.config.saveTyporaConfig(false, "");
 					}
 				});
 		} else {
@@ -323,16 +314,20 @@ class Typora {
 	 * @return {void}
 	 */
 	openFile(fileName: string): void {
-		if (this.enable) {
+		if (this.config.typora.enable) {
 			const filePath = resolve() + "\\" + fileName;
-			execFile(this.path, [filePath], (error, stdout, stderr) => {
-				if (error) {
-					console.error(`执行的错误: ${error}`);
-					return;
+			execFile(
+				this.config.typora.path,
+				[filePath],
+				(error, stdout, stderr) => {
+					if (error) {
+						console.error(`执行的错误: ${error}`);
+						return;
+					}
+					console.log(`stdout: ${stdout}`);
+					console.log(`stderr: ${stderr}`);
 				}
-				console.log(`stdout: ${stdout}`);
-				console.log(`stderr: ${stderr}`);
-			});
+			);
 		} else {
 			inquirer
 				.prompt([
@@ -345,7 +340,7 @@ class Typora {
 				])
 				.then(answers => {
 					if (answers.enable) {
-						this.verifyConfig();
+						this.testConfig();
 					}
 				});
 		}

@@ -10,9 +10,6 @@ mmd:
             filename: README
             description: 说明文档
         custom: null
-    typora:
-        enable: true
-        path: 'E:\SoftWares\Typora\Typora.exe'
 pip:
     enable: true
     name: pip
@@ -46,3 +43,6 @@ pip:
             name: aliyun
             url: 'https://mirrors.aliyun.com/pypi/simple/'
             usable: true
+typora:
+    enable: true
+    path: 'E:\SoftWares\Typora\Typora.exe'

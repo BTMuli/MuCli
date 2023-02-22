@@ -7,198 +7,33 @@
 /* Node */
 import inquirer from "inquirer";
 import { exec } from "child_process";
-/* MuCli */
+/* MuCli Base */
 import ModelMmd from "../model/mmd";
+import ConfigMmd from "../config/mmd";
 import FileBase from "../base/file";
-import Typora from "./typora";
-import { Config, Label } from "../interface/mmd";
-import ConfigBase from "../base/config";
+/* MuCli Interface */
+import { Config, Label, LabelSingle } from "../interface/mmd";
 
-class Markdown {
-	config: ConfigBase;
-	label: { default: Label; custom: Array<Label> };
-	label_default: Label;
-	typora: Typora;
+class Mmd {
+	config: ConfigMmd;
+	label: Label;
 	mucFile: FileBase;
 
 	constructor() {
-		const markdownConfig: Config = new ConfigBase().readConfig().mmd;
-		const typora: Typora = new Typora(markdownConfig.typora);
-		this.config = new ConfigBase();
-		this.label = markdownConfig.label;
-		this.label_default = markdownConfig.label.default;
-		this.typora = typora;
+		const mmdConfig: Config = new ConfigMmd().readConfig().mmd;
+		this.config = new ConfigMmd();
+		this.label = mmdConfig.label;
 		this.mucFile = new FileBase();
 	}
-
-	/* Typora 相关 */
-
-	/**
-	 * @description 检测 Typora 配置
-	 * @return {void}
-	 */
-	testTypora(): void {
-		this.typora.verifyConfig();
-	}
-
-	/**
-	 * @description 获取 Typora 配置
-	 * @return {void}
-	 */
-	showTypora(): void {
-		this.typora.showConfig();
-	}
-
-	/**
-	 * @description 调用 Typora 打开文件
-	 * @param {string} fileName 文件名
-	 * @return {void}
-	 */
-	openTypora(fileName: string): void {
-		this.typora.openFile(fileName);
-	}
-
-	/**
-	 * @description 修改 Typora 配置
-	 * @return {void}
-	 */
-	modifyTypora(): void {
-		this.showTypora();
-		inquirer
-			.prompt([
-				{
-					type: "checkbox",
-					name: "typora",
-					message: "请选择要修改的配置项",
-					choices: [
-						{
-							name: "Typora 可用性",
-							value: "enable",
-						},
-						{
-							name: "Typora 配置文件路径",
-							value: "path",
-						},
-					],
-				},
-				{
-					type: "confirm",
-					name: "enable",
-					message: `确认修改可用性？（当前${
-						this.typora.enable ? "可用" : "不可用"
-					}）`,
-					when: answers => answers.typora.includes("enable"),
-					default: true,
-				},
-				{
-					type: "input",
-					name: "path",
-					message: "请输入 Typora 配置文件路径",
-					when: answers => answers.typora.includes("path"),
-					default: this.typora.path,
-				},
-			])
-			.then(answers => {
-				if (answers.typora.length === 0) {
-					console.log("\n未对Typora配置进行修改。");
-				} else {
-					if (answers.typora.includes("enable")) {
-						this.typora.enable = !this.typora.enable;
-					}
-					if (answers.typora.includes("path")) {
-						this.typora.path = answers.path;
-					}
-					this.typora.saveConfig();
-					console.log("\nTypora 配置修改成功");
-				}
-				this.showTypora();
-			});
-	}
-
-	/**
-	 * @description 根据配置选择相应操作
-	 * @return {void}
-	 */
-	operaTypora(): void {
-		inquirer
-			.prompt([
-				{
-					type: "list",
-					name: "typora",
-					message: "请选择要进行的操作",
-					choices: [
-						{
-							name: "初始化 Typora 配置",
-							value: "init",
-						},
-						{
-							name: "检测 Typora 配置",
-							value: "test",
-						},
-						{
-							name: "查看 Typora 配置",
-							value: "show",
-						},
-						{
-							name: "修改 Typora 配置",
-							value: "modify",
-						},
-						{
-							name: "查看 muc mmd typora 命令说明",
-							value: "help",
-						},
-						{
-							name: "退出",
-							value: "exit",
-						},
-					],
-				},
-			])
-			.then(answers => {
-				switch (answers.typora) {
-					case "init":
-						this.typora.initConfig();
-						break;
-					case "test":
-						this.testTypora();
-						break;
-					case "show":
-						this.showTypora();
-						break;
-					case "modify":
-						this.modifyTypora();
-						break;
-					case "help":
-						exec("muc mmd typora -h", (error, stdout, stderr) => {
-							if (error) {
-								console.log(error);
-								return;
-							}
-							if (stderr) {
-								console.log(stderr);
-								return;
-							}
-							if (stdout) {
-								console.log(stdout);
-							}
-						});
-						break;
-					case "exit":
-						break;
-				}
-			});
-	}
-
-	/* Label 相关 */
 
 	/**
 	 * @description 检测 Label 是否存在
 	 * @param {string} fileName Label 名称
-	 * @return {Label} Label 信息
+	 * @return {LabelSingle} Label 信息
 	 */
-	checkLabel(fileName: string): Label {
-		const customLabel: Array<Label> = this.label.custom;
-		const defaultLabel: Label = {
+	checkLabel(fileName: string): LabelSingle {
+		const customLabel: Array<LabelSingle> = this.label.custom;
+		const defaultLabel: LabelSingle = {
 			filename: fileName,
 			author: undefined,
 			description: fileName,
@@ -212,7 +47,7 @@ class Markdown {
 			return defaultLabel;
 		}
 		// 判断是否存在
-		customLabel.map((label: Label) => {
+		customLabel.map((label: LabelSingle) => {
 			if (label.filename === fileName) {
 				return label;
 			}
@@ -222,10 +57,10 @@ class Markdown {
 
 	/**
 	 * @description 修改 Label
-	 * @param {Array<Label>} customLabel Label 信息
+	 * @param {Array<LabelSingle>} customLabel Label 信息
 	 * @return {void}
 	 */
-	changeLabel(customLabel: Array<Label>): void {
+	changeLabel(customLabel: Array<LabelSingle>): void {
 		this.config.changeConfig(
 			this.config.readConfig(),
 			["mmd", "label", "custom"],
@@ -239,7 +74,7 @@ class Markdown {
 	 * @return {void}
 	 */
 	addLabel(fileName: string): void {
-		const labelCheck: Label = this.checkLabel(fileName);
+		const labelCheck: LabelSingle = this.checkLabel(fileName);
 		if (labelCheck.author !== undefined) {
 			console.log(`Label ${fileName} 已存在`);
 			return;
@@ -256,11 +91,11 @@ class Markdown {
 						type: "input",
 						name: "description",
 						message: "请输入描述",
-						default: this.label_default.description,
+						default: this.label.default.description,
 					},
 				])
 				.then(label => {
-					const labelGet: Label = {
+					const labelGet: LabelSingle = {
 						author: label.author,
 						description: label.description,
 						filename: fileName,
@@ -277,7 +112,7 @@ class Markdown {
 						])
 						.then(answers => {
 							if (answers.create) {
-								let labelCustom: Array<Label> =
+								let labelCustom: Array<LabelSingle> =
 									this.label.custom;
 								if (
 									labelCustom === undefined ||
@@ -308,7 +143,7 @@ class Markdown {
 			}
 			console.table(labelsInfo);
 		} else {
-			const labelCheck: Label = this.checkLabel(fileName);
+			const labelCheck: LabelSingle = this.checkLabel(fileName);
 			if (labelCheck.author !== undefined) {
 				console.table(labelCheck);
 			} else {
@@ -336,7 +171,7 @@ class Markdown {
 	 * @return {void}
 	 */
 	delLabel(fileName: string): void {
-		const labelCheck: Label = this.checkLabel(fileName);
+		const labelCheck: LabelSingle = this.checkLabel(fileName);
 		if (labelCheck.author === undefined) {
 			console.log(`Label ${fileName} 不存在`);
 			return;
@@ -352,8 +187,8 @@ class Markdown {
 			])
 			.then(answers => {
 				if (answers.delete) {
-					let labelCustom: Array<Label> = this.label.custom;
-					labelCustom = labelCustom.filter((label: Label) => {
+					let labelCustom: Array<LabelSingle> = this.label.custom;
+					labelCustom = labelCustom.filter((label: LabelSingle) => {
 						return label.filename !== fileName;
 					});
 					this.changeLabel(labelCustom);
@@ -606,7 +441,7 @@ class Markdown {
 					type: "input",
 					name: "author",
 					message: "请输入作者",
-					default: label.author || this.label_default.author,
+					default: label.author || this.label.default.author,
 				},
 				{
 					type: "input",
@@ -667,7 +502,7 @@ class Markdown {
 				])
 				.then(async answer => {
 					if (answer.insert) {
-						const label: Label = this.checkLabel(fileName);
+						const label: LabelSingle = this.checkLabel(fileName);
 						await inquirer
 							.prompt([
 								{
@@ -722,4 +557,4 @@ class Markdown {
 	}
 }
 
-export default Markdown;
+export default Mmd;

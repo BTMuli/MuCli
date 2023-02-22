@@ -7,7 +7,7 @@
 /* Node */
 import { Command } from "commander";
 /* MuCli */
-import Markdown from "../utils/markdown";
+import Mmd from "../utils/mmd";
 import { PROJECT_INFO } from "../index";
 
 /* 版本管理 */
@@ -31,7 +31,7 @@ markdown
 	.option("-n, --name <name>", "the name of the new markdown file", "README")
 	.description("create a markdown file")
 	.action(options => {
-		const md: Markdown = new Markdown();
+		const md: Mmd = new Mmd();
 		md.promptCreateFile(options.name);
 	});
 
@@ -41,36 +41,8 @@ markdown
 	.option("-n, --name <name>", "the name of the markdown file", "README.md")
 	.description("update the header of the markdown file")
 	.action(async options => {
-		const md: Markdown = new Markdown();
+		const md: Mmd = new Mmd();
 		await md.promptUpdateFile(options.name);
-	});
-
-/* Typora 相关 */
-markdown
-	.command("typora")
-	/* 通过 Typora 打开 markdown 文件 */
-	.option("-n, --name [name]", "the name of the markdown file")
-	.description("open file with Typora")
-	/* 获取 Typora 的路径 */
-	.option("-i, --info", "get the path of Typora")
-	.description("get local typora path")
-	/* 设置 Typora 的路径 */
-	.option("-s, --set [path]", "set the path of Typora")
-	/* 测试 Typora 的配置 */
-	.option("-t, --test", "test the config of Typora")
-	.action(options => {
-		const md: Markdown = new Markdown();
-		if (options.info) {
-			md.showTypora();
-		} else if (options.set) {
-			md.modifyTypora();
-		} else if (options.name) {
-			md.openTypora(options.name);
-		} else if (options.test) {
-			md.testTypora();
-		} else {
-			md.operaTypora();
-		}
 	});
 
 /* markdown 模板相关 */
@@ -89,7 +61,7 @@ markdown
 	.option("-a, --add <name>", "add the markdown label")
 	.description("add the template")
 	.action(options => {
-		const md: Markdown = new Markdown();
+		const md: Mmd = new Mmd();
 		if (options.list) {
 			md.getLabel("all");
 		} else if (options.get) {

@@ -4,16 +4,20 @@
  * @version 0.7.2
  */
 
-/* MuCli */
+/* Node */
+import { Command } from "commander";
+/* MuCli Base */
 import ConfigBase from "../base/config";
+/* MuCli Interface */
 import { Config } from "../interface/muc";
 /* SubCommand */
 import dev from "../cli/dev";
-import markdown from "../cli/markdown";
+import markdown from "../cli/mmd";
 import pip from "../cli/pip";
-import { Command } from "commander";
+import typora from "../cli/typora";
+
 /* 项目命令列表 */
-export const COMMAND_LIST = [dev, markdown, pip];
+export const COMMAND_LIST = [dev, markdown, pip, typora];
 
 class ConfigMuc extends ConfigBase {
 	/**
