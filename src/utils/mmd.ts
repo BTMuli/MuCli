@@ -520,7 +520,7 @@ class Mmd {
 						await this.file.updateLine(
 							filePath,
 							10,
-							await mdModel.writeHeader(fileName)
+							await mdModel.writeHeader(filePath)
 						);
 					}
 				});
