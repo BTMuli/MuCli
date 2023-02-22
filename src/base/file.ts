@@ -1,24 +1,24 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 文件操作相关
- * @version 0.7.1
+ * @version 0.7.2
  */
 
 /* Node */
 import {
 	existsSync,
 	mkdirSync,
-	stat,
 	readFile,
+	stat,
 	writeFile,
 	writeFileSync,
 } from "fs";
 import { dirname } from "path";
 import { promisify } from "util";
 
-class MucFile {
+class FileBase {
 	/**
-	 * @description 目录创建
+	 * @description 创建目录
 	 * @param dirPath {string} 目录路径
 	 * @return {boolean} 是否创建成功
 	 */
@@ -41,23 +41,21 @@ class MucFile {
 	 */
 	createFile(inputPath: string, fileData: string): void {
 		try {
-			// 判断输入路径是否含目录
 			if (inputPath.indexOf("/") !== -1) {
 				const fileName: string = inputPath.split("/").pop();
 				const dirLen: number = inputPath.length - fileName.length;
 				const filePath: string = inputPath.substring(0, dirLen);
 				this.createDir(filePath);
 			}
-			// 创建文件
 			writeFile(inputPath, fileData, err => {
 				if (err) {
-					console.log(`\n文件 ${inputPath} 创建失败！\n${err}\n`);
+					console.log(`\n文件 ${inputPath} 创建失败！\n${err}`);
 				} else {
-					console.log(`\n文件 ${inputPath} 创建成功！\n`);
+					console.log(`\n文件 ${inputPath} 创建成功！`);
 				}
 			});
 		} catch (error) {
-			console.log(`\n文件 ${inputPath} 创建失败！\n${error}\n`);
+			console.log(`\n文件 ${inputPath} 创建失败！\n${error}`);
 		}
 	}
 
@@ -65,11 +63,12 @@ class MucFile {
 	 * @description 文件覆写
 	 * @param filePath {string} 文件路径
 	 * @param fileData {string} 文件内容
+	 * @todo 需要优化为 writeFile
 	 * @return {void}
 	 */
-	coverFile(filePath: string, fileData: string): void {
+	updateFile(filePath: string, fileData: string): void {
 		writeFileSync(filePath, fileData);
-		console.log(`\n文件 ${filePath} 写入成功！\n`);
+		console.log(`\n文件 ${filePath} 写入成功！`);
 	}
 
 	/**
@@ -104,7 +103,7 @@ class MucFile {
 				lineNum > fileLineNum ? fileLineNum : lineNum
 			);
 		} catch (error) {
-			console.log(`\n文件 ${filePath} 读取失败！\n${error}\n`);
+			console.log(`\n文件 ${filePath} 读取失败！\n${error}`);
 		}
 	}
 
@@ -128,14 +127,14 @@ class MucFile {
 			const fileLineNum = fileLine.length;
 			if (fileLineNum >= lineNum) {
 				fileLine.splice(lineNum, 0, insertData + lineSeparator);
-				this.coverFile(filePath, fileLine.join(lineSeparator));
+				this.updateFile(filePath, fileLine.join(lineSeparator));
 				return true;
 			} else {
-				console.log(`\n文件 ${filePath} 行数不足！\n`);
+				console.log(`\n文件 ${filePath} 行数不足！`);
 				return false;
 			}
 		} catch (error) {
-			console.log(`\n文件 ${filePath} 插入失败！\n${error}\n`);
+			console.log(`\n文件 ${filePath} 插入失败！\n${error}`);
 			return false;
 		}
 	}
@@ -147,7 +146,6 @@ class MucFile {
 	 * @param coverData {string} 覆盖内容
 	 * @return {Promise<boolean>} 是否覆盖成功
 	 */
-	// async coverLine(
 	async updateLine(
 		filePath: string,
 		lineNum: number,
@@ -161,17 +159,17 @@ class MucFile {
 			const fileLineNum = fileLine.length;
 			if (fileLineNum >= lineNum) {
 				fileLine.splice(0, lineNum, coverData);
-				this.coverFile(filePath, fileLine.join(lineSeparator));
+				this.updateFile(filePath, fileLine.join(lineSeparator));
 				return true;
 			} else {
-				console.log(`\n文件 ${filePath} 行数不足！\n`);
+				console.log(`\n文件 ${filePath} 行数不足！`);
 				return false;
 			}
 		} catch (error) {
-			console.log(`\n文件 ${filePath} 覆盖失败！\n${error}\n`);
+			console.log(`\n文件 ${filePath} 覆盖失败！\n${error}`);
 			return false;
 		}
 	}
 }
 
-export default MucFile;
+export default FileBase;
