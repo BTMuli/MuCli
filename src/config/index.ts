@@ -46,7 +46,6 @@ class ConfigMuc extends ConfigBase {
 	 * @description 修改命令可用性
 	 * @param name {string} 命令名称
 	 * @param target {string} 配置目标
-	 * @todo 需要测试修改是否成功
 	 * @return {void}
 	 */
 	transConfig(name: string, target: string): void {
@@ -76,8 +75,7 @@ class ConfigMuc extends ConfigBase {
 					target === "on"
 				);
 			}
-			// 输出修改后的配置文件
-			console.log(configData);
+			this.saveConfig(configData);
 		} else {
 			console.log("参数错误");
 		}

@@ -6,7 +6,7 @@
 
 /* MuCli */
 import YamlBase from "./yaml";
-import { ROOT_PATH } from "../config";
+import { ROOT_PATH } from "../index";
 import { Config } from "../interface/muc";
 
 class ConfigBase {

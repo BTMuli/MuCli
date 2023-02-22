@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 主命令文件
- * @version 0.7.0
+ * @version 0.7.2
  */
 
 /* Node */
@@ -10,7 +10,7 @@ import { exec } from "child_process";
 import axios from "axios";
 import inquirer from "inquirer";
 /* MuCli */
-import { PROJECT_INFO, ROOT_PATH } from "../config";
+import { PROJECT_INFO, ROOT_PATH } from "../index";
 import Config, { COMMAND_LIST } from "../config/index";
 
 /* 版本管理 */
@@ -51,10 +51,10 @@ MuCli.command("set")
 	.option("-n, --name <name>", "see and set [name]", "all")
 	.option("-t, --target <status>", "set [target] to [status]", "on")
 	.description("change subcommand use status")
-	.action(options => {
+	.action(async options => {
 		const muc = new Config();
 		/* 更新配置 */
-		muc.transConfig(options.name, options.target);
+		await muc.transConfig(options.name, options.target);
 		/* 读取配置 */
 		muc.loadConfig(MuCli);
 	});

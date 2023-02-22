@@ -5,7 +5,7 @@
  */
 
 /* MuCli */
-import { ROOT_PATH } from "../config";
+import { ROOT_PATH } from "../index";
 import { FilesPath } from "../interface/dev";
 
 class ModelDev {

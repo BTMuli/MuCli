@@ -1,15 +1,20 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
- * @description 项目入口文件
- * @version 0.7.0
+ * @description 处理根目录相关功能
+ * @version 0.7.2
  */
 
-/* MuCli */
-import MuCli from "./cli";
-import Config from "./config/index";
+/* Node */
+import { dirname, join } from "path";
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { PackageJson } from "./interface";
 
-/* 加载配置文件 */
-new Config().loadConfig(MuCli);
-
-/* 解析命令行参数 */
-MuCli.parse(process.argv);
+/* 项目根目录 */
+export const ROOT_PATH: string = dirname(
+	dirname(fileURLToPath(import.meta.url))
+);
+/* 项目包信息 */
+export const PROJECT_INFO: PackageJson = JSON.parse(
+	readFileSync(join(ROOT_PATH, "package.json")).toString()
+);

@@ -10,7 +10,7 @@ import { exec } from "child_process";
 /* MuCli */
 import FileBase from "../base/file";
 import ModelDev from "../model/dev";
-import { PROJECT_INFO, ROOT_PATH } from "../config";
+import { PROJECT_INFO, ROOT_PATH } from "../index";
 import { FilesPath } from "../interface/dev";
 import { PackageJson } from "../interface";
 

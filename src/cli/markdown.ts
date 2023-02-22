@@ -1,14 +1,14 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令，负责处理 markdown 文件
- * @version 0.7.2
+ * @version 0.7.3
  */
 
 /* Node */
 import { Command } from "commander";
 /* MuCli */
 import Markdown from "../utils/markdown";
-import { PROJECT_INFO } from "../config";
+import { PROJECT_INFO } from "../index";
 
 /* 版本管理 */
 const MmdVersion: string = PROJECT_INFO.subversion["mmd"];

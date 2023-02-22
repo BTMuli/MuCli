@@ -8,7 +8,7 @@
 import yamljs from "yamljs";
 /* MuCli */
 import FileBase from "./file";
-import { ROOT_PATH } from "../config";
+import { ROOT_PATH } from "../index";
 import { Config } from "../interface/muc";
 
 class YamlBase {
