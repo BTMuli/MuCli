@@ -1,30 +1,31 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description pip 镜像相关操作
- * @version 0.4.0
+ * @version 0.4.1
  */
 
 /* Node */
 import { exec } from "child_process";
 import inquirer from "inquirer";
 /* MuCli */
-import { MirrorModel, PipModel } from "../config/pip";
-import Config from "../config/index";
-import { PipConfig, PipMirror } from "./interface";
+import { ModelMirror, ModelPip } from "../model/pip";
+import { Config as ConfigMuc } from "../interface/muc";
+import { Config, Mirror } from "../interface/pip";
+import ConfigBase from "../base/config";
 
 class Pip {
-	pipConfig: Config;
-	mirrorInfo: PipModel;
+	pipConfig: ConfigBase;
+	mirrorInfo: ModelPip;
 
 	constructor() {
-		const pipConfig: PipConfig = new Config().readConfigDetail("pip");
-		this.pipConfig = new Config();
+		const pipConfig: Config = new ConfigBase().readConfig().pip;
+		this.pipConfig = new ConfigBase();
 		const mirrorUse: string = pipConfig.mirrorUse;
-		const mirrorList: MirrorModel[] = [];
-		pipConfig.mirrorList.forEach((mirror: PipMirror) => {
-			mirrorList.push(new MirrorModel(mirror));
+		const mirrorList: ModelMirror[] = [];
+		pipConfig.mirrorList.forEach((mirror: Mirror) => {
+			mirrorList.push(new ModelMirror(mirror));
 		});
-		this.mirrorInfo = new PipModel(mirrorUse, mirrorList);
+		this.mirrorInfo = new ModelPip(mirrorUse, mirrorList);
 	}
 
 	/**
@@ -94,11 +95,13 @@ class Pip {
 			]);
 			await this.mirrorInfo.addMirror(mirror.name, mirror.url);
 			console.log(`正在将 ${mirror.name} 写入配置文件...`);
-			this.pipConfig.changeConfig(
-				["pip"],
-				"mirrorList",
+			let configData: ConfigMuc = this.pipConfig.readConfig();
+			configData = this.pipConfig.changeConfig(
+				configData,
+				["pip", "mirrorList"],
 				this.mirrorInfo.mirrorList
 			);
+			this.pipConfig.saveConfig(configData);
 			console.log(`镜像源 ${mirror.name} 添加成功！`);
 		} else {
 			console.log(`镜像源 ${mirrorName} 已存在！`);
@@ -125,11 +128,14 @@ class Pip {
 					if (answer.confirm) {
 						await this.mirrorInfo.deleteMirror(mirrorName);
 						console.log(`正在更新配置文件...`);
+						const configData: ConfigMuc =
+							this.pipConfig.readConfig();
 						this.pipConfig.changeConfig(
-							["pip"],
-							"mirrorList",
+							configData,
+							["pip", "mirrorList"],
 							this.mirrorInfo.mirrorList
 						);
+						this.pipConfig.saveConfig(configData);
 						console.log(`镜像源 ${mirrorName} 删除成功！`);
 					}
 				});
@@ -164,29 +170,27 @@ class Pip {
 				await this.mirrorInfo.testMirror(mirror);
 			}
 		} else {
-			const mirrorListTest: PipMirror[] = this.mirrorInfo.mirrorList;
-			mirrorListTest.map(async (mirror: PipMirror) => {
+			const mirrorListTest: Mirror[] = this.mirrorInfo.mirrorList;
+			mirrorListTest.map(async (mirror: Mirror) => {
 				const result = await this.mirrorInfo.testMirror(mirror.name);
 				mirror.usable = result !== -1;
 				mirror.time = result;
 			});
 			// 排除不可用的镜像源后获取最快的镜像源
-			const mirrorListUsable: PipMirror[] = mirrorListTest.filter(
-				(mirror: PipMirror) => {
+			const mirrorListUsable: Mirror[] = mirrorListTest.filter(
+				(mirror: Mirror) => {
 					return mirror.usable;
 				}
 			);
-			const mirrorFastest: PipMirror = mirrorListUsable.reduce(
-				(prev: PipMirror, next: PipMirror) => {
+			const mirrorFastest: Mirror = mirrorListUsable.reduce(
+				(prev: Mirror, next: Mirror) => {
 					return prev.time < next.time ? prev : next;
 				}
 			);
 			// 获取当前使用的镜像源
-			const mirrorUse: PipMirror = mirrorListTest.find(
-				(mirror: PipMirror) => {
-					return mirror.name === this.mirrorInfo.mirrorUse;
-				}
-			);
+			const mirrorUse: Mirror = mirrorListTest.find((mirror: Mirror) => {
+				return mirror.name === this.mirrorInfo.mirrorUse;
+			});
 			// 输出结果
 			console.log(
 				`\n测试镜像源数量：${mirrorListTest.length}，可用镜像源数量：${mirrorListUsable.length}`
@@ -217,11 +221,13 @@ class Pip {
 								mirrorFastest.name
 							);
 						}
-						this.pipConfig.changeConfig(
-							["pip"],
-							"mirrorList",
+						let configData: ConfigMuc = this.pipConfig.readConfig();
+						configData = this.pipConfig.changeConfig(
+							configData,
+							["pip", "mirrorList"],
 							this.mirrorInfo.mirrorList
 						);
+						this.pipConfig.saveConfig(configData);
 					});
 			}
 			await inquirer
@@ -235,15 +241,17 @@ class Pip {
 				])
 				.then(async answer => {
 					if (answer.confirm) {
-						mirrorListTest.map((mirror: PipMirror) => {
+						mirrorListTest.map((mirror: Mirror) => {
 							delete mirror.time;
 						});
 						console.log("\n正在更新配置文件...");
-						this.pipConfig.changeConfig(
-							["pip"],
-							"mirrorList",
+						let configData: ConfigMuc = this.pipConfig.readConfig();
+						configData = this.pipConfig.changeConfig(
+							configData,
+							["pip", "mirrorList"],
 							mirrorListTest
 						);
+						this.pipConfig.saveConfig(configData);
 						console.log("\n更新配置文件成功!\n");
 					}
 				});
@@ -262,11 +270,13 @@ class Pip {
 		}
 		await this.mirrorInfo.setMirrorUse(mirror);
 		console.log("正在更新配置文件...");
-		this.pipConfig.changeConfig(
-			["pip"],
-			"useMirror",
+		let configData: ConfigMuc = this.pipConfig.readConfig();
+		configData = this.pipConfig.changeConfig(
+			configData,
+			["pip", "useMirror"],
 			this.mirrorInfo.mirrorUse
 		);
+		this.pipConfig.saveConfig(configData);
 		console.log("更新配置文件成功！");
 	}
 
@@ -286,21 +296,21 @@ class Pip {
 					type: "input",
 					name: "url",
 					message: "请输入镜像源地址：",
-					default: this.mirrorInfo.mirrorList.find(
-						(item: PipMirror) => {
-							return item.name === mirror;
-						}
-					).url,
+					default: this.mirrorInfo.mirrorList.find((item: Mirror) => {
+						return item.name === mirror;
+					}).url,
 				},
 			])
 			.then(async answer => {
 				await this.mirrorInfo.updateMirror(mirror, answer.url);
 				console.log("正在更新配置文件...");
-				this.pipConfig.changeConfig(
-					["pip"],
-					"mirrorList",
+				let configData: ConfigMuc = this.pipConfig.readConfig();
+				configData = this.pipConfig.changeConfig(
+					configData,
+					["pip", "mirrorList"],
 					this.mirrorInfo.mirrorList
 				);
+				this.pipConfig.saveConfig(configData);
 				console.log("更新配置文件成功！");
 			});
 	}

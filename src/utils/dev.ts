@@ -1,17 +1,18 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 dev 的具体实现
- * @version 0.2.0
+ * @version 0.2.1
  */
 
 /* Node */
 import inquirer from "inquirer";
 import { exec } from "child_process";
 /* MuCli */
-import MucFile from "./file";
-import DevModel from "../config/dev";
+import FileBase from "../base/file";
+import ModelDev from "../model/dev";
 import { PROJECT_INFO, ROOT_PATH } from "../config";
-import { DevFilesPath, ProjPackageJson } from "./interface";
+import { FilesPath } from "../interface/dev";
+import { PackageJson } from "../interface";
 
 class Dev {
 	/**
@@ -21,13 +22,13 @@ class Dev {
 	 * @return {void}
 	 */
 	updatePackage(name: string, version: string): void {
-		const projInfo: ProjPackageJson = PROJECT_INFO;
+		const projInfo: PackageJson = PROJECT_INFO;
 		if (name === "all") {
 			projInfo.version = version;
 		} else {
 			projInfo.subversion[name] = version;
 		}
-		new MucFile().coverFile(
+		new FileBase().updateFile(
 			`${ROOT_PATH}\\package.json`,
 			JSON.stringify(projInfo, null, 4)
 		);
@@ -39,7 +40,7 @@ class Dev {
 	 * @return {void}
 	 */
 	createNew(name): void {
-		const mucFile: MucFile = new MucFile();
+		const mucFile: FileBase = new FileBase();
 		inquirer
 			.prompt([
 				{
@@ -62,15 +63,18 @@ class Dev {
 				},
 			])
 			.then(async answers => {
-				const dev: DevModel = new DevModel(
+				const dev: ModelDev = new ModelDev(
 					answers.name,
 					answers.command,
 					answers.description
 				);
-				const paths: DevFilesPath = dev.getFilesPath();
-				await mucFile.coverFile(paths.cliPath, dev.getCliModel());
-				await mucFile.coverFile(paths.utilsPath, dev.getUtilsModel());
-				await mucFile.coverFile(paths.configPath, dev.getConfigModel());
+				const paths: FilesPath = dev.getFilesPath();
+				await mucFile.updateFile(paths.cliPath, dev.getCliModel());
+				await mucFile.updateFile(paths.utilsPath, dev.getUtilsModel());
+				await mucFile.updateFile(
+					paths.configPath,
+					dev.getConfigModel()
+				);
 				this.updatePackage(answers.command, "0.0.1");
 			});
 	}

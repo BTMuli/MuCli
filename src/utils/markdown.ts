@@ -1,34 +1,34 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description markdown 文件相关操作
- * @version 0.7.2
+ * @version 0.7.3
  */
 
 /* Node */
 import inquirer from "inquirer";
 import { exec } from "child_process";
 /* MuCli */
-import MarkdownModel from "../config/markdown";
-import MucFile from "./file";
-import Config from "../config/index";
+import ModelMmd from "../model/mmd";
+import FileBase from "../base/file";
 import Typora from "./typora";
-import { MmdConfig, MmdLabel } from "./interface";
+import { Config, Label } from "../interface/mmd";
+import ConfigBase from "../base/config";
 
 class Markdown {
-	config: Config;
-	label: { default: MmdLabel; custom: Array<MmdLabel> };
-	label_default: MmdLabel;
+	config: ConfigBase;
+	label: { default: Label; custom: Array<Label> };
+	label_default: Label;
 	typora: Typora;
-	mucFile: MucFile;
+	mucFile: FileBase;
 
 	constructor() {
-		const markdownConfig: MmdConfig = new Config().readConfigDetail("mmd");
+		const markdownConfig: Config = new ConfigBase().readConfig().mmd;
 		const typora: Typora = new Typora(markdownConfig.typora);
-		this.config = new Config();
+		this.config = new ConfigBase();
 		this.label = markdownConfig.label;
 		this.label_default = markdownConfig.label.default;
 		this.typora = typora;
-		this.mucFile = new MucFile();
+		this.mucFile = new FileBase();
 	}
 
 	/* Typora 相关 */
@@ -194,11 +194,11 @@ class Markdown {
 	/**
 	 * @description 检测 Label 是否存在
 	 * @param {string} fileName Label 名称
-	 * @return {MmdLabel} Label 信息
+	 * @return {Label} Label 信息
 	 */
-	checkLabel(fileName: string): MmdLabel {
-		const customLabel: Array<MmdLabel> = this.label.custom;
-		const defaultLabel: MmdLabel = {
+	checkLabel(fileName: string): Label {
+		const customLabel: Array<Label> = this.label.custom;
+		const defaultLabel: Label = {
 			filename: fileName,
 			author: undefined,
 			description: fileName,
@@ -212,7 +212,7 @@ class Markdown {
 			return defaultLabel;
 		}
 		// 判断是否存在
-		customLabel.map((label: MmdLabel) => {
+		customLabel.map((label: Label) => {
 			if (label.filename === fileName) {
 				return label;
 			}
@@ -222,11 +222,15 @@ class Markdown {
 
 	/**
 	 * @description 修改 Label
-	 * @param {Array<MmdLabel>} customLabel Label 信息
+	 * @param {Array<Label>} customLabel Label 信息
 	 * @return {void}
 	 */
-	changeLabel(customLabel: Array<MmdLabel>): void {
-		new Config().changeConfig(["mmd", "label"], "custom", customLabel);
+	changeLabel(customLabel: Array<Label>): void {
+		this.config.changeConfig(
+			this.config.readConfig(),
+			["mmd", "label", "custom"],
+			customLabel
+		);
 	}
 
 	/**
@@ -235,7 +239,7 @@ class Markdown {
 	 * @return {void}
 	 */
 	addLabel(fileName: string): void {
-		const labelCheck: MmdLabel = this.checkLabel(fileName);
+		const labelCheck: Label = this.checkLabel(fileName);
 		if (labelCheck.author !== undefined) {
 			console.log(`Label ${fileName} 已存在`);
 			return;
@@ -256,7 +260,7 @@ class Markdown {
 					},
 				])
 				.then(label => {
-					const labelGet: MmdLabel = {
+					const labelGet: Label = {
 						author: label.author,
 						description: label.description,
 						filename: fileName,
@@ -273,7 +277,7 @@ class Markdown {
 						])
 						.then(answers => {
 							if (answers.create) {
-								let labelCustom: Array<MmdLabel> =
+								let labelCustom: Array<Label> =
 									this.label.custom;
 								if (
 									labelCustom === undefined ||
@@ -304,7 +308,7 @@ class Markdown {
 			}
 			console.table(labelsInfo);
 		} else {
-			const labelCheck: MmdLabel = this.checkLabel(fileName);
+			const labelCheck: Label = this.checkLabel(fileName);
 			if (labelCheck.author !== undefined) {
 				console.table(labelCheck);
 			} else {
@@ -332,7 +336,7 @@ class Markdown {
 	 * @return {void}
 	 */
 	delLabel(fileName: string): void {
-		const labelCheck: MmdLabel = this.checkLabel(fileName);
+		const labelCheck: Label = this.checkLabel(fileName);
 		if (labelCheck.author === undefined) {
 			console.log(`Label ${fileName} 不存在`);
 			return;
@@ -348,8 +352,8 @@ class Markdown {
 			])
 			.then(answers => {
 				if (answers.delete) {
-					let labelCustom: Array<MmdLabel> = this.label.custom;
-					labelCustom = labelCustom.filter((label: MmdLabel) => {
+					let labelCustom: Array<Label> = this.label.custom;
+					labelCustom = labelCustom.filter((label: Label) => {
 						return label.filename !== fileName;
 					});
 					this.changeLabel(labelCustom);
@@ -492,7 +496,7 @@ class Markdown {
 		filePath.includes("\\")
 			? (fileName = filePath.split("\\").pop())
 			: (fileName = filePath.split("/").pop());
-		const mdModel: MarkdownModel = new MarkdownModel(author, description);
+		const mdModel: ModelMmd = new ModelMmd(author, description);
 		if (await this.mucFile.fileExist(filePath)) {
 			const hasHeader: boolean = await this.checkHeader(filePath);
 			inquirer
@@ -539,7 +543,7 @@ class Markdown {
 				.then(async answer => {
 					switch (answer.action) {
 						case "cover":
-							this.mucFile.coverFile(
+							this.mucFile.updateFile(
 								filePath,
 								mdModel.getHeader()
 							);
@@ -663,7 +667,7 @@ class Markdown {
 				])
 				.then(async answer => {
 					if (answer.insert) {
-						const label: MmdLabel = this.checkLabel(fileName);
+						const label: Label = this.checkLabel(fileName);
 						await inquirer
 							.prompt([
 								{
@@ -680,11 +684,10 @@ class Markdown {
 								},
 							])
 							.then(async input => {
-								const mdModel: MarkdownModel =
-									new MarkdownModel(
-										input.author,
-										input.description
-									);
+								const mdModel: ModelMmd = new ModelMmd(
+									input.author,
+									input.description
+								);
 								await this.mucFile.insertLine(
 									filePath,
 									0,
@@ -692,7 +695,7 @@ class Markdown {
 								);
 							});
 					} else if (answer.update) {
-						const mdModel: MarkdownModel = new MarkdownModel();
+						const mdModel: ModelMmd = new ModelMmd();
 						await this.mucFile.updateLine(
 							filePath,
 							10,

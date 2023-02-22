@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description  typora 相关操作
- * @version 0.7.0
+ * @version 0.7.3
  */
 
 /* Node */
@@ -11,14 +11,15 @@ import { exec, execFile } from "child_process";
 import { resolve } from "path";
 /* MuCli */
 import Config from "../config/index";
-import { MmdTyporaConfig } from "./interface";
+import { Config as ConfigMuc } from "../interface/muc";
+import { TyporaConfig } from "../interface/mmd";
 
 class Typora {
 	config: Config;
 	enable: boolean;
 	path: string;
 
-	constructor(typora: MmdTyporaConfig) {
+	constructor(typora: TyporaConfig) {
 		this.config = new Config();
 		this.enable = typora.enable;
 		this.path = typora.path;
@@ -26,9 +27,9 @@ class Typora {
 
 	/**
 	 * @description 获取配置文件
-	 * @return {MmdTyporaConfig} 配置文件
+	 * @return {TyporaConfig} 配置文件
 	 */
-	getConfig(): MmdTyporaConfig {
+	getConfig(): TyporaConfig {
 		return {
 			enable: this.enable,
 			path: this.path,
@@ -40,8 +41,14 @@ class Typora {
 	 * @return {void}
 	 */
 	saveConfig(): void {
-		const typoraInfo: MmdTyporaConfig = this.getConfig();
-		this.config.changeConfig(["mmd"], "typora", typoraInfo);
+		const typoraInfo: TyporaConfig = this.getConfig();
+		let configData: ConfigMuc = this.config.readConfig();
+		configData = this.config.changeConfig(
+			configData,
+			["mmd", "typora"],
+			typoraInfo
+		);
+		this.config.saveConfig(configData);
 	}
 
 	/**
@@ -86,7 +93,7 @@ class Typora {
 					message: "请输入 Typora 的路径",
 				},
 			])
-			.then((answers: any) => {
+			.then(answers => {
 				this.changeConfig(true, answers.path);
 			});
 	}
@@ -119,7 +126,7 @@ class Typora {
 							default: true,
 						},
 					])
-					.then((answers: any) => {
+					.then(answers => {
 						if (answers.confirm) {
 							this.manualTypora();
 						}
@@ -150,7 +157,7 @@ class Typora {
 						when: () => typoraPath === this.path,
 					},
 				])
-				.then((answers: any) => {
+				.then(answers => {
 					if (answers.path) {
 						this.changeConfig(true, typoraPath);
 					}
