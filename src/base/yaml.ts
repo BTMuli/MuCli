@@ -6,9 +6,10 @@
 
 /* Node */
 import yamljs from "yamljs";
-/* MuCli */
+/* MuCli Base */
 import FileBase from "./file";
 import { ROOT_PATH } from "../index";
+/* MuCli Interface */
 import { Config } from "../interface/muc";
 
 class YamlBase {

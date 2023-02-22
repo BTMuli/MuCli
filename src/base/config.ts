@@ -4,9 +4,10 @@
  * @version 0.7.2
  */
 
-/* MuCli */
+/* MuCli Base */
 import YamlBase from "./yaml";
 import { ROOT_PATH } from "../index";
+/* MuCli Interface */
 import { Config } from "../interface/muc";
 
 class ConfigBase {
@@ -22,7 +23,7 @@ class ConfigBase {
 			path = this.defaultPath;
 		}
 		this.configPath = ROOT_PATH + path;
-		this.backupPath = this.configPath.replace("config.yml", "backup.yml");
+		this.backupPath = this.configPath.replace("yml", "yml.bak");
 	}
 
 	/**
