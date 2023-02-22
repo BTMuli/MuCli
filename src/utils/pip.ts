@@ -7,25 +7,25 @@
 /* Node */
 import { exec } from "child_process";
 import inquirer from "inquirer";
-/* MuCli */
+/* MuCli Base */
 import { ModelMirror, ModelPip } from "../model/pip";
-import { Config as ConfigMuc } from "../interface/muc";
-import { Config, Mirror } from "../interface/pip";
-import ConfigBase from "../base/config";
+import ConfigPip from "../config/pip";
+/* MuCli Interface */
+import { MirrorSingle } from "../interface/pip";
 
 class Pip {
-	pipConfig: ConfigBase;
+	config: ConfigPip;
 	mirrorInfo: ModelPip;
+	mirrorList: MirrorSingle[];
 
 	constructor() {
-		const pipConfig: Config = new ConfigBase().readConfig().pip;
-		this.pipConfig = new ConfigBase();
-		const mirrorUse: string = pipConfig.mirrorUse;
+		this.config = new ConfigPip();
+		this.mirrorList = this.config.mirror.list;
 		const mirrorList: ModelMirror[] = [];
-		pipConfig.mirrorList.forEach((mirror: Mirror) => {
+		this.mirrorList.forEach((mirror: MirrorSingle) => {
 			mirrorList.push(new ModelMirror(mirror));
 		});
-		this.mirrorInfo = new ModelPip(mirrorUse, mirrorList);
+		this.mirrorInfo = new ModelPip(this.config.mirror.current, mirrorList);
 	}
 
 	/**
@@ -93,15 +93,12 @@ class Pip {
 					message: "请输入镜像源地址：",
 				},
 			]);
-			await this.mirrorInfo.addMirror(mirror.name, mirror.url);
-			console.log(`正在将 ${mirror.name} 写入配置文件...`);
-			let configData: ConfigMuc = this.pipConfig.readConfig();
-			configData = this.pipConfig.changeConfig(
-				configData,
-				["pip", "mirrorList"],
-				this.mirrorInfo.mirrorList
+			this.mirrorList = await this.mirrorInfo.addMirror(
+				mirror.name,
+				mirror.url
 			);
-			this.pipConfig.saveConfig(configData);
+			console.log(`正在将 ${mirror.name} 写入配置文件...`);
+			this.config.saveMirrorConfig(this.mirrorList);
 			console.log(`镜像源 ${mirror.name} 添加成功！`);
 		} else {
 			console.log(`镜像源 ${mirrorName} 已存在！`);
@@ -126,17 +123,11 @@ class Pip {
 				])
 				.then(async answer => {
 					if (answer.confirm) {
-						await this.mirrorInfo.deleteMirror(mirrorName);
+						this.mirrorList =
+							this.mirrorInfo.deleteMirror(mirrorName);
 						console.log(`正在更新配置文件...`);
-						const configData: ConfigMuc =
-							this.pipConfig.readConfig();
-						this.pipConfig.changeConfig(
-							configData,
-							["pip", "mirrorList"],
-							this.mirrorInfo.mirrorList
-						);
-						this.pipConfig.saveConfig(configData);
-						console.log(`镜像源 ${mirrorName} 删除成功！`);
+						this.config.saveMirrorConfig(this.mirrorList);
+						console.log(`配置文件更新成功！`);
 					}
 				});
 		} else {
@@ -170,27 +161,29 @@ class Pip {
 				await this.mirrorInfo.testMirror(mirror);
 			}
 		} else {
-			const mirrorListTest: Mirror[] = this.mirrorInfo.mirrorList;
-			mirrorListTest.map(async (mirror: Mirror) => {
+			const mirrorListTest: MirrorSingle[] = this.mirrorInfo.mirrorList;
+			mirrorListTest.map(async (mirror: MirrorSingle) => {
 				const result = await this.mirrorInfo.testMirror(mirror.name);
 				mirror.usable = result !== -1;
 				mirror.time = result;
 			});
 			// 排除不可用的镜像源后获取最快的镜像源
-			const mirrorListUsable: Mirror[] = mirrorListTest.filter(
-				(mirror: Mirror) => {
+			const mirrorListUsable: MirrorSingle[] = mirrorListTest.filter(
+				(mirror: MirrorSingle) => {
 					return mirror.usable;
 				}
 			);
-			const mirrorFastest: Mirror = mirrorListUsable.reduce(
-				(prev: Mirror, next: Mirror) => {
+			const mirrorFastest: MirrorSingle = mirrorListUsable.reduce(
+				(prev: MirrorSingle, next: MirrorSingle) => {
 					return prev.time < next.time ? prev : next;
 				}
 			);
 			// 获取当前使用的镜像源
-			const mirrorUse: Mirror = mirrorListTest.find((mirror: Mirror) => {
-				return mirror.name === this.mirrorInfo.mirrorUse;
-			});
+			const mirrorUse: MirrorSingle = mirrorListTest.find(
+				(mirror: MirrorSingle) => {
+					return mirror.name === this.mirrorInfo.mirrorUse;
+				}
+			);
 			// 输出结果
 			console.log(
 				`\n测试镜像源数量：${mirrorListTest.length}，可用镜像源数量：${mirrorListUsable.length}`
@@ -217,17 +210,8 @@ class Pip {
 					])
 					.then(async answer => {
 						if (answer.confirm) {
-							await this.mirrorInfo.setMirrorUse(
-								mirrorFastest.name
-							);
+							this.mirrorInfo.setMirrorUse(mirrorFastest.name);
 						}
-						let configData: ConfigMuc = this.pipConfig.readConfig();
-						configData = this.pipConfig.changeConfig(
-							configData,
-							["pip", "mirrorList"],
-							this.mirrorInfo.mirrorList
-						);
-						this.pipConfig.saveConfig(configData);
 					});
 			}
 			await inquirer
@@ -241,17 +225,15 @@ class Pip {
 				])
 				.then(async answer => {
 					if (answer.confirm) {
-						mirrorListTest.map((mirror: Mirror) => {
+						mirrorListTest.map((mirror: MirrorSingle) => {
 							delete mirror.time;
 						});
+						this.mirrorList = mirrorListTest;
 						console.log("\n正在更新配置文件...");
-						let configData: ConfigMuc = this.pipConfig.readConfig();
-						configData = this.pipConfig.changeConfig(
-							configData,
-							["pip", "mirrorList"],
-							mirrorListTest
+						this.config.saveMirrorConfig(
+							this.mirrorList,
+							this.mirrorInfo.mirrorUse
 						);
-						this.pipConfig.saveConfig(configData);
 						console.log("\n更新配置文件成功!\n");
 					}
 				});
@@ -263,20 +245,18 @@ class Pip {
 	 * @param {string} mirror 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async setMirrorUse(mirror: string) {
+	async setMirrorUse(mirror: string): Promise<void> {
 		if (!this.mirrorInfo.mirrorExist(mirror)) {
 			console.log(`\n镜像源 ${mirror} 不存在！\n`);
 			return;
 		}
 		await this.mirrorInfo.setMirrorUse(mirror);
 		console.log("正在更新配置文件...");
-		let configData: ConfigMuc = this.pipConfig.readConfig();
-		configData = this.pipConfig.changeConfig(
-			configData,
-			["pip", "useMirror"],
+		this.mirrorList = this.mirrorInfo.mirrorList;
+		this.config.saveMirrorConfig(
+			this.mirrorList,
 			this.mirrorInfo.mirrorUse
 		);
-		this.pipConfig.saveConfig(configData);
 		console.log("更新配置文件成功！");
 	}
 
@@ -296,21 +276,21 @@ class Pip {
 					type: "input",
 					name: "url",
 					message: "请输入镜像源地址：",
-					default: this.mirrorInfo.mirrorList.find((item: Mirror) => {
-						return item.name === mirror;
-					}).url,
+					default: this.mirrorInfo.mirrorList.find(
+						(item: MirrorSingle) => {
+							return item.name === mirror;
+						}
+					).url,
 				},
 			])
 			.then(async answer => {
 				await this.mirrorInfo.updateMirror(mirror, answer.url);
 				console.log("正在更新配置文件...");
-				let configData: ConfigMuc = this.pipConfig.readConfig();
-				configData = this.pipConfig.changeConfig(
-					configData,
-					["pip", "mirrorList"],
-					this.mirrorInfo.mirrorList
+				this.mirrorList = this.mirrorInfo.mirrorList;
+				this.config.saveMirrorConfig(
+					this.mirrorList,
+					this.mirrorInfo.mirrorUse
 				);
-				this.pipConfig.saveConfig(configData);
 				console.log("更新配置文件成功！");
 			});
 	}
