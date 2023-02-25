@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 主命令文件
- * @version 0.7.2
+ * @version 0.7.3
  */
 
 /* Node */
@@ -48,13 +48,11 @@ MuCli.option("-l, --list", "list all commands").action(options => {
 
 /* 选用/弃用子命令 */
 MuCli.command("set")
-	.option("-n, --name <name>", "see and set [name]", "all")
-	.option("-t, --target <status>", "set [target] to [status]", "on")
 	.description("change subcommand use status")
-	.action(async options => {
+	.action(() => {
 		const muc: ConfigMuc = new ConfigMuc();
 		/* 更新配置 */
-		await muc.transConfig(options.name, options.target);
+		muc.transConfig();
 		/* 读取配置 */
 		muc.loadConfig(MuCli);
 	});
