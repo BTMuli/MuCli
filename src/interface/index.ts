@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 项目涉及到的 interface
- * @version 0.7.2
+ * @version 0.7.3
  */
 
 /**
@@ -19,7 +19,7 @@ export interface Config {
 
 /**
  * @description package.json 对应的 interface
- * @version 0.7.2
+ * @version 0.7.3
  * @interface PackageJson
  * @property {string} name 项目名称
  * @property {string} version 版本号
@@ -29,6 +29,7 @@ export interface Config {
  * @property {string} main 入口文件
  * @property {JSON} scripts 脚本
  * @property {JSON} bin 可执行文件
+ * @property {Array<string>} files 文件
  * @property {Array<string>} keywords 关键字
  * @property {string} author 作者
  * @property {string} license 许可证
@@ -48,6 +49,7 @@ export interface PackageJson {
 	main: string;
 	scripts: JSON;
 	bin: JSON;
+	files: Array<string>;
 	keywords: Array<string>;
 	author: string;
 	license: string;

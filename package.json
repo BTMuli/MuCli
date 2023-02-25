@@ -18,6 +18,10 @@
     "bin": {
         "muc": "./dist/index.js"
     },
+    "files": [
+        "config_default",
+        "dist"
+    ],
     "keywords": [
         "Node",
         "Cli",
