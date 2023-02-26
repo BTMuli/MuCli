@@ -145,4 +145,16 @@ MuCli.command("backup")
 			});
 	});
 
+/* 一言 */
+MuCli.command("hello")
+	.description("get a essay from hitokoto.cn")
+	.action(() => {
+		axios.get("https://v1.hitokoto.cn/?c=a&c=b&c=c&c=d").then(res => {
+			const content: string = res.data.hitokoto;
+			const from: string = res.data.from;
+			const id: number = res.data.id;
+			console.log(`\n${content}\n\n\t\t\t\t\t\t——『${from}』|${id}\n`);
+		});
+	});
+
 export default MuCli;
