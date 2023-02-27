@@ -131,7 +131,8 @@ MuCli.command("backup")
 				{
 					type: "confirm",
 					name: "backup",
-					message: "是否备份配置文件？（文件将备份到 backup.yml )",
+					message:
+						"是否备份配置文件？（文件将备份到 backup.yml.bak）",
 					default: true,
 				},
 			])

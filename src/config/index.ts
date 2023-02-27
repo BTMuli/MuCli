@@ -52,7 +52,7 @@ class ConfigMuc extends ConfigBase {
 	 * @return {void}
 	 */
 	loadBackupConfig(): void {
-		console.log("配置文件不存在，加载备份文件...");
+		console.log(`正在从 ${this.backupPath} 加载备份文件...`);
 		const backupData: Config = this.readConfig(this.backupPath);
 		this.saveConfig(backupData, this.configPath);
 		console.log("备份文件加载成功！\n请重新运行命令。");
