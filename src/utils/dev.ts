@@ -77,65 +77,77 @@ class Dev {
 							message: "请选择要创建的文件",
 							choices: [
 								{
-									name: `cli(${paths.cliPath})`,
+									name: `cli`,
 									value: "cli",
 									checked: true,
 								},
 								{
-									name: `config(${paths.configPath})`,
+									name: `config`,
 									value: "config",
 									checked: true,
 								},
 								{
-									name: `interface(${paths.interPath})`,
+									name: `interface`,
 									value: "interface",
 									checked: true,
 								},
 								{
-									name: `model(${paths.modelPath})`,
+									name: `model`,
 									value: "model",
 									checked: true,
 								},
 								{
-									name: `utils(${paths.utilsPath})`,
+									name: `utils`,
 									value: "utils",
 									checked: true,
 								},
 							],
 						},
 					])
-					.then(lv2 => {
-						if (lv2.cli) {
-							mucFile.updateFile(
-								paths.cliPath,
-								dev.getCliContent()
-							);
-						}
-						if (lv2.config) {
-							mucFile.updateFile(
-								paths.configPath,
-								dev.getConfigContent()
-							);
-						}
-						if (lv2.interface) {
-							mucFile.updateFile(
-								paths.interPath,
-								dev.getInterContent()
-							);
-						}
-						if (lv2.model) {
-							mucFile.updateFile(
-								paths.modelPath,
-								dev.getModelContent()
-							);
-						}
-						if (lv2.utils) {
-							mucFile.updateFile(
-								paths.utilsPath,
-								dev.getUtilsContent()
-							);
-						}
+					.then(async lv2 => {
+						console.log("\n正在创建文件...\n");
+						lv2.files.map(lv3 => {
+							switch (lv3) {
+								case "cli":
+									mucFile.updateFile(
+										paths.cliPath,
+										dev.getCliContent()
+									);
+									break;
+								case "config":
+									mucFile.updateFile(
+										paths.configPath,
+										dev.getConfigContent()
+									);
+									break;
+								case "interface":
+									mucFile.updateFile(
+										paths.interPath,
+										dev.getInterContent()
+									);
+									break;
+								case "model":
+									mucFile.updateFile(
+										paths.modelPath,
+										dev.getModelContent()
+									);
+									break;
+								case "utils":
+									mucFile.updateFile(
+										paths.utilsPath,
+										dev.getUtilsContent()
+									);
+									break;
+								default:
+									break;
+							}
+						});
 						this.updatePackage(lv1.command, "0.0.1");
+						await new Promise(() => {
+							setTimeout(() => {
+								console.log("\n文件创建成功！\n");
+							}, 1000);
+						});
 					});
 			});
 	}
