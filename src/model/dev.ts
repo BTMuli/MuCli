@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 dev 相关配置
- * @version 0.2.1
+ * @version 0.2.2
  */
 
 /* MuCli */
@@ -39,9 +39,10 @@ class ModelDev {
 		const fileName: string = this.command + ".ts";
 		return {
 			cliPath: `${ROOT_PATH}\\src\\cli\\${fileName}`,
-			utilsPath: `${ROOT_PATH}\\src\\utils\\${fileName}`,
 			configPath: `${ROOT_PATH}\\src\\config\\${fileName}`,
 			interPath: `${ROOT_PATH}\\src\\interface\\${fileName}`,
+			modelPath: `${ROOT_PATH}\\src\\model\\${fileName}`,
+			utilsPath: `${ROOT_PATH}\\src\\utils\\${fileName}`,
 		};
 	}
 
@@ -65,7 +66,7 @@ class ModelDev {
 	 * @description Cli 目录下的文件内容
 	 * @return {string} 文件内容
 	 */
-	getCliModel(): string {
+	getCliContent(): string {
 		const fileName: string = this.command;
 		const clsName: string = this.transCommand(this.name);
 		/* eslint-disable */
@@ -74,8 +75,8 @@ class ModelDev {
       '/* Node */\r\n' +
       'import { Command } from "commander";\r\n' +
       '/* MuCli */\r\n' +
-      `import { PROJECT_INFO } from "../config";\r\n` +
-      '// import ' + clsName + ' from "../utils/' + fileName + '";\r\n\r\n' +
+			'// import ' + clsName + ' from "../utils/' + fileName + '";\r\n' +
+      `import { PROJECT_INFO } from "../index";\r\n\r\n` +
       '/* 版本管理 */\r\n' +
       'const '+ clsName + 'Version: string = PROJECT_INFO["subversion"]["' + this.command + '"];\r\n\r\n' +
       'const ' + this.name + ': Command = new Command();\r\n\r\n' +
@@ -93,37 +94,21 @@ class ModelDev {
 	}
 
 	/**
-	 * @description Utils 目录下的文件内容
-	 * @return {string} 文件内容
-	 */
-	getUtilsModel(): string {
-		const fileName: string = this.command + ".ts";
-		const clsName: string = this.transCommand(this.name);
-		/* eslint-disable */
-    return (
-      this.getFileHeader() +
-      '/* Node */\r\n' +
-      '// import inquirer from "inquirer";\r\n' +
-      '/* MuCli */\r\n' +
-      '// import MucFile from "./file";\r\n' +
-      '// import ' + clsName + 'Model from "../config/' + fileName + '";\r\n\r\n' +
-      'class ' + clsName + ' {}\r\n\r\n' +
-      'export default ' + clsName + ';\r\n'
-    );
-    /* eslint-enable */
-	}
-
-	/**
 	 * @description Config 目录下的文件内容
 	 * @return {string} 文件内容
 	 */
-	getConfigModel(): string {
+	getConfigContent(): string {
 		const clsName: string = this.transCommand(this.name);
 		/* eslint-disable */
     return (
       this.getFileHeader() +
-      'class ' + clsName + 'Model {}\r\n\r\n' +
-      'export default ' + clsName + 'Model;\r\n'
+      '/* MuCli Base */\r\n' +
+			'import ConfigBase from "../base/config";\r\n' +
+			'/* MuCli Interface */\r\n' +
+			`// import { Config } from "../interface/${this.command}";\r\n` +
+			'// import { Config as ConfigMuc } from "../interface/muc";\r\n\r\n' +
+			`class Config${clsName} extends ConfigBase {\r\n}\r\n\r\n` +
+			`export default Config${clsName};\r\n`
     );
     /* eslint-enable */
 	}
@@ -132,10 +117,14 @@ class ModelDev {
 	 * @description Interface 目录下的文件内容
 	 * @return {string} 文件内容
 	 */
-	getInterModel(): string {
+	getInterContent(): string {
 		/* eslint-disable */
 		return (
-			this.getFileHeader() +
+			'/**\r\n' +
+			` * @author ${this.author}\r\n` +
+			` * @description ${this.command} 涉及到的 interface\r\n` +
+			' * @version 0.0.1\r\n' +
+			' */\r\n\r\n' +
 			'import { Config as ConfigBase } from "./index";\r\n\r\n' +
 			'/**\r\n' +
 			' * @description 配置文件对应的 interface\r\n' +
@@ -149,6 +138,42 @@ class ModelDev {
 			'\tname: string;\r\n' +
 			'\tenable: boolean;\r\n' +
 			'}\r\n'
+		);
+		/* eslint-enable */
+	}
+
+	/**
+	 * @description Model 目录下的文件内容
+	 * @return {string} 文件内容
+	 */
+	getModelContent(): string {
+		const clsName: string = this.transCommand(this.name);
+		/* eslint-disable */
+		return (
+			this.getFileHeader() +
+			'class ' + clsName + 'Model {}\r\n\r\n' +
+			'export default ' + clsName + 'Model;\r\n'
+		);
+		/* eslint-enable */
+	}
+
+	/**
+	 * @description Utils 目录下的文件内容
+	 * @return {string} 文件内容
+	 */
+	getUtilsContent(): string {
+		const fileName: string = this.command + ".ts";
+		const clsName: string = this.transCommand(this.name);
+		/* eslint-disable */
+		return (
+			this.getFileHeader() +
+			'/* Node */\r\n' +
+			'// import inquirer from "inquirer";\r\n' +
+			'/* MuCli */\r\n' +
+			'// import MucFile from "./file";\r\n' +
+			'// import ' + clsName + 'Model from "../config/' + fileName + '";\r\n\r\n' +
+			'class ' + clsName + ' {}\r\n\r\n' +
+			'export default ' + clsName + ';\r\n'
 		);
 		/* eslint-enable */
 	}

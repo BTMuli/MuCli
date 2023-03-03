@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 dev 的具体实现
- * @version 0.2.1
+ * @version 0.2.2
  */
 
 /* Node */
@@ -62,21 +62,81 @@ class Dev {
 					default: `A SubCommand within MuCli for ${name || "test"}`,
 				},
 			])
-			.then(async answers => {
+			.then(async lv1 => {
 				const dev: ModelDev = new ModelDev(
-					answers.name,
-					answers.command,
-					answers.description
+					lv1.name,
+					lv1.command,
+					lv1.description
 				);
 				const paths: FilesPath = dev.getFilesPath();
-				await mucFile.updateFile(paths.cliPath, dev.getCliModel());
-				await mucFile.updateFile(paths.utilsPath, dev.getUtilsModel());
-				await mucFile.updateFile(
-					paths.configPath,
-					dev.getConfigModel()
-				);
-				await mucFile.updateFile(paths.interPath, dev.getInterModel());
-				this.updatePackage(answers.command, "0.0.1");
+				inquirer
+					.prompt([
+						{
+							type: "checkbox",
+							name: "files",
+							message: "请选择要创建的文件",
+							choices: [
+								{
+									name: `cli(${paths.cliPath})`,
+									value: "cli",
+									checked: true,
+								},
+								{
+									name: `config(${paths.configPath})`,
+									value: "config",
+									checked: true,
+								},
+								{
+									name: `interface(${paths.interPath})`,
+									value: "interface",
+									checked: true,
+								},
+								{
+									name: `model(${paths.modelPath})`,
+									value: "model",
+									checked: true,
+								},
+								{
+									name: `utils(${paths.utilsPath})`,
+									value: "utils",
+									checked: true,
+								},
+							],
+						},
+					])
+					.then(lv2 => {
+						if (lv2.cli) {
+							mucFile.updateFile(
+								paths.cliPath,
+								dev.getCliContent()
+							);
+						}
+						if (lv2.config) {
+							mucFile.updateFile(
+								paths.configPath,
+								dev.getConfigContent()
+							);
+						}
+						if (lv2.interface) {
+							mucFile.updateFile(
+								paths.interPath,
+								dev.getInterContent()
+							);
+						}
+						if (lv2.model) {
+							mucFile.updateFile(
+								paths.modelPath,
+								dev.getModelContent()
+							);
+						}
+						if (lv2.utils) {
+							mucFile.updateFile(
+								paths.utilsPath,
+								dev.getUtilsContent()
+							);
+						}
+						this.updatePackage(lv1.command, "0.0.1");
+					});
 			});
 	}
 
