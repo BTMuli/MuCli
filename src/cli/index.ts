@@ -94,11 +94,11 @@ MuCli.command("update")
 								}
 							);
 						} else {
-							console.log(`已取消更新`);
+							console.log(`已取消更新\n`);
 						}
 					});
 			} else {
-				console.log(`已是最新版本`);
+				console.log(`已是最新版本\n`);
 			}
 		});
 	});

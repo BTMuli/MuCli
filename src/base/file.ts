@@ -70,7 +70,7 @@ class FileBase {
 						console.log(`\n文件 ${filePath} 覆写失败！\n${err}`);
 					}
 				});
-				console.log(`\n文件 ${filePath} 覆写成功！`);
+				console.log(`文件 ${filePath} 覆写成功！`);
 			}
 		});
 	}
