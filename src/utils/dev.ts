@@ -215,6 +215,12 @@ class Dev {
 						name: "install",
 						message: "是否立即更新依赖？",
 						default: true,
+						when: () =>
+							new Promise(resolve => {
+								setTimeout(() => {
+									resolve(true);
+								}, 1000);
+							}),
 					},
 				])
 				.then(answers => {
