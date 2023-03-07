@@ -1,9 +1,7 @@
-#!/usr/bin/env node
-
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 项目入口文件
- * @version 0.7.2
+ * @version 0.7.3
  */
 
 /* MuCli */
@@ -18,7 +16,7 @@ try {
 	/* 解析命令行参数 */
 	MuCli.parse(process.argv);
 } catch (error) {
-	console.log("配置文件加载失败！");
+	console.log("\n配置文件加载失败！");
 	/* 加载备份配置文件 */
 	muc.loadBackupConfig();
 }

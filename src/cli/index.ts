@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 主命令文件
- * @version 0.7.2
+ * @version 0.7.3
  */
 
 /* Node */
@@ -48,13 +48,11 @@ MuCli.option("-l, --list", "list all commands").action(options => {
 
 /* 选用/弃用子命令 */
 MuCli.command("set")
-	.option("-n, --name <name>", "see and set [name]", "all")
-	.option("-t, --target <status>", "set [target] to [status]", "on")
 	.description("change subcommand use status")
-	.action(async options => {
+	.action(() => {
 		const muc: ConfigMuc = new ConfigMuc();
 		/* 更新配置 */
-		await muc.transConfig(options.name, options.target);
+		muc.transConfig();
 		/* 读取配置 */
 		muc.loadConfig(MuCli);
 	});
@@ -96,11 +94,11 @@ MuCli.command("update")
 								}
 							);
 						} else {
-							console.log(`已取消更新`);
+							console.log(`已取消更新\n`);
 						}
 					});
 			} else {
-				console.log(`已是最新版本`);
+				console.log(`已是最新版本\n`);
 			}
 		});
 	});
@@ -133,7 +131,8 @@ MuCli.command("backup")
 				{
 					type: "confirm",
 					name: "backup",
-					message: "是否备份配置文件？（文件将备份到 backup.yml )",
+					message:
+						"是否备份配置文件？（文件将备份到 backup.yml.bak）",
 					default: true,
 				},
 			])
@@ -145,6 +144,18 @@ MuCli.command("backup")
 					console.log(`已取消备份`);
 				}
 			});
+	});
+
+/* 一言 */
+MuCli.command("hello")
+	.description("get a essay from hitokoto.cn")
+	.action(() => {
+		axios.get("https://v1.hitokoto.cn/?c=a&c=b&c=c&c=d").then(res => {
+			const content: string = res.data.hitokoto;
+			const from: string = res.data.from;
+			const id: number = res.data.id;
+			console.log(`\n${content}\n\n\t\t\t\t\t\t——『${from}』|${id}\n`);
+		});
 	});
 
 export default MuCli;

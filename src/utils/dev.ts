@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 dev 的具体实现
- * @version 0.2.1
+ * @version 0.2.2
  */
 
 /* Node */
@@ -62,21 +62,93 @@ class Dev {
 					default: `A SubCommand within MuCli for ${name || "test"}`,
 				},
 			])
-			.then(async answers => {
+			.then(async lv1 => {
 				const dev: ModelDev = new ModelDev(
-					answers.name,
-					answers.command,
-					answers.description
+					lv1.name,
+					lv1.command,
+					lv1.description
 				);
 				const paths: FilesPath = dev.getFilesPath();
-				await mucFile.updateFile(paths.cliPath, dev.getCliModel());
-				await mucFile.updateFile(paths.utilsPath, dev.getUtilsModel());
-				await mucFile.updateFile(
-					paths.configPath,
-					dev.getConfigModel()
-				);
-				await mucFile.updateFile(paths.interPath, dev.getInterModel());
-				this.updatePackage(answers.command, "0.0.1");
+				inquirer
+					.prompt([
+						{
+							type: "checkbox",
+							name: "files",
+							message: "请选择要创建的文件",
+							choices: [
+								{
+									name: `cli`,
+									value: "cli",
+									checked: true,
+								},
+								{
+									name: `config`,
+									value: "config",
+									checked: true,
+								},
+								{
+									name: `interface`,
+									value: "interface",
+									checked: true,
+								},
+								{
+									name: `model`,
+									value: "model",
+									checked: true,
+								},
+								{
+									name: `utils`,
+									value: "utils",
+									checked: true,
+								},
+							],
+						},
+					])
+					.then(async lv2 => {
+						console.log("\n正在创建文件...\n");
+						lv2.files.map(lv3 => {
+							switch (lv3) {
+								case "cli":
+									mucFile.updateFile(
+										paths.cliPath,
+										dev.getCliContent()
+									);
+									break;
+								case "config":
+									mucFile.updateFile(
+										paths.configPath,
+										dev.getConfigContent()
+									);
+									break;
+								case "interface":
+									mucFile.updateFile(
+										paths.interPath,
+										dev.getInterContent()
+									);
+									break;
+								case "model":
+									mucFile.updateFile(
+										paths.modelPath,
+										dev.getModelContent()
+									);
+									break;
+								case "utils":
+									mucFile.updateFile(
+										paths.utilsPath,
+										dev.getUtilsContent()
+									);
+									break;
+								default:
+									break;
+							}
+						});
+						this.updatePackage(lv1.command, "0.0.1");
+						await new Promise(() => {
+							setTimeout(() => {
+								console.log("\n文件创建成功！\n");
+							}, 1000);
+						});
+					});
 			});
 	}
 
@@ -143,6 +215,12 @@ class Dev {
 						name: "install",
 						message: "是否立即更新依赖？",
 						default: true,
+						when: () =>
+							new Promise(resolve => {
+								setTimeout(() => {
+									resolve(true);
+								}, 1000);
+							}),
 					},
 				])
 				.then(answers => {

@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-22
+Update: 2023-03-07
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-02-22 22:51:59`
+> 更新于 `2023-03-07 14:49:53`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -44,13 +44,15 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  set [options]     change subcommand use status
+  set               change subcommand use status
   update            update muc from upstream
   build             build ts file
   backup            backup config file
+  hello             get a essay from hitokoto.cn
   mmd [options]     A SubCommand within MuCli for Markdown
   pip [options]     A SubCommand within MuCli for pip
   typora [options]  A SubCommand within MuCli for Typora
+
 ```
 
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
@@ -70,16 +72,16 @@ Commands:
 
 ```text
 > muc -v
-0.7.2
+0.7.3
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
 
 ```text
 > muc dev -sv
-0.2.1
+0.2.2
 > muc mmd -sv
-0.7.3
+0.7.4
 > muc pip -sv
 0.4.1
 > muc typora -sv
@@ -93,13 +95,12 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.7.2' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
-│   dev   │ '0.2.1' │ false  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.7.3' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   muc   │ '0.7.3' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.2.2' │  true  │ 'A SubCommand within MuCli for SubCommand' │
+│   mmd   │ '0.7.4' │  true  │  'A SubCommand within MuCli for Markdown'  │
 │   pip   │ '0.4.1' │  true  │    'A SubCommand within MuCli for pip'     │
 │ typora  │ '0.7.3' │  true  │   'A SubCommand within MuCli for Typora'   │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
-
 ```
 
 ## MuCli-Markdown
@@ -286,7 +287,7 @@ Commands:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-02-22
+Update: 2023-03-07
 ---
 ```
 

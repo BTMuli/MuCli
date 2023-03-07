@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description dev 涉及到的 interface
- * @version 0.2.1
+ * @version 0.2.2
  */
 
 import { Config as ConfigBase } from "./index";
@@ -24,14 +24,16 @@ export interface Config extends ConfigBase {
  * @version 0.2.1
  * @interface FilesPath
  * @property {string} cliPath cli 文件夹路径
- * @property {string} utilsPath utils 文件夹路径
  * @property {string} configPath config 文件夹路径
  * @property {string} interPath interface 文件夹路径
+ * @property {string} modelPath model 文件夹路径
+ * @property {string} utilsPath utils 文件夹路径
  * @return {FilesPath} 文件路径相关接口
  */
 export interface FilesPath {
 	cliPath: string;
-	utilsPath: string;
 	configPath: string;
 	interPath: string;
+	modelPath: string;
+	utilsPath: string;
 }

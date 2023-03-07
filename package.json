@@ -1,9 +1,9 @@
 {
     "name": "@btmuli/mucli",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "subversion": {
-        "dev": "0.2.1",
-        "mmd": "0.7.3",
+        "dev": "0.2.2",
+        "mmd": "0.7.4",
         "pip": "0.4.1",
         "typora": "0.7.3"
     },
@@ -12,12 +12,16 @@
     "main": "index.js",
     "scripts": {
         "build": "rollup -c",
-        "lint-all": "eslint --ext .ts,.json,.js ./",
-        "lint-fix": "eslint --ext .ts,.json,.js ./ --fix"
+        "lint-all": "eslint --ext .ts,.json ./",
+        "lint-fix": "eslint --ext .ts,.json ./ --fix"
     },
     "bin": {
         "muc": "./dist/index.js"
     },
+    "files": [
+        "config_default",
+        "dist"
+    ],
     "keywords": [
         "Node",
         "Cli",

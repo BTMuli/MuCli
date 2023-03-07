@@ -1,5 +1,5 @@
 dev:
-    enable: true
+    enable: false
     name: subCommand
 mmd:
     enable: true

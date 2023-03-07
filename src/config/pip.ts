@@ -29,7 +29,6 @@ class ConfigPip extends ConfigBase {
 			JSON.stringify(this.readConfig())
 		);
 		configData = this.changeConfig(configData, ["pip", "mirror"], mirror);
-		console.log(configData);
 		this.saveConfig(configData);
 	}
 }
