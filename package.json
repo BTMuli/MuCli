@@ -12,8 +12,8 @@
     "main": "index.js",
     "scripts": {
         "build": "rollup -c",
-        "lint-all": "eslint --ext .ts,.json,.js ./",
-        "lint-fix": "eslint --ext .ts,.json,.js ./ --fix"
+        "lint-all": "eslint --ext .ts,.json ./",
+        "lint-fix": "eslint --ext .ts,.json ./ --fix"
     },
     "bin": {
         "muc": "./dist/index.js"
