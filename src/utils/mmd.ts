@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description markdown 文件相关操作
- * @version 0.7.3
+ * @version 0.7.4
  */
 
 /* Node */
@@ -304,6 +304,30 @@ class Mmd {
 	}
 
 	/**
+	 * @description 处理 filePath
+	 * @param {string} filePath 文件路径
+	 * @return {string[2]} 处理后的文件路径 [文件夹路径, 文件名]
+	 */
+	handleFilePath(filePath: string): Array<string> {
+		// 分隔符可能是 / 或者 \
+		let fileName: string;
+		filePath.includes("\\")
+			? (fileName = filePath.split("\\").pop())
+			: (fileName = filePath.split("/").pop());
+		if (fileName.includes(".")) {
+			if (fileName.endsWith(".md")) {
+				fileName = fileName.replace(".md", "");
+			} else {
+				console.log("\n文件名不合法，文件名应以 .md 结尾");
+				return;
+			}
+		} else {
+			filePath = filePath + ".md";
+		}
+		return [filePath, fileName];
+	}
+
+	/**
 	 * @description 创建新文件
 	 * @param {string} filePath 文件路径
 	 * @param {string} author 作者
@@ -398,22 +422,9 @@ class Mmd {
 	 * @return {void}
 	 */
 	promptCreateFile(filePath: string): void {
-		// 分隔符可能是 / 或者 \
-		let fileName: string;
-		filePath.includes("\\")
-			? (fileName = filePath.split("\\").pop())
-			: (fileName = filePath.split("/").pop());
-		if (fileName.includes(".")) {
-			if (fileName.endsWith(".md")) {
-				fileName = fileName.replace(".md", "");
-			} else {
-				console.log("\n文件名不合法，文件名应以 .md 结尾");
-				return;
-			}
-		}
-		if (!fileName.includes(".")) {
-			filePath = filePath + ".md";
-		}
+		const fileTrans = this.handleFilePath(filePath);
+		filePath = fileTrans[0];
+		const fileName: string = fileTrans[1];
 		const label = this.checkLabel(fileName);
 		inquirer
 			.prompt([
@@ -451,21 +462,9 @@ class Mmd {
 	 * @return {Promise<void>}
 	 */
 	async promptUpdateFile(filePath: string): Promise<void> {
-		// 分隔符可能是 / 或者 \
-		let fileName: string;
-		filePath.includes("\\")
-			? (fileName = filePath.split("\\").pop())
-			: (fileName = filePath.split("/").pop());
-		if (fileName.includes(".")) {
-			if (fileName.endsWith(".md")) {
-				fileName = fileName.replace(".md", "");
-			} else {
-				console.log("\n文件名不合法，文件名应以 .md 结尾");
-				return;
-			}
-		} else {
-			filePath = filePath + ".md";
-		}
+		const fileTrans = this.handleFilePath(filePath);
+		filePath = fileTrans[0];
+		const fileName: string = fileTrans[1];
 		const fileCheck: boolean = await this.file.fileExist(filePath);
 		if (fileCheck) {
 			const hasHeader: boolean = await this.checkHeader(filePath);
