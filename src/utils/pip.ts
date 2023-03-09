@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description pip 镜像相关操作
- * @version 0.4.1
+ * @version 0.4.2
  */
 
 /* Node */
@@ -33,7 +33,8 @@ class Pip {
 		package: undefined | string;
 		requirement: undefined | string;
 	}): void {
-		const url: string = this.mirrorInfo.getMirrorUse().url;
+		const mirrorUse = this.mirrorInfo.getMirrorUse();
+		const url = mirrorUse.url;
 		let command = "";
 		let venv: string = process.env.VIRTUAL_ENV;
 		if (venv !== undefined) {
@@ -44,19 +45,28 @@ class Pip {
 		if (args.package !== undefined) {
 			command = `${venv} install ${args.package} -i ${url}`;
 		} else if (args.requirement !== undefined) {
-			command = `${venv} install -r ${args.requirement} -i ${url}`;
+			// 默认 -r 参数为 requirements.txt 文件路径
+			if (typeof args.requirement !== "string") {
+				command = `${venv} install -r requirements.txt -i ${url}`;
+			} else {
+				command = `${venv} install -r ${args.requirement} -i ${url}`;
+			}
 		}
-		console.log(`执行命令：${command}`);
-		exec(command, (error, stdout, stderr) => {
-			if (error) {
-				console.log(error);
-				return;
-			}
-			console.log(stdout);
-			if (stderr) {
-				console.log(stderr);
-			}
-		});
+		if (command !== "") {
+			console.log(`执行命令：${command}`);
+			exec(command, (error, stdout, stderr) => {
+				if (error) {
+					console.log(error);
+					return;
+				}
+				console.log(stdout);
+				if (stderr) {
+					console.log(stderr);
+				}
+			});
+		} else {
+			console.log("请输入 -p 或 -r 参数！");
+		}
 	}
 
 	/**
