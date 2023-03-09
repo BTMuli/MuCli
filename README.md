@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-03-07
+Update: 2023-03-09
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-03-07 14:49:53`
+> 更新于 `2023-03-09 21:46:23`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -52,7 +52,6 @@ Commands:
   mmd [options]     A SubCommand within MuCli for Markdown
   pip [options]     A SubCommand within MuCli for pip
   typora [options]  A SubCommand within MuCli for Typora
-
 ```
 
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
@@ -62,7 +61,6 @@ Commands:
 + `build`：用于开发环境，负责编译本地的 `ts` 文件
 + `backup`：用于备份配置文件，在配置文件错误清空时会从备份文件中恢复
 + `mmd`：用于 Markdown 相关操作
-+ `dev`：用于创建子命令及更新命令版本，**默认关闭**。
 + `pip`：用于 pip 相关操作
 + `typora`：用于 Typora 相关操作
 
@@ -72,7 +70,7 @@ Commands:
 
 ```text
 > muc -v
-0.7.3
+0.7.4
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -83,7 +81,7 @@ Commands:
 > muc mmd -sv
 0.7.4
 > muc pip -sv
-0.4.1
+0.4.2
 > muc typora -sv
 0.7.3
 ```
@@ -95,10 +93,10 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.7.3' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
-│   dev   │ '0.2.2' │  true  │ 'A SubCommand within MuCli for SubCommand' │
+│   muc   │ '0.7.4' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   dev   │ '0.2.2' │ false  │ 'A SubCommand within MuCli for SubCommand' │
 │   mmd   │ '0.7.4' │  true  │  'A SubCommand within MuCli for Markdown'  │
-│   pip   │ '0.4.1' │  true  │    'A SubCommand within MuCli for pip'     │
+│   pip   │ '0.4.2' │  true  │    'A SubCommand within MuCli for pip'     │
 │ typora  │ '0.7.3' │  true  │   'A SubCommand within MuCli for Typora'   │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
 ```
@@ -287,7 +285,7 @@ Commands:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-03-07
+Update: 2023-03-09
 ---
 ```
 
