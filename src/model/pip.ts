@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 pip 相关模型
- * @version 0.4.1
+ * @version 0.4.2
  */
 
 /* Node */
@@ -90,15 +90,14 @@ export class ModelPip {
 
 	/**
 	 * @description 获取当前使用的镜像信息
-	 * @return {ModelMirror} 当前使用的镜像
+	 * @return {MirrorSingle} 当前使用的镜像
 	 */
-	getMirrorUse(): ModelMirror {
-		this.list.find(mirror => {
+	getMirrorUse(): MirrorSingle {
+		return this.list.find(mirror => {
 			if (mirror.name.toString() === this.current) {
-				return new ModelMirror(mirror);
+				return mirror;
 			}
 		});
-		return undefined;
 	}
 
 	/**
