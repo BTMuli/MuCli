@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 主命令文件
- * @version 0.7.3
+ * @version 0.7.5
  */
 
 /* Node */
@@ -139,7 +139,9 @@ MuCli.command("backup")
 			.then(answer => {
 				if (answer.backup) {
 					muc.backupConfig();
-					console.log(`已备份配置文件`);
+					setInterval(() => {
+						console.log("已备份配置文件");
+					}, 1000);
 				} else {
 					console.log(`已取消备份`);
 				}
