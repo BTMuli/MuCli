@@ -1,13 +1,14 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description pip 镜像相关操作
- * @version 0.4.2
+ * @version 0.4.3
  */
 
 /* Node */
 import { exec } from "child_process";
 import inquirer from "inquirer";
 /* MuCli Base */
+import FileBase from "../base/file";
 import { ModelPip } from "../model/pip";
 import ConfigPip from "../config/pip";
 /* MuCli Interface */
@@ -25,13 +26,13 @@ class Pip {
 	/**
 	 * @description 安装 pip 包
 	 * @param {JSON} args 命令参数
-	 * @param {string} args.package 包名
-	 * @param {string} args.requirement requirements.txt 文件路径
+	 * @param {undefined | string | boolean} args.package 包名
+	 * @param {undefined | string | boolean} args.requirement requirements.txt 文件路径
 	 * @return {void}
 	 */
 	install(args: {
-		package: undefined | string;
-		requirement: undefined | string;
+		package: undefined | string | boolean;
+		requirement: undefined | string | boolean;
 	}): void {
 		const mirrorUse = this.mirrorInfo.getMirrorUse();
 		const url = mirrorUse.url;
@@ -42,31 +43,81 @@ class Pip {
 		} else {
 			venv = "pip";
 		}
-		if (args.package !== undefined) {
-			command = `${venv} install ${args.package} -i ${url}`;
-		} else if (args.requirement !== undefined) {
-			// 默认 -r 参数为 requirements.txt 文件路径
-			if (typeof args.requirement !== "string") {
-				command = `${venv} install -r requirements.txt -i ${url}`;
-			} else {
-				command = `${venv} install -r ${args.requirement} -i ${url}`;
-			}
-		}
-		if (command !== "") {
-			console.log(`执行命令：${command}`);
-			exec(command, (error, stdout, stderr) => {
-				if (error) {
-					console.log(error);
-					return;
+		inquirer
+			.prompt([
+				{
+					type: "input",
+					name: "package",
+					message: "请输入包名：",
+					when: args.package !== undefined,
+					default: args.package,
+				},
+				{
+					type: "input",
+					name: "requirement",
+					message: "请输入 requirements.txt 文件路径：",
+					when: args.requirement !== undefined,
+					default: "requirements.txt",
+				},
+				{
+					type: "list",
+					name: "operate",
+					message: "请选择操作：",
+					choices: [
+						{
+							name: "安装包",
+							value: "package",
+						},
+						{
+							name: "安装 requirements.txt 文件",
+							value: "requirement",
+						},
+					],
+					when:
+						args.package === undefined &&
+						args.requirement === undefined,
+				},
+			])
+			.then(async answer => {
+				if (answer.package) {
+					command = `${venv} install ${answer.package} -i ${url}`;
+				} else if (answer.requirement) {
+					// 寻找是否有 requirements.txt 文件
+					const check = await new FileBase().fileExist(
+						"requirements.txt"
+					);
+					if (!check) {
+						console.log("requirements.txt 文件不存在");
+						return;
+					}
+					command = `${venv} install -r ${answer.requirement} -i ${url}`;
+				} else if (answer.operate) {
+					if (answer.operate === "package") {
+						this.install({
+							package: true,
+							requirement: undefined,
+						});
+					} else if (answer.operate === "requirement") {
+						this.install({
+							package: undefined,
+							requirement: true,
+						});
+					}
 				}
-				console.log(stdout);
-				if (stderr) {
-					console.log(stderr);
+				if (command !== "") {
+					console.log(`执行命令：${command}`);
+					exec(command, (error, stdout, stderr) => {
+						if (error) {
+							console.log(error);
+							return;
+						}
+						console.log(stdout);
+						if (stderr) {
+							console.log(stderr);
+						}
+					});
 				}
 			});
-		} else {
-			console.log("请输入 -p 或 -r 参数！");
-		}
 	}
 
 	/**
