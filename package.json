@@ -1,10 +1,10 @@
 {
     "name": "@btmuli/mucli",
-    "version": "0.7.4",
+    "version": "0.7.5",
     "subversion": {
         "dev": "0.2.2",
         "mmd": "0.7.4",
-        "pip": "0.4.2",
+        "pip": "0.4.3",
         "typora": "0.7.3"
     },
     "description": "个人用的 Node Cli",
