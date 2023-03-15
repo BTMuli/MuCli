@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 pip 相关模型
- * @version 0.4.2
+ * @version 0.4.3
  */
 
 /* Node */
@@ -105,9 +105,15 @@ export class ModelPip {
 	 * @return {void}
 	 */
 	outputMirrorList(): void {
+		const infoTable = [];
 		this.getMirrorList().forEach(mirror => {
-			mirror.outputMirrorInfo();
+			infoTable.push({
+				镜像名称: mirror.name,
+				镜像地址: mirror.url,
+				是否可用: mirror.usable ? "可用" : "不可用",
+			});
 		});
+		console.table(infoTable, ["镜像名称", "镜像地址", "是否可用"]);
 	}
 
 	/**
@@ -117,7 +123,7 @@ export class ModelPip {
 	 */
 	mirrorExist(name: string): MirrorSingle | false {
 		for (let i = 0; i < this.list.length; i++) {
-			if (this.list[i].name.toString() === name) {
+			if (this.list[i].name.toString() === name.toString()) {
 				return this.list[i];
 			}
 		}

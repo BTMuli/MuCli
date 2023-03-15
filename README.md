@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-03-09
+Update: 2023-03-15
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-03-09 21:46:23`
+> 更新于 `2023-03-15 15:20:52`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -64,13 +64,15 @@ Commands:
 + `pip`：用于 pip 相关操作
 + `typora`：用于 Typora 相关操作
 
+> dev 命令为开发环境下的子命令，由于 npm 包文件仅包含 `dist` 文件夹，所以无法使用，强行使用可能会造成预期外的错误。
+
 ### 查看版本
 
 主 CLI 采用 `-v` 或 `--version` 查看版本，如下：
 
 ```text
 > muc -v
-0.7.4
+0.7.5
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -81,7 +83,7 @@ Commands:
 > muc mmd -sv
 0.7.4
 > muc pip -sv
-0.4.2
+0.4.3
 > muc typora -sv
 0.7.3
 ```
@@ -93,10 +95,10 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.7.4' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   muc   │ '0.7.5' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
 │   dev   │ '0.2.2' │ false  │ 'A SubCommand within MuCli for SubCommand' │
 │   mmd   │ '0.7.4' │  true  │  'A SubCommand within MuCli for Markdown'  │
-│   pip   │ '0.4.2' │  true  │    'A SubCommand within MuCli for pip'     │
+│   pip   │ '0.4.3' │  true  │    'A SubCommand within MuCli for pip'     │
 │ typora  │ '0.7.3' │  true  │   'A SubCommand within MuCli for Typora'   │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
 ```
@@ -152,28 +154,6 @@ Options:
   -a, --add <name>     add the markdown label
   -h, --help           display help for command
 ```
-
-### MuCli-Dev
-
-对应的是上面的 `dev` 命令：
-
-```shell
-> muc dev -h
-Usage: muc dev [options] [command]
-
-A SubCommand within MuCli for SubCommand
-
-Options:
-  -sv, --subversion  output the subversion of MuCli-Dev
-  -h, --help         display help for command
-
-Commands:
-  new [options]
-  update             update the version of a command
-  help [command]     display help for command
-```
-
-其中，`new` 命令用于创建新的子命令，`update` 命令用于更新命令版本。
 
 ## MuCli-Pip
 
@@ -285,7 +265,7 @@ Commands:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-03-09
+Update: 2023-03-15
 ---
 ```
 

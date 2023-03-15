@@ -1,13 +1,14 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description pip 镜像相关操作
- * @version 0.4.2
+ * @version 0.4.3
  */
 
 /* Node */
 import { exec } from "child_process";
 import inquirer from "inquirer";
 /* MuCli Base */
+import FileBase from "../base/file";
 import { ModelPip } from "../model/pip";
 import ConfigPip from "../config/pip";
 /* MuCli Interface */
@@ -25,13 +26,13 @@ class Pip {
 	/**
 	 * @description 安装 pip 包
 	 * @param {JSON} args 命令参数
-	 * @param {string} args.package 包名
-	 * @param {string} args.requirement requirements.txt 文件路径
+	 * @param {undefined | string | boolean} args.package 包名
+	 * @param {undefined | string | boolean} args.requirement requirements.txt 文件路径
 	 * @return {void}
 	 */
 	install(args: {
-		package: undefined | string;
-		requirement: undefined | string;
+		package: undefined | string | boolean;
+		requirement: undefined | string | boolean;
 	}): void {
 		const mirrorUse = this.mirrorInfo.getMirrorUse();
 		const url = mirrorUse.url;
@@ -42,31 +43,143 @@ class Pip {
 		} else {
 			venv = "pip";
 		}
-		if (args.package !== undefined) {
-			command = `${venv} install ${args.package} -i ${url}`;
-		} else if (args.requirement !== undefined) {
-			// 默认 -r 参数为 requirements.txt 文件路径
-			if (typeof args.requirement !== "string") {
-				command = `${venv} install -r requirements.txt -i ${url}`;
-			} else {
-				command = `${venv} install -r ${args.requirement} -i ${url}`;
-			}
-		}
-		if (command !== "") {
-			console.log(`执行命令：${command}`);
-			exec(command, (error, stdout, stderr) => {
-				if (error) {
-					console.log(error);
-					return;
+		inquirer
+			.prompt([
+				{
+					type: "input",
+					name: "package",
+					message: "请输入包名：",
+					when: args.package !== undefined,
+					default: args.package,
+				},
+				{
+					type: "input",
+					name: "requirement",
+					message: "请输入 requirements.txt 文件路径：",
+					when: args.requirement !== undefined,
+					default: "requirements.txt",
+				},
+				{
+					type: "list",
+					name: "operate",
+					message: "请选择操作：",
+					choices: [
+						{
+							name: "安装包",
+							value: "package",
+						},
+						{
+							name: "安装 requirements.txt 文件",
+							value: "requirement",
+						},
+					],
+					when:
+						args.package === undefined &&
+						args.requirement === undefined,
+				},
+			])
+			.then(async answer => {
+				if (answer.package) {
+					command = `${venv} install ${answer.package} -i ${url}`;
+				} else if (answer.requirement) {
+					// 寻找是否有 requirements.txt 文件
+					const check = await new FileBase().fileExist(
+						"requirements.txt"
+					);
+					if (!check) {
+						console.log("requirements.txt 文件不存在");
+						return;
+					}
+					command = `${venv} install -r ${answer.requirement} -i ${url}`;
+				} else if (answer.operate) {
+					if (answer.operate === "package") {
+						this.install({
+							package: true,
+							requirement: undefined,
+						});
+					} else if (answer.operate === "requirement") {
+						this.install({
+							package: undefined,
+							requirement: true,
+						});
+					}
 				}
-				console.log(stdout);
-				if (stderr) {
-					console.log(stderr);
+				if (command !== "") {
+					console.log(`执行命令：${command}`);
+					exec(command, (error, stdout, stderr) => {
+						if (error) {
+							console.log(error);
+							return;
+						}
+						console.log(stdout);
+						if (stderr) {
+							console.log(stderr);
+						}
+					});
 				}
 			});
-		} else {
-			console.log("请输入 -p 或 -r 参数！");
-		}
+	}
+
+	/**
+	 * @description 操作中转
+	 * @return {void}
+	 */
+	operaMirror(): void {
+		inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "operate",
+					message: "请选择操作：",
+					choices: [
+						{
+							name: "查看镜像",
+							value: "show",
+						},
+						{
+							name: "设置当前使用镜像",
+							value: "use",
+						},
+						{
+							name: "添加镜像",
+							value: "add",
+						},
+						{
+							name: "删除镜像",
+							value: "delete",
+						},
+						{
+							name: "更新镜像",
+							value: "update",
+						},
+						{
+							name: "测试镜像",
+							value: "test",
+						},
+						{
+							name: "退出",
+							value: "exit",
+						},
+					],
+				},
+			])
+			.then(async answer => {
+				if (answer.operate === "show") {
+					this.showMirror();
+				} else if (answer.operate === "use") {
+					await this.setMirrorUse();
+				} else if (answer.operate === "add") {
+					await this.addMirror();
+				} else if (answer.operate === "delete") {
+					await this.deleteMirror();
+				} else if (answer.operate === "update") {
+					await this.updateMirror();
+				} else if (answer.operate === "test") {
+					await this.verifyMirror();
+				} else if (answer.operate === "exit") {
+					return;
+				}
+			});
 	}
 
 	/**
@@ -79,11 +192,14 @@ class Pip {
 
 	/**
 	 * @description 添加镜像
-	 * @param {string} mirrorName 镜像源名称
+	 * @param {string|undefined} mirrorName 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async addMirror(mirrorName: string): Promise<void> {
-		const mirrorGet = this.mirrorInfo.mirrorExist(mirrorName);
+	async addMirror(mirrorName: string = undefined): Promise<void> {
+		let mirrorGet: MirrorSingle | false = false;
+		if (mirrorName !== undefined) {
+			mirrorGet = this.mirrorInfo.mirrorExist(mirrorName);
+		}
 		if (mirrorGet === false) {
 			const mirror = await inquirer.prompt([
 				{
@@ -99,9 +215,11 @@ class Pip {
 				},
 			]);
 			await this.mirrorInfo.addMirror(mirror.name, mirror.url);
-			console.log(`正在将 ${mirror.name} 写入配置文件...`);
 			this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
-			console.log(`镜像源 ${mirror.name} 添加成功！`);
+			// 延时 1s 输出
+			setTimeout(() => {
+				console.log("更新配置文件成功！");
+			}, 1000);
 		} else {
 			console.log(`镜像源 ${mirrorName} 已存在！`);
 		}
@@ -109,69 +227,94 @@ class Pip {
 
 	/**
 	 * @description 删除镜像
-	 * @param {string} mirrorName 镜像源名称
+	 * @param {string} mirror 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async deleteMirror(mirrorName: string): Promise<void> {
-		if (this.mirrorInfo.mirrorExist(mirrorName)) {
-			inquirer
-				.prompt([
-					{
-						type: "confirm",
-						name: "confirm",
-						message: `是否删除镜像源 ${mirrorName}？`,
-						default: false,
-					},
-				])
-				.then(async answer => {
-					if (answer.confirm) {
-						this.mirrorInfo.deleteMirror(mirrorName);
-						console.log(`正在更新配置文件...`);
-						this.config.saveMirrorConfig(
-							this.mirrorInfo.getConfig()
-						);
-						console.log(`配置文件更新成功！`);
-					}
-				});
-		} else {
-			console.log(`镜像源 ${mirrorName} 不存在！`);
-		}
+	async deleteMirror(mirror: string = undefined): Promise<void> {
+		// 获取当前镜像源列表
+		const mirrorList = this.mirrorInfo.getMirrorList();
+		inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "mirror",
+					message: "请选择要删除的镜像源：",
+					choices: mirrorList,
+					default: mirror,
+				},
+			])
+			.then(async answer => {
+				this.mirrorInfo.deleteMirror(answer.mirror);
+				this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
+				// 延时 1s 输出
+				setTimeout(() => {
+					console.log("更新配置文件成功！");
+				}, 1000);
+			});
+	}
+
+	/**
+	 * @description 获取测试的镜像源
+	 * @return {Promise<string>}
+	 */
+	async getMirrorTest(): Promise<string> {
+		// 获取镜像源列表
+		const mirrorList = this.mirrorInfo.getMirrorList();
+		return inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "test",
+					message: "请选择测试的对象：",
+					choices: [
+						{
+							name: "全部镜像源",
+							value: "all",
+						},
+						{
+							name: "指定镜像源",
+							value: "one",
+						},
+					],
+				},
+				{
+					type: "list",
+					name: "mirror",
+					message: "请选择镜像源：",
+					choices: mirrorList,
+					when: answer => answer.test === "one",
+				},
+			])
+			.then(async answer => {
+				if (answer.test === "all") {
+					return "all";
+				} else if (answer.test === "one") {
+					return answer.mirror;
+				}
+			});
 	}
 
 	/**
 	 * @description 测试镜像源
-	 * @param {string} mirror 镜像源名称
 	 * @returns
 	 */
-	async verifyMirror(mirror: string = undefined) {
-		if (mirror !== undefined) {
-			const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
+	async verifyMirror() {
+		const mirrorTest = await this.getMirrorTest();
+		if (mirrorTest !== "all") {
+			const mirrorGet = this.mirrorInfo.mirrorExist(mirrorTest);
 			if (mirrorGet === false) {
-				await inquirer
-					.prompt([
-						{
-							type: "confirm",
-							name: "confirm",
-							message: `镜像源 ${mirror} 不存在，是否添加？`,
-							default: false,
-						},
-					])
-					.then(async answer => {
-						if (answer.confirm) {
-							await this.addMirror(mirror);
-						}
-					});
-			} else {
-				this.mirrorInfo.testMirror(mirrorGet).then(time => {
-					if (time !== -1) {
-						console.log(
-							`镜像源 ${mirror} 可用，响应时间为 ${time}ms`
-						);
-					} else {
-						console.log(`镜像源 ${mirror} 不可用！`);
-					}
-				});
+				console.log(`镜像源 ${mirrorTest} 不存在！`);
+				return;
 			}
+			this.mirrorInfo.testMirror(mirrorGet).then(time => {
+				if (time !== -1) {
+					console.log(
+						`镜像源 ${mirrorTest} 可用，响应时间为 ${time}ms`
+					);
+				} else {
+					console.log(`镜像源 ${mirrorTest} 不可用！`);
+				}
+			});
 		} else {
 			const mirrorListTest: MirrorSingle[] = this.mirrorInfo.list;
 			Promise.all(
@@ -247,11 +390,13 @@ class Pip {
 									}
 								);
 								this.mirrorInfo.list = mirrorListTest;
-								console.log("\n正在更新配置文件...");
 								this.config.saveMirrorConfig(
 									this.mirrorInfo.getConfig()
 								);
-								console.log("\n更新配置文件成功!\n");
+								// 延时 1s 输出
+								setTimeout(() => {
+									console.log("更新配置文件成功！");
+								}, 1000);
 							}
 						});
 				}
@@ -264,16 +409,39 @@ class Pip {
 	 * @param {string} mirror 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async setMirrorUse(mirror: string): Promise<void> {
-		const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
-		if (mirrorGet === false) {
-			console.log(`\n镜像源 ${mirror} 不存在！\n`);
-			return;
+	async setMirrorUse(mirror: string = undefined): Promise<void> {
+		// 获取当前镜像源列表
+		const mirrorList = this.mirrorInfo.getMirrorList();
+		if (mirror !== undefined) {
+			const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
+			if (mirrorGet === false) {
+				console.log(`\n镜像源 ${mirror} 不存在！\n`);
+				return;
+			}
 		}
-		await this.mirrorInfo.setMirrorUse(mirror);
-		console.log("正在更新配置文件...");
-		this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
-		console.log("更新配置文件成功！");
+		inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "mirror",
+					message: "请选择要使用的镜像源：",
+					choices: mirrorList,
+					default: mirror || this.mirrorInfo.current,
+				},
+			])
+			.then(async answer => {
+				const mirrorGet = this.mirrorInfo.mirrorExist(answer.mirror);
+				if (mirrorGet === false) {
+					console.log(`\n镜像源 ${mirror} 不存在！\n`);
+					return;
+				}
+				this.mirrorInfo.setMirrorUse(mirrorGet.name);
+				this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
+				// 延时 1s 输出
+				setTimeout(() => {
+					console.log("更新配置文件成功！");
+				}, 1000);
+			});
 	}
 
 	/**
@@ -281,27 +449,53 @@ class Pip {
 	 * @param {string} mirror 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async updateMirror(mirror: string) {
-		if (!this.mirrorInfo.mirrorExist(mirror)) {
-			console.log(`\n镜像源 ${mirror} 不存在！\n`);
-			return;
+	async updateMirror(mirror: string = undefined) {
+		// 获取当前镜像源列表
+		const mirrorList = this.mirrorInfo.getMirrorList();
+		if (mirror !== undefined) {
+			const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
+			if (mirrorGet === false) {
+				console.log(`\n镜像源 ${mirror} 不存在！\n`);
+				return;
+			}
 		}
 		inquirer
 			.prompt([
 				{
-					type: "input",
-					name: "url",
-					message: "请输入镜像源地址：",
-					default: this.mirrorInfo.list.find((item: MirrorSingle) => {
-						return item.name === mirror;
-					}).url,
+					type: "list",
+					name: "mirror",
+					message: "请选择要更新的镜像源：",
+					choices: mirrorList,
+					default: mirror || this.mirrorInfo.current,
 				},
 			])
-			.then(async answer => {
-				await this.mirrorInfo.updateMirror(mirror, answer.url);
-				console.log("正在更新配置文件...");
-				this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
-				console.log("更新配置文件成功！");
+			.then(async answerF => {
+				inquirer
+					.prompt([
+						{
+							type: "input",
+							name: "url",
+							message: "请输入镜像源地址：",
+							default: this.mirrorInfo.list.find(
+								(item: MirrorSingle) => {
+									return item.name === answerF.mirror;
+								}
+							).url,
+						},
+					])
+					.then(async answerS => {
+						await this.mirrorInfo.updateMirror(
+							answerF.mirror,
+							answerS.url
+						);
+						this.config.saveMirrorConfig(
+							this.mirrorInfo.getConfig()
+						);
+						// 延时 1s 输出
+						setTimeout(() => {
+							console.log("更新配置文件成功！");
+						}, 1000);
+					});
 			});
 	}
 }
