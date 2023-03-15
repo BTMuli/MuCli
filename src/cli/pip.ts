@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令，负责处理 pip 镜像相关操作
- * @version 0.4.1
+ * @version 0.4.2
  */
 
 /* Node */
@@ -37,14 +37,9 @@ pip.command("install")
 /* 测试镜像源 */
 pip.command("test")
 	.description("test mirror")
-	.option("-n, --name [name]", "mirror name")
-	.action(async options => {
+	.action(async () => {
 		const pip: Pip = new Pip();
-		if (options.name) {
-			await pip.verifyMirror(options.name);
-		} else {
-			await pip.verifyMirror();
-		}
+		await pip.verifyMirror();
 	});
 
 /* 处理镜像源 */
@@ -65,8 +60,10 @@ pip.command("mirror")
 			await pip.setMirrorUse(options.set);
 		} else if (options.update) {
 			await pip.updateMirror(options.update);
-		} else {
+		} else if (options.list) {
 			await pip.showMirror();
+		} else {
+			pip.operaMirror();
 		}
 	});
 

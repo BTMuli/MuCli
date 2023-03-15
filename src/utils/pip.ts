@@ -121,6 +121,56 @@ class Pip {
 	}
 
 	/**
+	 * @description 操作中转
+	 * @return {void}
+	 */
+	operaMirror(): void {
+		inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "operate",
+					message: "请选择操作：",
+					choices: [
+						{
+							name: "查看镜像",
+							value: "show",
+						},
+						{
+							name: "设置当前使用镜像",
+							value: "use",
+						},
+						{
+							name: "添加镜像",
+							value: "add",
+						},
+						{
+							name: "删除镜像",
+							value: "delete",
+						},
+						{
+							name: "更新镜像",
+							value: "update",
+						},
+					],
+				},
+			])
+			.then(async answer => {
+				if (answer.operate === "show") {
+					this.showMirror();
+				} else if (answer.operate === "use") {
+					await this.setMirrorUse();
+				} else if (answer.operate === "add") {
+					await this.addMirror();
+				} else if (answer.operate === "delete") {
+					await this.deleteMirror();
+				} else if (answer.operate === "update") {
+					await this.updateMirror();
+				}
+			});
+	}
+
+	/**
 	 * @description 查看镜像
 	 * @return {void}
 	 */
@@ -130,11 +180,14 @@ class Pip {
 
 	/**
 	 * @description 添加镜像
-	 * @param {string} mirrorName 镜像源名称
+	 * @param {string|undefined} mirrorName 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async addMirror(mirrorName: string): Promise<void> {
-		const mirrorGet = this.mirrorInfo.mirrorExist(mirrorName);
+	async addMirror(mirrorName: string = undefined): Promise<void> {
+		let mirrorGet: MirrorSingle | false = false;
+		if (mirrorName !== undefined) {
+			mirrorGet = this.mirrorInfo.mirrorExist(mirrorName);
+		}
 		if (mirrorGet === false) {
 			const mirror = await inquirer.prompt([
 				{
@@ -160,69 +213,92 @@ class Pip {
 
 	/**
 	 * @description 删除镜像
-	 * @param {string} mirrorName 镜像源名称
+	 * @param {string} mirror 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async deleteMirror(mirrorName: string): Promise<void> {
-		if (this.mirrorInfo.mirrorExist(mirrorName)) {
-			inquirer
-				.prompt([
-					{
-						type: "confirm",
-						name: "confirm",
-						message: `是否删除镜像源 ${mirrorName}？`,
-						default: false,
-					},
-				])
-				.then(async answer => {
-					if (answer.confirm) {
-						this.mirrorInfo.deleteMirror(mirrorName);
-						console.log(`正在更新配置文件...`);
-						this.config.saveMirrorConfig(
-							this.mirrorInfo.getConfig()
-						);
-						console.log(`配置文件更新成功！`);
-					}
-				});
-		} else {
-			console.log(`镜像源 ${mirrorName} 不存在！`);
-		}
+	async deleteMirror(mirror: string = undefined): Promise<void> {
+		// 获取当前镜像源列表
+		const mirrorList = this.mirrorInfo.getMirrorList();
+		inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "mirror",
+					message: "请选择要删除的镜像源：",
+					choices: mirrorList,
+					default: mirror,
+				},
+			])
+			.then(async answer => {
+				this.mirrorInfo.deleteMirror(answer.mirror);
+				console.log(`正在更新配置文件...`);
+				this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
+				console.log(`配置文件更新成功！`);
+			});
+	}
+
+	/**
+	 * @description 获取测试的镜像源
+	 * @return {Promise<string>}
+	 */
+	async getMirrorTest(): Promise<string> {
+		// 获取镜像源列表
+		const mirrorList = this.mirrorInfo.getMirrorList();
+		return inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "test",
+					message: "请选择测试的对象：",
+					choices: [
+						{
+							name: "全部镜像源",
+							value: "all",
+						},
+						{
+							name: "指定镜像源",
+							value: "one",
+						},
+					],
+				},
+				{
+					type: "list",
+					name: "mirror",
+					message: "请选择镜像源：",
+					choices: mirrorList,
+					when: answer => answer.test === "one",
+				},
+			])
+			.then(async answer => {
+				if (answer.test === "all") {
+					return "all";
+				} else if (answer.test === "one") {
+					return answer.mirror;
+				}
+			});
 	}
 
 	/**
 	 * @description 测试镜像源
-	 * @param {string} mirror 镜像源名称
 	 * @returns
 	 */
-	async verifyMirror(mirror: string = undefined) {
-		if (mirror !== undefined) {
-			const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
+	async verifyMirror() {
+		const mirrorTest = await this.getMirrorTest();
+		if (mirrorTest !== "all") {
+			const mirrorGet = this.mirrorInfo.mirrorExist(mirrorTest);
 			if (mirrorGet === false) {
-				await inquirer
-					.prompt([
-						{
-							type: "confirm",
-							name: "confirm",
-							message: `镜像源 ${mirror} 不存在，是否添加？`,
-							default: false,
-						},
-					])
-					.then(async answer => {
-						if (answer.confirm) {
-							await this.addMirror(mirror);
-						}
-					});
-			} else {
-				this.mirrorInfo.testMirror(mirrorGet).then(time => {
-					if (time !== -1) {
-						console.log(
-							`镜像源 ${mirror} 可用，响应时间为 ${time}ms`
-						);
-					} else {
-						console.log(`镜像源 ${mirror} 不可用！`);
-					}
-				});
+				console.log(`镜像源 ${mirrorTest} 不存在！`);
+				return;
 			}
+			this.mirrorInfo.testMirror(mirrorGet).then(time => {
+				if (time !== -1) {
+					console.log(
+						`镜像源 ${mirrorTest} 可用，响应时间为 ${time}ms`
+					);
+				} else {
+					console.log(`镜像源 ${mirrorTest} 不可用！`);
+				}
+			});
 		} else {
 			const mirrorListTest: MirrorSingle[] = this.mirrorInfo.list;
 			Promise.all(
@@ -315,16 +391,38 @@ class Pip {
 	 * @param {string} mirror 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async setMirrorUse(mirror: string): Promise<void> {
-		const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
-		if (mirrorGet === false) {
-			console.log(`\n镜像源 ${mirror} 不存在！\n`);
-			return;
+	async setMirrorUse(mirror: string = undefined): Promise<void> {
+		// 获取当前镜像源列表
+		const mirrorList = this.mirrorInfo.getMirrorList();
+		if (mirror !== undefined) {
+			const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
+			if (mirrorGet === false) {
+				console.log(`\n镜像源 ${mirror} 不存在！\n`);
+				return;
+			}
 		}
-		await this.mirrorInfo.setMirrorUse(mirror);
-		console.log("正在更新配置文件...");
-		this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
-		console.log("更新配置文件成功！");
+		inquirer
+			.prompt([
+				{
+					type: "list",
+					name: "mirror",
+					message: "请选择要使用的镜像源：",
+					choices: mirrorList,
+					default: mirror || this.mirrorInfo.current,
+				},
+			])
+			.then(async answer => {
+				console.log(answer);
+				const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
+				if (mirrorGet === false) {
+					console.log(`\n镜像源 ${mirror} 不存在！\n`);
+					return;
+				}
+				await this.mirrorInfo.setMirrorUse(mirror);
+				console.log("正在更新配置文件...");
+				this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
+				console.log("更新配置文件成功！");
+			});
 	}
 
 	/**
@@ -332,27 +430,48 @@ class Pip {
 	 * @param {string} mirror 镜像源名称
 	 * @return {Promise<void>}
 	 */
-	async updateMirror(mirror: string) {
-		if (!this.mirrorInfo.mirrorExist(mirror)) {
-			console.log(`\n镜像源 ${mirror} 不存在！\n`);
-			return;
+	async updateMirror(mirror: string = undefined) {
+		// 获取当前镜像源列表
+		const mirrorList = this.mirrorInfo.getMirrorList();
+		if (mirror !== undefined) {
+			const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
+			if (mirrorGet === false) {
+				console.log(`\n镜像源 ${mirror} 不存在！\n`);
+				return;
+			}
 		}
 		inquirer
 			.prompt([
 				{
-					type: "input",
-					name: "url",
-					message: "请输入镜像源地址：",
-					default: this.mirrorInfo.list.find((item: MirrorSingle) => {
-						return item.name === mirror;
-					}).url,
+					type: "list",
+					name: "mirror",
+					message: "请选择要更新的镜像源：",
+					choices: mirrorList,
+					default: mirror || this.mirrorInfo.current,
 				},
 			])
 			.then(async answer => {
-				await this.mirrorInfo.updateMirror(mirror, answer.url);
-				console.log("正在更新配置文件...");
-				this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
-				console.log("更新配置文件成功！");
+				inquirer
+					.prompt([
+						{
+							type: "input",
+							name: "url",
+							message: "请输入镜像源地址：",
+							default: this.mirrorInfo.list.find(
+								(item: MirrorSingle) => {
+									return item.name === answer.mirror;
+								}
+							).url,
+						},
+					])
+					.then(async answer => {
+						await this.mirrorInfo.updateMirror(mirror, answer.url);
+						console.log("正在更新配置文件...");
+						this.config.saveMirrorConfig(
+							this.mirrorInfo.getConfig()
+						);
+						console.log("更新配置文件成功！");
+					});
 			});
 	}
 }
