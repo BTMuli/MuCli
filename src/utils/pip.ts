@@ -152,6 +152,14 @@ class Pip {
 							name: "更新镜像",
 							value: "update",
 						},
+						{
+							name: "测试镜像",
+							value: "test",
+						},
+						{
+							name: "退出",
+							value: "exit",
+						},
 					],
 				},
 			])
@@ -166,6 +174,10 @@ class Pip {
 					await this.deleteMirror();
 				} else if (answer.operate === "update") {
 					await this.updateMirror();
+				} else if (answer.operate === "test") {
+					await this.verifyMirror();
+				} else if (answer.operate === "exit") {
+					return;
 				}
 			});
 	}
@@ -203,9 +215,11 @@ class Pip {
 				},
 			]);
 			await this.mirrorInfo.addMirror(mirror.name, mirror.url);
-			console.log(`正在将 ${mirror.name} 写入配置文件...`);
 			this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
-			console.log(`镜像源 ${mirror.name} 添加成功！`);
+			// 延时 1s 输出
+			setTimeout(() => {
+				console.log("更新配置文件成功！");
+			}, 1000);
 		} else {
 			console.log(`镜像源 ${mirrorName} 已存在！`);
 		}
@@ -231,9 +245,11 @@ class Pip {
 			])
 			.then(async answer => {
 				this.mirrorInfo.deleteMirror(answer.mirror);
-				console.log(`正在更新配置文件...`);
 				this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
-				console.log(`配置文件更新成功！`);
+				// 延时 1s 输出
+				setTimeout(() => {
+					console.log("更新配置文件成功！");
+				}, 1000);
 			});
 	}
 
@@ -374,11 +390,13 @@ class Pip {
 									}
 								);
 								this.mirrorInfo.list = mirrorListTest;
-								console.log("\n正在更新配置文件...");
 								this.config.saveMirrorConfig(
 									this.mirrorInfo.getConfig()
 								);
-								console.log("\n更新配置文件成功!\n");
+								// 延时 1s 输出
+								setTimeout(() => {
+									console.log("更新配置文件成功！");
+								}, 1000);
 							}
 						});
 				}
@@ -412,16 +430,17 @@ class Pip {
 				},
 			])
 			.then(async answer => {
-				console.log(answer);
-				const mirrorGet = this.mirrorInfo.mirrorExist(mirror);
+				const mirrorGet = this.mirrorInfo.mirrorExist(answer.mirror);
 				if (mirrorGet === false) {
 					console.log(`\n镜像源 ${mirror} 不存在！\n`);
 					return;
 				}
-				await this.mirrorInfo.setMirrorUse(mirror);
-				console.log("正在更新配置文件...");
+				this.mirrorInfo.setMirrorUse(mirrorGet.name);
 				this.config.saveMirrorConfig(this.mirrorInfo.getConfig());
-				console.log("更新配置文件成功！");
+				// 延时 1s 输出
+				setTimeout(() => {
+					console.log("更新配置文件成功！");
+				}, 1000);
 			});
 	}
 
@@ -450,7 +469,7 @@ class Pip {
 					default: mirror || this.mirrorInfo.current,
 				},
 			])
-			.then(async answer => {
+			.then(async answerF => {
 				inquirer
 					.prompt([
 						{
@@ -459,18 +478,23 @@ class Pip {
 							message: "请输入镜像源地址：",
 							default: this.mirrorInfo.list.find(
 								(item: MirrorSingle) => {
-									return item.name === answer.mirror;
+									return item.name === answerF.mirror;
 								}
 							).url,
 						},
 					])
-					.then(async answer => {
-						await this.mirrorInfo.updateMirror(mirror, answer.url);
-						console.log("正在更新配置文件...");
+					.then(async answerS => {
+						await this.mirrorInfo.updateMirror(
+							answerF.mirror,
+							answerS.url
+						);
 						this.config.saveMirrorConfig(
 							this.mirrorInfo.getConfig()
 						);
-						console.log("更新配置文件成功！");
+						// 延时 1s 输出
+						setTimeout(() => {
+							console.log("更新配置文件成功！");
+						}, 1000);
 					});
 			});
 	}
