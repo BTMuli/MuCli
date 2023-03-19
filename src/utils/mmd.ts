@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description markdown 文件相关操作
- * @version 0.7.4
+ * @version 0.7.5
  */
 
 /* Node */
@@ -448,8 +448,12 @@ class Mmd {
 				},
 			])
 			.then(async answers => {
+				// 获取文件名
+				const getName = answers.title;
+				// 获取文件路径
+				const getFilePath = filePath.replace(fileName, getName);
 				await this.createFile(
-					filePath,
+					getFilePath,
 					answers.author,
 					answers.description
 				);
