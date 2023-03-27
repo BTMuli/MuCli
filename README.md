@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-03-15
+Update: 2023-03-27
 ---
 
 > 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
 > 
-> 更新于 `2023-03-15 15:20:52`
+> 更新于 `2023-03-27 14:41:21`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -72,7 +72,7 @@ Commands:
 
 ```text
 > muc -v
-0.7.5
+0.7.6
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -81,7 +81,7 @@ Commands:
 > muc dev -sv
 0.2.2
 > muc mmd -sv
-0.7.4
+0.7.5
 > muc pip -sv
 0.4.3
 > muc typora -sv
@@ -95,9 +95,9 @@ Commands:
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.7.5' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   muc   │ '0.7.6' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
 │   dev   │ '0.2.2' │ false  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.7.4' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   mmd   │ '0.7.5' │  true  │  'A SubCommand within MuCli for Markdown'  │
 │   pip   │ '0.4.3' │  true  │    'A SubCommand within MuCli for pip'     │
 │ typora  │ '0.7.3' │  true  │   'A SubCommand within MuCli for Typora'   │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
@@ -265,7 +265,7 @@ Commands:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-03-15
+Update: 2023-03-27
 ---
 ```
 
