@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description markdown 文件相关操作
- * @version 0.7.5
+ * @since mmd 0.7.6
  */
 
 /* Node */
@@ -28,6 +28,7 @@ class Mmd {
 
 	/**
 	 * @description 检测 Label 是否存在
+	 * @since mmd 0.7.6
 	 * @param {string} fileName Label 名称
 	 * @return {LabelSingle} Label 信息
 	 */
@@ -47,12 +48,13 @@ class Mmd {
 			return defaultLabel;
 		}
 		// 判断是否存在
-		customLabel.map((label: LabelSingle) => {
-			if (label.filename === fileName) {
-				return label;
-			}
-		});
-		return defaultLabel;
+		return (
+			customLabel.find((label: LabelSingle) => {
+				if (label.filename === fileName) {
+					return label;
+				}
+			}) || defaultLabel
+		);
 	}
 
 	/**
@@ -418,6 +420,7 @@ class Mmd {
 
 	/**
 	 * @description 创建新文件前的提示
+	 * @since mmd 0.7.6
 	 * @param {string} filePath 文件路径
 	 * @return {void}
 	 */
@@ -425,7 +428,7 @@ class Mmd {
 		const fileTrans = this.handleFilePath(filePath);
 		filePath = fileTrans[0];
 		const fileName: string = fileTrans[1];
-		const label = this.checkLabel(fileName);
+		let label = this.checkLabel(fileName);
 		inquirer
 			.prompt([
 				{
@@ -434,29 +437,35 @@ class Mmd {
 					message: "请输入文件名称",
 					default: fileName,
 				},
-				{
-					type: "input",
-					name: "author",
-					message: "请输入作者",
-					default: label.author || this.label.default.author,
-				},
-				{
-					type: "input",
-					name: "description",
-					message: "请输入描述",
-					default: label.description,
-				},
 			])
-			.then(async answers => {
-				// 获取文件名
-				const getName = answers.title;
-				// 获取文件路径
-				const getFilePath = filePath.replace(fileName, getName);
-				await this.createFile(
-					getFilePath,
-					answers.author,
-					answers.description
-				);
+			.then(async answerF => {
+				label = this.checkLabel(answerF.title);
+				inquirer
+					.prompt([
+						{
+							type: "input",
+							name: "author",
+							message: "请输入作者",
+							default: label.author || this.label.default.author,
+						},
+						{
+							type: "input",
+							name: "description",
+							message: "请输入描述",
+							default: label.description,
+						},
+					])
+					.then(async answerS => {
+						// 获取文件名
+						const getName = answerF.title;
+						// 获取文件路径
+						const getFilePath = filePath.replace(fileName, getName);
+						await this.createFile(
+							getFilePath,
+							answerS.author,
+							answerS.description
+						);
+					});
 			});
 	}
 
