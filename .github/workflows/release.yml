@@ -1,10 +1,14 @@
 name: MuCli Package Pub
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
+    # master分支
+    if: github.ref == 'refs/heads/master'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -12,7 +16,6 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-  #      - run: npm test
 
   publish-gpr:
     needs: build
