@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 主命令文件
- * @version 0.7.5
+ * @version 0.7.6
  */
 
 /* Node */
@@ -107,8 +107,7 @@ MuCli.command("update")
 MuCli.command("build")
 	.description("build ts file")
 	.action(() => {
-		// 获取当前目录
-		exec(`cd ${ROOT_PATH} && rollup -c`, (err, stdout, stderr) => {
+		exec(`npm run build`, { cwd: ROOT_PATH }, (err, stdout, stderr) => {
 			if (err) {
 				console.log(err);
 				return;
