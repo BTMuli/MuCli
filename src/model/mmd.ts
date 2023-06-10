@@ -1,7 +1,8 @@
 /**
+ * @file model mmd.ts
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 mmd 相关模型
- * @version 0.7.3
+ * @since 0.7.4
  */
 
 /* Node */
@@ -32,6 +33,7 @@ class ModelMmd {
 
 	/**
 	 * @description 生成 markdown 文件头部
+	 * @since 0.7.4
 	 * @returns {string} markdown 文件头部
 	 */
 	getHeader(): string {
@@ -44,7 +46,7 @@ class ModelMmd {
       'Description: ' + this.description + this.lineBreak +
       'Update: ' + dateNow + this.lineBreak +
       this.sign + this.lineBreak + this.lineBreak +
-      this.quote + '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`' + this.lineBreak +
+      this.quote + '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + ' `' + this.lineBreak +
       '> ' + this.lineBreak +
       '> 更新于 `' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`'
     );
