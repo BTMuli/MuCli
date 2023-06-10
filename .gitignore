@@ -1,5 +1,7 @@
 # Jetbrains IDE config dir
 .idea
-
-# node_modules
-node_modules
+# Yarn modules
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+.pnp.*

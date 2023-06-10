@@ -8,6 +8,7 @@
         "typora": "0.7.3"
     },
     "description": "个人用的 Node Cli",
+    "packageManager": "yarn@3.5.1",
     "type": "module",
     "main": "index.js",
     "scripts": {
