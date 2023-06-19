@@ -6,17 +6,7 @@ on:
       - master
 
 jobs:
-  build:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: corepack enable
-
   publish-gpr:
-    needs: build
     runs-on: windows-latest
     permissions:
       contents: read
@@ -27,13 +17,13 @@ jobs:
         with:
           node-version: 16
           registry-url: 'https://npm.pkg.github.com'
+      - run: corepack enable
       - run: yarn
       - run: yarn npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GHP_TOKEN}}
 
   publish-npm:
-    needs: build
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -41,6 +31,7 @@ jobs:
         with:
           node-version: 16
           registry-url: 'https://registry.npmjs.org'
+      - run: corepack enable
       - run: yarn
       - run: yarn npm publish
         env:
