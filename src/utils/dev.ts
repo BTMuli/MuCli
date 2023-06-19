@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 dev 的具体实现
- * @version 0.2.2
+ * @since dev 0.2.3
  */
 
 /* Node */
@@ -197,6 +197,7 @@ class Dev {
 
 	/**
 	 * @description 更新主命令版本号
+	 * @since dev 0.2.3
 	 * @param upVersion {string} 新版本号
 	 * @return {void}
 	 */
@@ -225,7 +226,7 @@ class Dev {
 				])
 				.then(answers => {
 					if (answers.install) {
-						exec("npm install", (err, stdout, stderr) => {
+						exec("yarn install", (err, stdout, stderr) => {
 							if (err) {
 								console.log(err);
 								return;
@@ -237,7 +238,7 @@ class Dev {
 							console.log(stdout);
 						});
 					} else {
-						console.log("\n请手动执行 npm install 更新依赖\n");
+						console.log("\n请手动执行 yarn install 更新依赖\n");
 					}
 				});
 		} else {
