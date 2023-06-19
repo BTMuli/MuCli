@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 主命令文件
- * @version 0.7.6
+ * @since 0.8.0
  */
 
 /* Node */
@@ -107,7 +107,7 @@ MuCli.command("update")
 MuCli.command("build")
 	.description("build ts file")
 	.action(() => {
-		exec(`npm run build`, { cwd: ROOT_PATH }, (err, stdout, stderr) => {
+		exec(`yarn build`, { cwd: ROOT_PATH }, (err, stdout, stderr) => {
 			if (err) {
 				console.log(err);
 				return;

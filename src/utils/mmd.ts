@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description markdown 文件相关操作
- * @since mmd 0.7.6
+ * @since mmd 0.7.7
  */
 
 /* Node */
@@ -28,7 +28,7 @@ class Mmd {
 
 	/**
 	 * @description 检测 Label 是否存在
-	 * @since mmd 0.7.6
+	 * @since mmd 0.7.7
 	 * @param {string} fileName Label 名称
 	 * @return {LabelSingle} Label 信息
 	 */
@@ -36,7 +36,7 @@ class Mmd {
 		const customLabel: Array<LabelSingle> = this.label.custom;
 		const defaultLabel: LabelSingle = {
 			filename: fileName,
-			author: undefined,
+			author: this.label.default.author,
 			description: fileName,
 		};
 		// 判断是否是默认模板
@@ -501,6 +501,7 @@ class Mmd {
 				.then(async answer => {
 					if (answer.insert) {
 						const label: LabelSingle = this.checkLabel(fileName);
+						console.log(label);
 						await inquirer
 							.prompt([
 								{
