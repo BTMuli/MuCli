@@ -2,7 +2,7 @@
  * @file model mmd.ts
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 mmd 相关模型
- * @since 0.7.4
+ * @since 0.7.8
  */
 
 /* Node */
@@ -24,7 +24,7 @@ class ModelMmd {
 		/* eslint-disable */
     this.quote = (
       '> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) ' +
-      '由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于'
+      '由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于 '
     );
     /* eslint-enable */
 		this.author = author;
