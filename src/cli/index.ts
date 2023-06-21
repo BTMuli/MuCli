@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 主命令文件
- * @since 0.8.0
+ * @since 0.8.1
  */
 
 /* Node */
@@ -24,8 +24,9 @@ MuCli.name("muc")
 	.description("A Node Cli for Personal Use by BTMUli.");
 
 /* 查看子命令信息 */
-MuCli.option("-l, --list", "list all commands").action(options => {
-	if (options.list) {
+MuCli.command("list")
+	.description("list all commands")
+	.action(() => {
 		const muc: ConfigMuc = new ConfigMuc();
 		const commandList = [];
 		commandList["muc"] = {
@@ -41,10 +42,7 @@ MuCli.option("-l, --list", "list all commands").action(options => {
 			};
 		});
 		console.table(commandList);
-	} else {
-		MuCli.help();
-	}
-});
+	});
 
 /* 选用/弃用子命令 */
 MuCli.command("set")
