@@ -33,7 +33,7 @@ class ModelMmd {
 
 	/**
 	 * @description 生成 markdown 文件头部
-	 * @since 0.7.4
+	 * @since 0.7.8
 	 * @returns {string} markdown 文件头部
 	 */
 	getHeader(): string {
@@ -47,7 +47,7 @@ class ModelMmd {
       'Update: ' + dateNow + this.lineBreak +
       this.sign + this.lineBreak + this.lineBreak +
       this.quote + '`' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + ' `' + this.lineBreak +
-      '> ' + this.lineBreak +
+      '>' + this.lineBreak +
       '> 更新于 `' + format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '`'
     );
     /* eslint-enable */
