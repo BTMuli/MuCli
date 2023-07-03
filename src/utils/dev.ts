@@ -60,7 +60,9 @@ class Dev {
 					type: "input",
 					message: "请输入子命令描述",
 					name: "description",
-					default: `A SubCommand within MuCli for [${name || "test"}]`,
+					default: `A SubCommand within MuCli for [${
+						name || "test"
+					}]`,
 				},
 			])
 			.then(async lv1 => {
@@ -69,7 +71,7 @@ class Dev {
 					lv1.command,
 					lv1.description.startsWith("A")
 						? lv1.description
-						: `A SubCommand within MuCli for [${lv1.description}]`
+						: `A SubCommand within MuCli for ${lv1.description}`
 				);
 				const paths: FilesPath = dev.getFilesPath();
 				inquirer
