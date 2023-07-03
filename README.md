@@ -2,12 +2,12 @@
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-03-27
+Update: 2023-07-03
 ---
 
-> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于`2022-12-21 12:58:15`
-> 
-> 更新于 `2023-03-27 14:41:21`
+> 本文档 [`Front-matter`](https://github.com/BTMuli/Mucli#FrontMatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于 `2022-12-21 12:58:15`
+>
+> 更新于 `2023-07-03 19:29:18`
 
 ![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge)![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -40,10 +40,10 @@ A Node Cli for Personal Use by BTMUli.
 
 Options:
   -v, --version     output the version number
-  -l, --list        list all commands
   -h, --help        display help for command
 
 Commands:
+  list              list all commands
   set               change subcommand use status
   update            update muc from upstream
   build             build ts file
@@ -52,17 +52,20 @@ Commands:
   mmd [options]     A SubCommand within MuCli for Markdown
   pip [options]     A SubCommand within MuCli for pip
   typora [options]  A SubCommand within MuCli for Typora
+  help [command]    display help for command
 ```
 
 如上，除了 Commander 默认的 `help` 之外，目前的子命令如下：
 
-+ `set`：用于子命令的启用/禁用
-+ `update`：用于查找上游更新
-+ `build`：用于开发环境，负责编译本地的 `ts` 文件
-+ `backup`：用于备份配置文件，在配置文件错误清空时会从备份文件中恢复
-+ `mmd`：用于 Markdown 相关操作
-+ `pip`：用于 pip 相关操作
-+ `typora`：用于 Typora 相关操作
+-   `list`：用于展示子命令相关信息
+-   `set`：用于子命令的启用/禁用
+-   `update`：用于查找上游更新
+-   `build`：用于开发环境，负责编译本地的 `ts` 文件
+-   `backup`：用于备份配置文件，在配置文件错误清空时会从备份文件中恢复
+-   `hello`：展示 hitokoto.cn 的一句话
+-   `mmd`：用于 Markdown 相关操作
+-   `pip`：用于 pip 相关操作
+-   `typora`：用于 Typora 相关操作
 
 > dev 命令为开发环境下的子命令，由于 npm 包文件仅包含 `dist` 文件夹，所以无法使用，强行使用可能会造成预期外的错误。
 
@@ -72,7 +75,7 @@ Commands:
 
 ```text
 > muc -v
-0.7.6
+0.8.1
 ```
 
 子命令则通过 `-sv` 即 `subversion` 来查看，如下:
@@ -81,23 +84,23 @@ Commands:
 > muc dev -sv
 0.2.2
 > muc mmd -sv
-0.7.5
+0.7.7
 > muc pip -sv
 0.4.3
 > muc typora -sv
 0.7.3
 ```
 
-当然，你也可以通过 `muc -l` 来查看所有命令的版本及其可用性，如下：
+当然，你也可以通过 `muc list` 来查看所有命令的版本及其可用性，如下：
 
 ```text
-> muc -l
+> muc list
 ┌─────────┬─────────┬────────┬────────────────────────────────────────────┐
 │ (index) │ version │ enable │                description                 │
 ├─────────┼─────────┼────────┼────────────────────────────────────────────┤
-│   muc   │ '0.7.6' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
+│   muc   │ '0.8.1' │  true  │  'A Node Cli for Personal Use by BTMUli.'  │
 │   dev   │ '0.2.2' │ false  │ 'A SubCommand within MuCli for SubCommand' │
-│   mmd   │ '0.7.5' │  true  │  'A SubCommand within MuCli for Markdown'  │
+│   mmd   │ '0.7.7' │  true  │  'A SubCommand within MuCli for Markdown'  │
 │   pip   │ '0.4.3' │  true  │    'A SubCommand within MuCli for pip'     │
 │ typora  │ '0.7.3' │  true  │   'A SubCommand within MuCli for Typora'   │
 └─────────┴─────────┴────────┴────────────────────────────────────────────┘
@@ -122,14 +125,13 @@ Commands:
   update [options]   update the header of the markdown file
   label [options]    add the template
   help [command]     display help for command
-
 ```
 
 目前主要功能如下：
 
-+ `new`：创建一个 Markdown 文件，支持自定义模板
-+ `update`：更新 Markdown 文件的头部信息
-+ `label`：管理 Markdown 模板
+-   `new`：创建一个 Markdown 文件，支持自定义模板
+-   `update`：更新 Markdown 文件的头部信息
+-   `label`：管理 Markdown 模板
 
 markdown 文件支持模板，模板参数如下：
 
@@ -141,7 +143,7 @@ description: [description]
 
 相关命令如下:
 
-```shell
+```text
 > muc mmd label -h
 Usage: muc mmd label [options]
 
@@ -180,7 +182,7 @@ Commands:
 
 `pip install` 相关操作如下：
 
-```shell
+```text
 > muc pip install -h
 Usage: muc pip install [options]
 
@@ -194,7 +196,7 @@ Options:
 
 `pip mirror` 相关操作如下：
 
-```shell
+```text
 > muc pip mirror -h
 Usage: muc pip mirror [options]
 
@@ -211,7 +213,7 @@ Options:
 
 `pip test` 相关操作如下：
 
-```shell
+```text
 > muc pip test -h
 Usage: muc pip test [options]
 
@@ -247,12 +249,12 @@ Commands:
 
 这是将之前 Mmd-Typora 的功能单独拆分出来，目前支持的功能如下：
 
-+ `init`：初始化 Typora 的配置文件
-+ `open`：打开文件
-+ `info`：获取本地 Typora 的路径
-+ `set`：设置 Typora 的路径
-+ `test`：测试 Typora 的配置
-+ `help`：帮助
+-   `init`：初始化 Typora 的配置文件
+-   `open`：打开文件
+-   `info`：获取本地 Typora 的路径
+-   `set`：设置 Typora 的路径
+-   `test`：测试 Typora 的配置
+-   `help`：帮助
 
 ## FrontMatter
 
@@ -265,7 +267,7 @@ Commands:
 Author: 目棃
 Date: 2022-09-29
 Description: 说明文档
-Update: 2023-03-27
+Update: 2023-07-03
 ---
 ```
 
@@ -273,114 +275,6 @@ Update: 2023-03-27
 
 ---
 
-## 代码格式化
-
-本项目通过 [`Eslint`](http://eslint.cn/) 结合 [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) 进行代码格式化。
-
-相关安装包如下：
-
-```yaml
-"@typescript-eslint/eslint-plugin": "^5.51.0"
-"@typescript-eslint/parser": "^5.51.0"
-"eslint": "^8.25.0"
-"eslint-config-prettier": "^8.5.0"
-"eslint-plugin-json": "^3.1.0"
-"eslint-plugin-prettier": "^4.2.1"
-"prettier": "^2.7.1"
-```
-
-相关配置文件如下：
-
-+ [`.eslintignore`](.eslintignore)：Eslint 忽略文件，类似于 [`.gitignore`](.gitignore)
-+ [`.eslintrc.json`](.eslintrc.json)：Eslint 主配置文件
-+ [`.prettierrc.json`](.prettierrc.json)：Prettier 主配置文件
-
-配置完后可以通过如下命令执行：
-
-+ `npm run lint-all`：执行 Eslint，进行代码检查
-+ `npm run lint-fix`：执行 Eslint ，对一些不符合条件的代码进行格式化
-
-若有代码需要忽略，可以采用如下方式：
-
-```js
-/* 忽略某段代码 */
-/* eslint-disable */
-// [code block]
-/* eslint-enable */
-
-/* 忽略某行代码 */
-// [code line] // eslint-disable-line
-
-/* 忽略下一行代码 */
-// eslint-disable-next-line
-// [code line]
-```
-
----
-
-## 提交规范
-
-本项目 Commit 采用 [Angular 团队提交规范](https://zjdoc-gitguide.readthedocs.io/zh_CN/latest/message/angular-commit.html)。
-
-通过 Webstorm 上的插件 [Git Commit Template](https://plugins.jetbrains.com/plugin/9861-git-commit-template) 予以辅助。
-
-其提交格式如下：
-
-```text
-<type>(<scope>): <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
-```
-
-每次提交可以包含页眉 `header` 、正文 `body` 和页脚 `footer` ，每次提交必须包含页眉内容
-
-每次提交的信息不超过100个字符。
-
----
-
 ## LICENSE
 
-本项目采用 MIT 协议。
-
-```text
-The MIT License (MIT)
-
-Copyright (C) 2022-present BTMuli<bt-muli@outlook.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-```
-
-## 致谢
-
-感谢 Github 提供的 Education Pack[^1]，使得本项目可以免费使用 Github Copilot[^2]。
-
-感谢 JetBrains 提供的 Education Pack[^3]，使得本项目可以免费使用 Webstorm[^4]。
-
-感谢 npmjs[^5] 提供的免费服务，使得本项目可以免费使用 npmjs 仓库[^6]。
-
-用到本项目的朋友们，如果觉得本项目对你有帮助，欢迎 Star 本项目，也欢迎 Fork 本项目，如果有任何问题，欢迎提 Issue 或者 Pull Request。
-
-[^1]: [GitHub Education Pack](https://education.github.com/pack)
-[^2]: [GitHub Copilot](https://copilot.github.com/)
-[^3]: [JetBrains Education Pack](https://www.jetbrains.com/zh-cn/community/education/#students)
-[^4]: [JetBrains Webstorm](https://www.jetbrains.com/zh-cn/webstorm/)
-[^5]: [npmjs](https://www.npmjs.com/)
-[^6]: [本项目 npmjs 仓库](https://www.npmjs.com/package/@btmuli/mucli)
+本项目采用 [MIT](./LICENSE) 协议。

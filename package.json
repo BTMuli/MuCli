@@ -1,6 +1,6 @@
 {
 	"name": "@btmuli/mucli",
-	"version": "0.8.0",
+	"version": "0.8.1",
 	"subversion": {
 		"dev": "0.2.2",
 		"mmd": "0.7.7",
