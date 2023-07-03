@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description markdown 文件相关操作
- * @since mmd 0.7.7
+ * @since mmd 0.7.8
  */
 
 /* Node */
@@ -89,7 +89,6 @@ class Mmd {
 						description: label.description,
 						filename: fileName,
 					};
-					console.log(labelGet);
 					inquirer
 						.prompt([
 							{

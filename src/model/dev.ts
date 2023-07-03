@@ -1,7 +1,7 @@
 /**
  * @author BTMuli<bt-muli@outlook.com>
  * @description 子命令 dev 相关配置
- * @version 0.2.2
+ * @since 0.2.3
  */
 
 /* MuCli */
@@ -48,6 +48,7 @@ class ModelDev {
 
 	/**
 	 * @description 获取文件头部注释
+	 * @since 0.2.3
 	 * @return {string} 文件头部注释
 	 */
 	getFileHeader(): string {
@@ -56,7 +57,7 @@ class ModelDev {
       '/**\r\n' +
       ` * @author ${this.author}\r\n` +
       ` * @description ${this.description}\r\n` +
-      ` * @version 0.0.1\r\n` +
+      ` * @since 0.0.1\r\n` +
       ' */\r\n\r\n'
     );
     /* eslint-enable */
@@ -115,6 +116,7 @@ class ModelDev {
 
 	/**
 	 * @description Interface 目录下的文件内容
+	 * @since 0.2.3
 	 * @return {string} 文件内容
 	 */
 	getInterContent(): string {
@@ -123,12 +125,12 @@ class ModelDev {
 			'/**\r\n' +
 			` * @author ${this.author}\r\n` +
 			` * @description ${this.command} 涉及到的 interface\r\n` +
-			' * @version 0.0.1\r\n' +
+			' * @since 0.0.1\r\n' +
 			' */\r\n\r\n' +
 			'import { Config as ConfigBase } from "./index";\r\n\r\n' +
 			'/**\r\n' +
 			' * @description 配置文件对应的 interface\r\n' +
-			' * @version 0.0.1\r\n' +
+			' * @since 0.0.1\r\n' +
 			' * @interface Config\r\n' +
 			' * @property {string} name command 名称\r\n' +
 			' * @property {boolean} enable 是否启用\r\n' +
