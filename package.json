@@ -15,9 +15,7 @@
 		"build": "rollup -c",
 		"lint-all": "eslint --ext .ts,.json ./",
 		"lint-fix": "eslint --ext .ts,.json ./ --fix",
-		"postinstall": "husky install",
-		"prepublishOnly": "pinst --disable",
-		"postpublish": "pinst --enable"
+		"prepare": "husky install"
 	},
 	"lint-staged": {
 		"*.ts": "eslint --fix",

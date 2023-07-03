@@ -1,38 +1,36 @@
 name: MuCli Package Pub
 
 on:
-  push:
-    branches:
-      - master
+    push:
+        branches:
+            - master
 
 jobs:
-  publish-gpr:
-    runs-on: windows-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          registry-url: 'https://npm.pkg.github.com'
-      - run: corepack enable
-      - run: yarn
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GHP_TOKEN}}
+    publish-gpr:
+        runs-on: windows-latest
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  registry-url: "https://npm.pkg.github.com"
+            - run: yarn
+            - run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.GHP_TOKEN}}
 
-  publish-npm:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          registry-url: 'https://registry.npmjs.org'
-      - run: corepack enable
-      - run: yarn
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    publish-npm:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  registry-url: "https://registry.npmjs.org"
+            - run: yarn
+            - run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
