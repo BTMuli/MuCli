@@ -1,9 +1,9 @@
 {
 	"name": "@btmuli/mucli",
-	"version": "0.8.0",
+	"version": "0.8.1",
 	"subversion": {
-		"dev": "0.2.2",
-		"mmd": "0.7.7",
+		"dev": "0.2.3",
+		"mmd": "0.7.8",
 		"pip": "0.4.3",
 		"typora": "0.7.3"
 	},
