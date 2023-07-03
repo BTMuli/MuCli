@@ -15,7 +15,7 @@
 		"build": "rollup -c",
 		"lint-all": "eslint --ext .ts,.json ./",
 		"lint-fix": "eslint --ext .ts,.json ./ --fix",
-		"prepare": "husky install"
+		"postinstall": "husky install"
 	},
 	"lint-staged": {
 		"*.ts": "eslint --fix",
