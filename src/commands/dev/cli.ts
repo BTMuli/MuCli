@@ -49,11 +49,13 @@ dev
     exec(`pnpm ${option}`, { cwd: getRootPath() }, (err, stdout, stderr) => {
       let message = "";
       if (err !== null) message = err.message;
-      if (stderr !== null) message = stderr;
-      if (err !== null) {
-        if (message === "") message = stdout;
+      if (stderr !== null && stderr !== "") {
+        message = message === "" ? stderr : `${message}\n${stderr}`;
+      }
+      if (message !== "") {
         message = `Scripts: ${chalk.blue(cmd)} run failed\n${chalk.red(
           message,
+          stdout,
         )}`;
         spinner.fail(message);
       } else {
