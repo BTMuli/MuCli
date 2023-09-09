@@ -1,0 +1,69 @@
+{
+  "name": "mucli",
+  "version": "1.0.0",
+  "description": "A Node Cli for personal use by BTMuli",
+  "main": "index.js",
+  "scripts": {
+    "code:check": "eslint .",
+    "code:fmt": "prettier --write .",
+    "code:fix": "eslint --fix .",
+    "muc": "ts-node ./src/index.ts",
+    "prepare": "husky install"
+  },
+  "bin": {
+    "muc": "console.log('hello world')"
+  },
+  "lint-staged": {
+    "*.{json,ts,yml}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "keywords": [
+    "BTMuli",
+    "CLI",
+    "Node",
+    "Typescript"
+  ],
+  "author": "BTMuli <bt-muli@outlook.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BTMuli/MuCli.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/BTMuli/MuCli#readme",
+  "bugs": {
+    "url": "https://github.com/BTMuli/MuCli/issues"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "fs-extra": "^11.1.1",
+    "glob": "^10.3.4",
+    "inquirer": "^9.2.10",
+    "ora": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.5.9",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "esbuild": "^0.19.2",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsonc": "^2.9.0",
+    "eslint-plugin-n": "^16.0.2",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-yml": "^1.8.0",
+    "husky": "^8.0.3",
+    "jsonc-eslint-parser": "^2.3.0",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "yaml-eslint-parser": "^1.2.2"
+  }
+}

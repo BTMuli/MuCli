@@ -1,0 +1,105 @@
+root: true
+env:
+  es2021: true
+  node: true
+extends:
+  - prettier
+  - plugin:prettier/recommended
+  - plugin:yml/standard
+  - plugin:jsonc/recommended-with-json
+parserOptions:
+  ecmaVersion: 12
+  sourceType: module
+  project: ./tsconfig.json
+  tsconfigRootDir: .
+rules:
+  # prettier
+  prettier/prettier: error
+overrides:
+  - files: ["*.ts"]
+    extends: standard-with-typescript
+    rules:
+      "@typescript-eslint/quotes":
+        - error
+        - double
+      "@typescript-eslint/semi":
+        - error
+        - always
+      "@typescript-eslint/indent":
+        - error
+        - 2
+      "@typescript-eslint/comma-dangle":
+        - error
+        - always-multiline
+      "@typescript-eslint/space-before-function-paren":
+        - error
+        - anonymous: always
+          named: never
+          asyncArrow: always
+      import/order:
+        - error
+        - groups:
+            - builtin
+            - external
+            - [internal, parent, sibling, index]
+            - unknown
+          newlines-between: always
+          alphabetize:
+            order: asc
+            caseInsensitive: true
+  - files: ["*.json"]
+    parser: jsonc-eslint-parser
+    rules:
+      jsonc/sort-array-values:
+        - error
+        - pathPattern: .*
+          order:
+            type: asc
+      jsonc/sort-keys:
+        - error
+        - pathPattern: ^$
+          order:
+            - name
+            - version
+            - description
+            - scripts
+            - bin
+            - lint-staged
+            - keywords
+            - author
+            - lincense
+            - repository
+            - homepage
+            - bugs
+            - dependencies
+            - devDependencies
+        - pathPattern: settings
+          order:
+            type: asc
+  - files: ["*.yaml", "*.yml"]
+    parser: yaml-eslint-parser
+    parserOptions:
+      defaultYAMLVersion: "1.2"
+    rules:
+      yml/indent:
+        - error
+        - 2
+      yml/no-multiple-empty-lines: error
+      yml/key-spacing: error
+      yml/quotes:
+        - error
+        - prefer: double
+          avoidEscape: true
+      yml/sort-keys:
+        - error
+        - pathPattern: ^$
+          order:
+            - root
+            - env
+            - extends
+            - plugins
+            - rules
+            - overrides
+        - pathPattern: ^rules$
+          order:
+            type: asc

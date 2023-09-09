@@ -1,0 +1,8 @@
+# Node modules
+node_modules
+# Pnpm lock file
+pnpm-lock.yaml
+# Vscode
+!.vscode
+# Prettier
+!.prettierrc.yml
