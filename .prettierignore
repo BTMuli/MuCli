@@ -1,0 +1,4 @@
+# dist
+dist/index.js
+# Pnpm lockfile
+pnpm-lock.yaml
