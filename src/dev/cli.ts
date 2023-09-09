@@ -18,7 +18,7 @@ import {
   getRootPath,
   getScripts,
   getSubVersion,
-} from "../../utils/getBaseInfo";
+} from "../utils/getBaseInfo";
 
 const dev = new Command("dev");
 const version = getSubVersion(SubCommand.dev);
