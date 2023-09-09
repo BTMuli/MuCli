@@ -73,6 +73,7 @@ overrides:
             - version
             - description
             - scripts
+            - type
             - bin
             - lint-staged
             - keywords
