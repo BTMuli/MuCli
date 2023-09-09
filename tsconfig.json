@@ -14,6 +14,7 @@
     "*.json",
     ".*.yml",
     ".vscode/*.json",
+    "config/default.yml",
     "dist/**/*",
     "scripts/*",
     "src/**/*"

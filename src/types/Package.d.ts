@@ -19,6 +19,7 @@ declare namespace MUCLI.Package {
    * @property {string} version - 版本号
    * @property {string} description - 描述
    * @property {string} packageManager - 包管理器
+   * @property {SubVersion} subVersion - 子版本号
    * @property {Record<string, string>} scripts - 脚本
    * @property {string} type - 类型
    * @property {Record<string, string>} bin - 命令
@@ -38,6 +39,7 @@ declare namespace MUCLI.Package {
     version: string;
     description: string;
     packageManager: string;
+    subVersion: SubVersion;
     scripts: Record<string, string>;
     type: string;
     bin: Record<string, string>;
@@ -50,5 +52,18 @@ declare namespace MUCLI.Package {
     bugs: Record<string, string>;
     dependencies: Record<string, string>;
     devDependencies: Record<string, string>;
+  }
+
+  /**
+   * @description 子版本号
+   * @interface SubVersion
+   * @since 1.0.0
+   * @property {string} dev - 子命令 dev 版本号
+   * @property {string} mmd - 子命令 mmd 版本号
+   * @return SubVersion
+   */
+  export interface SubVersion {
+    dev: string;
+    mmd: string;
   }
 }

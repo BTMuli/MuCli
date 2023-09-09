@@ -1,0 +1,12 @@
+dev:
+  name: dev
+  enable: true
+mmd:
+  name: mmd
+  enable: true
+  labels: []
+  defaultLabel:
+    author: 目棃
+    filename: README
+    description: 说明文档
+update: 1694264558

@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "A Node Cli for personal use by BTMuli",
   "packageManager": "pnpm@8.7.4",
+  "subVersion": {
+    "dev": "1.0.0",
+    "mmd": "1.0.0"
+  },
   "scripts": {
     "build": "ts-node ./scripts/build.ts",
     "code:check": "eslint .",
@@ -44,14 +48,17 @@
     "glob": "^10.3.4",
     "inquirer": "^9.2.10",
     "ora": "^7.0.1",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-terser": "^0.4.3",
     "@types/fs-extra": "^11.0.1",
+    "@types/inquirer": "^9.0.3",
     "@types/node": "^20.6.0",
+    "@types/yamljs": "^0.2.31",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "eslint": "^8.49.0",

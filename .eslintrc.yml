@@ -72,6 +72,8 @@ overrides:
             - name
             - version
             - description
+            - packageManager
+            - subVersion
             - scripts
             - type
             - bin
