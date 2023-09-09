@@ -2,12 +2,13 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "commonjs",
+    "module": "ESNext",
     "moduleResolution": "Node",
-    "rootDir": "./",
+    "rootDir": ".",
+    "lib": ["es2015"],
+    "outDir": "./dist",
     "skipLibCheck": true,
-    "strict": true,
-    "target": "ESNext"
+    "strict": true
   },
   "include": [
     "*.json",
@@ -16,5 +17,9 @@
     "dist/**/*",
     "scripts/*",
     "src/**/*"
-  ]
+  ],
+  "exclude": ["dist", "node_modules"],
+  "ts-node": {
+    "esm": true
+  }
 }

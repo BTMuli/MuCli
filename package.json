@@ -2,16 +2,18 @@
   "name": "mucli",
   "version": "1.0.0",
   "description": "A Node Cli for personal use by BTMuli",
-  "main": "index.js",
+  "packageManager": "pnpm@8.7.4",
   "scripts": {
+    "build": "ts-node ./scripts/build.ts",
     "code:check": "eslint .",
     "code:fmt": "prettier --write .",
     "code:fix": "eslint --fix .",
     "muc": "ts-node ./src/index.ts",
     "prepare": "husky install"
   },
+  "type": "module",
   "bin": {
-    "muc": "console.log('hello world')"
+    "muc": "./dist/index.js"
   },
   "lint-staged": {
     "*.{json,ts,yml}": [
@@ -44,12 +46,14 @@
     "ora": "^7.0.1"
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-terser": "^0.4.3",
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.6.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
-    "esbuild": "^0.19.2",
-    "eslint": "^8.48.0",
+    "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-standard-with-typescript": "^39.0.0",
     "eslint-plugin-import": "^2.28.1",
@@ -62,6 +66,8 @@
     "jsonc-eslint-parser": "^2.3.0",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
+    "rollup": "^3.29.0",
+    "rollup-plugin-typescript2": "^0.35.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "yaml-eslint-parser": "^1.2.2"

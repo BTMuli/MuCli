@@ -2,6 +2,8 @@ root: true
 env:
   es2021: true
   node: true
+globals:
+  MUCLI: readonly
 extends:
   - prettier
   - plugin:prettier/recommended
@@ -36,6 +38,14 @@ overrides:
         - anonymous: always
           named: never
           asyncArrow: always
+      "@typescript-eslint/member-delimiter-style":
+        - error
+        - multiline:
+            delimiter: semi
+            requireLast: true
+      "@typescript-eslint/consistent-type-assertions":
+        - error
+        - assertionStyle: angle-bracket
       import/order:
         - error
         - groups:
@@ -96,6 +106,7 @@ overrides:
           order:
             - root
             - env
+            - globals
             - extends
             - plugins
             - rules

@@ -2,7 +2,7 @@
 node_modules
 # Pnpm lock file
 pnpm-lock.yaml
+# Dist folder
+dist
 # Vscode
 !.vscode
-# Prettier
-!.prettierrc.yml
