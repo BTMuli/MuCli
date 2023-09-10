@@ -12,6 +12,27 @@ import { getRootPath } from "../utils/getBaseInfo";
 import { getConfig } from "../utils/loadConfig";
 
 /**
+ * @description 获取时间， YYYY-MM-DD || YYYY-MM-DD HH:mm:ss
+ * @function getDate
+ * @since 1.0.0
+ * @param {boolean} full 是否返回完整时间
+ * @returns {string} 时间
+ */
+export function getDate(full?: boolean): string {
+  const dateNow = new Date();
+  const year = dateNow.getFullYear().toString().padStart(4, "0");
+  const month = (dateNow.getMonth() + 1).toString().padStart(2, "0");
+  const date = dateNow.getDate().toString().padStart(2, "0");
+  const hour = dateNow.getHours().toString().padStart(2, "0");
+  const minute = dateNow.getMinutes().toString().padStart(2, "0");
+  const second = dateNow.getSeconds().toString().padStart(2, "0");
+  if (full === true) {
+    return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+  }
+  return `${year}-${month}-${date}`;
+}
+
+/**
  * @description 处理 markdown 文件路径
  * @since 1.0.0
  * @param {string} filepath markdown 文件路径
@@ -57,10 +78,8 @@ export function getFrontmatter(
 ): string {
   const templatePath = resolve(getRootPath(), "template", "MuCli", "README.md");
   const template = fs.readFileSync(templatePath, "utf-8");
-  const dateNow = new Date();
-  const date = `${dateNow.getFullYear()}-${dateNow.getMonth()}-${dateNow.getDate()}`;
-  const time = `${dateNow.getHours()}:${dateNow.getMinutes()}:${dateNow.getSeconds()}`;
-  const datefull = `${date} ${time}`;
+  const date = getDate(false);
+  const datefull = getDate(true);
   // 按行分割
   const templateArr = template.split("\n");
   // 根据行数处理
@@ -93,9 +112,9 @@ export function getFrontmatter(
     if (index === 3) {
       if (create !== undefined) {
         const dateCreate = create.split(" ")[0];
-        res = item.replace("create", dateCreate);
+        res = item.replace("date", dateCreate);
       } else {
-        res = item.replace("create", date);
+        res = item.replace("date", date);
       }
       templateArr[index] = res;
     }
