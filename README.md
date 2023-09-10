@@ -7,7 +7,7 @@ Update: 2023-09-10
 
 > 本文档 [`Frontmatter`](https://github.com/BTMuli/MuCli#Frontmatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于 `2023-09-10 11:38:39`
 >
-> 更新于 `2023-09-10 11:38:39`
+> 更新于 `2023-09-10 11:58:15`
 
 # MuCli
 
@@ -17,8 +17,24 @@ Now it is in refactoring.
 
 ## Install
 
+> Since this project is in refactoring, it is not recommended now.
+
+By npm:
+
 ```bash
-npm install -g mucli
+npm install -g @btmuli/mucli
+```
+
+> It is recommended if you want to use it now.
+
+By git:
+
+```bash
+git clone git@github.com:BTMuli/MuCli.git
+cd MuCli
+npm install
+npm run build
+npm link
 ```
 
 ## Usage
@@ -41,7 +57,7 @@ You can use `muc -h` to get more information.
 
 What is `Frontmatter`?
 
-> Frontmatter is metadata at the top of a file. It is commonly used to specify the title, author, and date of a document, but can be used for any kind of metadata. This website uses frontmatter to specify the title, author, and date of each page.
+> Frontmatter is metadata at the top of a file. It is commonly used to specify the title, author, and date of a document, but can be used for any kind of metadata.
 
 For example，this file's `Frontmatter` is(since `2023-09-10 11:38:39`):
 
