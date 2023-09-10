@@ -154,7 +154,7 @@ export async function updatePromote(filePath: string): Promise<void> {
         frontmatter.create,
       );
       const contentArr = fs.readFileSync(filePath, "utf-8").split("\n");
-      contentArr.splice(0, 10, ...fileContent.split("\n"));
+      contentArr.splice(0, 11, ...fileContent.split("\n"));
       fs.writeFileSync(filePath, contentArr.join("\n"));
       spinner.succeed("Frontmatter updated");
     }
