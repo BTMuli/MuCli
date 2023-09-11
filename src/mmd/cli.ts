@@ -6,6 +6,7 @@
 
 import { Command } from "commander";
 
+import { labelTransfer } from "./label";
 import { createPromote, updatePromote } from "./promote";
 import { handleMarkdownPath } from "./utils";
 import { SubCommand, getSubVersion } from "../utils/getBaseInfo";
@@ -23,8 +24,8 @@ mmd
 mmd
   .command("label")
   .description("label crud")
-  .action(() => {
-    console.log("label");
+  .action(async () => {
+    await labelTransfer();
   });
 
 // command for markdown create
