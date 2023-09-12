@@ -6,3 +6,5 @@ pnpm-lock.yaml
 dist
 # Vscode
 !.vscode
+# User config
+config/user.yml

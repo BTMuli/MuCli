@@ -4,7 +4,7 @@
  * @since 1.0.0
  */
 
-import { type Command } from "commander";
+import type { Command } from "commander";
 import fs from "fs-extra";
 import YAML from "yamljs";
 

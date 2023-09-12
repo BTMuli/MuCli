@@ -46,6 +46,7 @@ overrides:
       "@typescript-eslint/consistent-type-assertions":
         - error
         - assertionStyle: angle-bracket
+      "@typescript-eslint/no-import-type-side-effects": error
       import/order:
         - error
         - groups:

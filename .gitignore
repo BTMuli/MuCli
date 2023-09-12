@@ -2,3 +2,5 @@
 node_modules
 # user config
 config/user.yml
+# Jetbrains IDE
+.idea
