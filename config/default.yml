@@ -1,6 +1,6 @@
 dev:
   name: dev
-  enable: true
+  enable: false
 mmd:
   name: mmd
   enable: true
@@ -9,4 +9,4 @@ mmd:
     author: 目棃
     filename: README
     description: 说明文档
-update: 1694264558
+update: 1694621837
