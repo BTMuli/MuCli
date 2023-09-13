@@ -1,7 +1,7 @@
 /**
  * @file src/utils/getBaseInfo.ts
  * @description 获取项目基本信息
- * @since 1.0.0
+ * @since 1.1.0
  */
 
 import { resolve } from "path";
@@ -26,21 +26,24 @@ export enum SubCommand {
 /**
  * @description 获取项目根路径
  * @function getRootPath
- * @since 1.0.0
+ * @since 1.1.0
  * @returns {string} 项目根路径
  */
 export function getRootPath(): string {
+  if (appRootPath.path.endsWith("dist")) {
+    return appRootPath.resolve("../");
+  }
   return appRootPath.path;
 }
 
 /**
  * @description 读取 package.json 文件
  * @function readPackage
- * @since 1.0.0
+ * @since 1.1.0
  * @returns {MUCLI.Package.FullInfo} package.json 文件信息
  */
 export function readPackage(): MUCLI.Package.FullInfo {
-  const jsonPath = appRootPath.resolve("package.json");
+  const jsonPath = resolve(getRootPath(), "package.json");
   return fs.readJSONSync(jsonPath);
 }
 
@@ -70,12 +73,12 @@ export function getScripts(): string[] {
 /**
  * @description 获取配置文件所在路径
  * @function getConfigPath
- * @since 1.0.0
+ * @since 1.1.0
  * @param {boolean} isDefault - 是否为默认配置文件
  * @returns {string} 配置文件所在路径
  */
 export function getConfigPath(isDefault: boolean = false): string {
-  const configDir = appRootPath.resolve("config");
+  const configDir = resolve(getRootPath(), "config");
   const defaultPath = resolve(configDir, "default.yml");
   if (isDefault) return defaultPath;
   const dateDefault = YAML.load(defaultPath).update;
