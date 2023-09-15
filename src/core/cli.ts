@@ -1,7 +1,7 @@
 /**
  * @file src/core/cli.ts
  * @description 主命令入口文件
- * @since 1.0.0
+ * @since 1.1.1
  */
 
 import { exec } from "child_process";
@@ -97,6 +97,44 @@ MuCli.command("update")
     } else {
       spinnerF.succeed("MuCli is latest!");
     }
+  });
+
+// test the time to request the site
+MuCli.command("test [url]")
+  .option("-t, --timeout <timeout>", "set the timeout of request", "10")
+  .description("test the time to request the site")
+  .action(async (url, options) => {
+    let urlGet = url;
+    let timeout = parseInt(options.timeout);
+    if (urlGet === undefined) {
+      urlGet = "https://www.github.com";
+    }
+    if (timeout === undefined) {
+      timeout = 10;
+    }
+    const prefix = `Testing Website Response Time for ${chalk.blue(urlGet)}`;
+    const spinner = ora(`${prefix} 0.00/${timeout}`).start();
+    let timeLoad = "0.00";
+    const timer = setInterval(() => {
+      timeLoad = (parseFloat(timeLoad) + 0.1).toFixed(1);
+      spinner.text = `${prefix} ${timeLoad}/${timeout}`;
+    }, 100);
+    axios
+      .get(urlGet, {
+        timeout: timeout * 1000,
+      })
+      .then((res) => {
+        clearInterval(timer);
+        spinner.succeed(
+          `Response Time: ${chalk.blue(res.headers["x-response-time"])}`,
+        );
+      })
+      .catch((err) => {
+        clearInterval(timer);
+        spinner.fail(
+          `Request failed, cost time: ${chalk.red(timeLoad)}s\n${err.message}`,
+        );
+      });
   });
 
 export default MuCli;
