@@ -1,6 +1,6 @@
 {
   "name": "@btmuli/mucli",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A Node Cli for personal use by BTMuli",
   "packageManager": "pnpm@8.7.5",
   "subVersion": {
@@ -16,7 +16,7 @@
   },
   "type": "module",
   "bin": {
-    "muc": "./dist/index.js"
+    "muc": "dist/index.js"
   },
   "lint-staged": {
     "*.{json,ts,yml}": [
