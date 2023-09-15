@@ -1,12 +1,12 @@
 /**
  * @file src/core/cli.ts
  * @description 主命令入口文件
- * @since 1.1.1
+ * @since 1.1.2
  */
 
 import { exec } from "child_process";
 
-import axios from "axios";
+import axios, { type AxiosError } from "axios";
 import chalk from "chalk";
 import { Command } from "commander";
 import inquirer from "inquirer";
@@ -129,10 +129,13 @@ MuCli.command("test [url]")
           `Response Time: ${chalk.blue(res.headers["x-response-time"])}`,
         );
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         clearInterval(timer);
+        const failMsg: string = err.isAxiosError
+          ? err.message
+          : JSON.stringify(err.toJSON());
         spinner.fail(
-          `Request failed, cost time: ${chalk.red(timeLoad)}s\n${err.message}`,
+          `Request failed, cost time: ${chalk.red(timeLoad)}s\n${failMsg}`,
         );
       });
   });
