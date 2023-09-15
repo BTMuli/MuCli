@@ -1,7 +1,7 @@
 /**
  * @file src/mmd/utils.ts
  * @description mmd 命令-工具函数
- * @since 1.0.0
+ * @since 1.1.1
  */
 
 import { resolve } from "path";
@@ -66,7 +66,7 @@ export function handleMarkdownName(filepath: string): string {
 
 /**
  * @description 获取 markdown 文件的 frontmatter
- * @since 1.0.0
+ * @since 1.1.1
  * @param {string} author markdown 文件作者
  * @param {string} description markdown 文件描述
  * @returns {string} frontmatter
@@ -124,7 +124,7 @@ export function getFrontmatter(
 
 /**
  * @description 尝试读取 markdown 文件的 frontmatter
- * @since 1.0.0
+ * @since 1.1.1
  * @param {string} filePath markdown 文件路径
  * @returns {MUCLI.Markdown.Frontmatter|false} frontmatter
  */
@@ -146,13 +146,6 @@ export function tryGetFrontmatter(
   if (!fs.existsSync(fullPath)) return false;
   const fileContent = fs.readFileSync(fullPath, "utf-8");
   const contentArr = fileContent.split("\n");
-  if (
-    contentArr.length < 10 ||
-    contentArr[0] !== "---" ||
-    contentArr[5] !== "---"
-  ) {
-    return false;
-  }
   const frontmatter: MUCLI.Markdown.Frontmatter = {
     author: "",
     description: "",
