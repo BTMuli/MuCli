@@ -1,7 +1,8 @@
 /**
  * @file src/mmd/utils.ts
  * @description mmd 命令-工具函数
- * @since 1.1.1
+ * @since 1.1.3
+ * @version 1.0.2
  */
 
 import { resolve } from "path";
@@ -124,7 +125,8 @@ export function getFrontmatter(
 
 /**
  * @description 尝试读取 markdown 文件的 frontmatter
- * @since 1.1.1
+ * @since 1.1.3
+ * @version 1.0.2
  * @param {string} filePath markdown 文件路径
  * @returns {MUCLI.Markdown.Frontmatter|false} frontmatter
  */
@@ -155,17 +157,17 @@ export function tryGetFrontmatter(
     modify: "",
   };
   contentArr.forEach((item, index) => {
-    if (index === 1) {
-      frontmatter.author = item.split("Author: ")[1].trim();
-    }
-    if (index === 2) {
-      frontmatter.description = item.split("Description: ")[1].trim();
-    }
-    if (index === 3) {
-      frontmatter.date = item.split("Date: ")[1].trim();
-    }
-    if (index === 4) {
-      frontmatter.update = item.split("Update: ")[1].trim();
+    // 兼容旧版
+    if (index >= 1 && index <= 4) {
+      if (item.startsWith("Author: ")) {
+        frontmatter.author = item.split("Author: ")[1].trim();
+      } else if (item.startsWith("Description: ")) {
+        frontmatter.description = item.split("Description: ")[1].trim();
+      } else if (item.startsWith("Date: ")) {
+        frontmatter.date = item.split("Date: ")[1].trim();
+      } else if (item.startsWith("Update: ")) {
+        frontmatter.update = item.split("Update: ")[1].trim();
+      }
     }
     if (index === 7) {
       frontmatter.create = item.split("`")[3];
