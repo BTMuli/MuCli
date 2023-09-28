@@ -2,12 +2,12 @@
 Author: 目棃
 Description: 说明文档
 Date: 2023-09-10
-Update: 2023-09-13
+Update: 2023-09-28
 ---
 
 > 本文档 [`Frontmatter`](https://github.com/BTMuli/MuCli#Frontmatter) 由 [MuCli](https://github.com/BTMuli/Mucli) 自动生成于 `2023-09-10 11:38:39`
 >
-> 更新于 `2023-09-13 16:55:34`
+> 更新于 `2023-09-28 17:46:06`
 
 [![](https://img.shields.io/github/license/BTMuli/MuCli?style=for-the-badge)](./LICENSE) ![](https://img.shields.io/github/package-json/v/btmuli/mucli?style=for-the-badge) ![](https://img.shields.io/github/last-commit/btmuli/mucli?style=for-the-badge)
 
@@ -16,8 +16,6 @@ Update: 2023-09-13
 A Node CLI for personal use by BTMuli.
 
 ## Install
-
-> Since this project is in refactoring, it is not recommended now.
 
 By npm:
 
