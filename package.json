@@ -50,8 +50,7 @@
     "inquirer": "^9.2.11",
     "ora": "^7.0.1",
     "tslib": "^2.6.2",
-    "yamljs": "^0.3.0",
-    "ts-node": "^10.9.1"
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^6.0.0",
@@ -78,6 +77,7 @@
     "prettier": "^3.0.3",
     "rollup": "^3.29.4",
     "rollup-plugin-typescript2": "^0.36.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "yaml-eslint-parser": "^1.2.2"
   }
