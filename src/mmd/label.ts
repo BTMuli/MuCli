@@ -1,7 +1,8 @@
 /**
  * @file src/mmd/label.ts
  * @description mmd 命令-label 相关
- * @since 1.0.0
+ * @since 1.1.4
+ * @version 1.0.3
  */
 
 import assert from "assert";
@@ -106,7 +107,8 @@ async function seeLabel(): Promise<void> {
 /**
  * @description 创建 label
  * @function createLabel
- * @since 1.0.0\
+ * @since 1.1.4
+ * @version 1.0.3
  * @param {string} filename 文件名
  * @returns {Promise<void>}
  */
@@ -153,11 +155,13 @@ async function createLabel(filename?: string): Promise<void> {
         type: "input",
         name: "author",
         message: "Author:",
+        default: labelDefault.author,
       },
       {
         type: "input",
         name: "description",
         message: "Description:",
+        default: labelDefault.description,
       },
     ]);
     const newLabel = {

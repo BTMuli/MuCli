@@ -1,8 +1,8 @@
 /**
  * @file src/mmd/utils.ts
  * @description mmd 命令-工具函数
- * @since 1.1.3
- * @version 1.0.2
+ * @since 1.1.4
+ * @version 1.0.3
  */
 
 import { resolve } from "path";
@@ -49,7 +49,8 @@ export function handleMarkdownPath(filepath?: string): string {
 
 /**
  * @description 处理 markdown 文件名
- * @since 1.0.0
+ * @since 1.1.4
+ * @version 1.0.3
  * @param {string} filepath markdown 文件路径
  * @returns {string} markdown 文件名
  */
@@ -61,6 +62,9 @@ export function handleMarkdownName(filepath: string): string {
     filename = <string>filepath.split("/").pop();
   } else {
     filename = filepath;
+  }
+  if (filename.endsWith(".md")) {
+    filename = filename.split(".md")[0];
   }
   return filename;
 }
