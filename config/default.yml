@@ -9,4 +9,7 @@ mmd:
     author: 目棃
     filename: README
     description: 说明文档
-update: 1694621837
+pip:
+  name: pip
+  enable: true
+update: 1696430269

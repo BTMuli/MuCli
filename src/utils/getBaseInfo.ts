@@ -1,7 +1,7 @@
 /**
  * @file src/utils/getBaseInfo.ts
  * @description 获取项目基本信息
- * @since 1.1.0
+ * @since 1.2.0
  */
 
 import { resolve } from "path";
@@ -13,14 +13,16 @@ import YAML from "yamljs";
 /**
  * @description 子命令枚举
  * @enum SubCommand
- * @since 1.0.0
+ * @since 1.2.0
  * @property {string} dev - dev 命令
  * @property {string} mmd - mmd 命令
+ * @property {string} pip - pip 命令
  * @return enum
  */
 export enum SubCommand {
   dev = "dev",
   mmd = "mmd",
+  pip = "pip",
 }
 
 /**

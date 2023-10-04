@@ -1,7 +1,7 @@
 /**
  * @file src/core/cli.ts
  * @description 主命令入口文件
- * @since 1.1.2
+ * @since 1.2.0
  */
 
 import { exec } from "child_process";
@@ -27,7 +27,7 @@ MuCli.name("muc")
 MuCli.command("set")
   .description("set subcommand on or off")
   .action(async () => {
-    const commandList = ["dev", "mmd"];
+    const commandList = ["dev", "mmd", "pip"];
     const onCommandList = getOnSubCommands();
     const choices = commandList.map((command) => {
       if (onCommandList.includes(command)) {

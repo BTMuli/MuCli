@@ -1,7 +1,7 @@
 /**
  * @file src/types/Package.d.ts
  * @description package.json 文件类型定义
- * @since 1.0.0
+ * @since 1.2.0
  */
 
 /**
@@ -57,13 +57,15 @@ declare namespace MUCLI.Package {
   /**
    * @description 子版本号
    * @interface SubVersion
-   * @since 1.0.0
+   * @since 1.2.0
    * @property {string} dev - 子命令 dev 版本号
    * @property {string} mmd - 子命令 mmd 版本号
+   * @property {string} pip - 子命令 pip 版本号
    * @return SubVersion
    */
   export interface SubVersion {
     dev: string;
     mmd: string;
+    pip: string;
   }
 }

@@ -1,7 +1,7 @@
 /**
  * @file src/types/Config.d.ts
  * @description 配置文件类型定义
- * @since 1.0.0
+ * @since 1.2.0
  */
 
 /**
@@ -27,15 +27,17 @@ declare namespace MUCLI.Config {
   /**
    * @description 配置文件类型定义
    * @interface FullInfo
-   * @since 1.0.0
+   * @since 1.2.0
    * @property {Dev} dev - 子命令 dev 配置
    * @property {Mmd} mmd - 子命令 mmd 配置
+   * @property {Pip} pip - 子命令 pip 配置
    * @property {number} update - 更新时间戳（秒）
    * @return FullInfo
    */
   export interface FullInfo {
     dev: Dev;
     mmd: Mmd;
+    pip: Pip;
     update: number;
   }
 
@@ -76,4 +78,13 @@ declare namespace MUCLI.Config {
     filename: string;
     description: string;
   }
+
+  /**
+   * @description 子命令 pip 配置
+   * @interface Pip
+   * @since 1.2.0
+   * @extends Base
+   * @return Pip
+   */
+  export interface Pip extends Base {}
 }

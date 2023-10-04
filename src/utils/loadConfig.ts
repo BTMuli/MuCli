@@ -1,7 +1,7 @@
 /**
  * @file src/utils/loadConfig.ts
  * @description 加载配置文件
- * @since 1.0.0
+ * @since 1.2.0
  */
 
 import type { Command } from "commander";
@@ -25,7 +25,7 @@ export function getConfig(useLocal: boolean = false): MUCLI.Config.FullInfo {
 /**
  * @description 获取开启的子命令
  * @function getOnSubCommands
- * @since 1.0.0
+ * @since 1.2.0
  * @returns {string[]} 开启的子命令
  */
 export function getOnSubCommands(): string[] {
@@ -33,6 +33,7 @@ export function getOnSubCommands(): string[] {
   const onSubCommands: string[] = [];
   if (config.dev.enable) onSubCommands.push("dev");
   if (config.mmd.enable) onSubCommands.push("mmd");
+  if (config.pip.enable) onSubCommands.push("pip");
   return onSubCommands;
 }
 
