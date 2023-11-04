@@ -1,7 +1,7 @@
 /**
  * @file src/mmd/promote.ts
  * @description mmd 命令-工具函数
- * @since 1.0.0
+ * @since 1.0.4
  */
 
 import chalk from "chalk";
@@ -60,7 +60,7 @@ export async function getPromote(
 /**
  * @description 创建新的 markdown 文件的提示
  * @function createPromote
- * @since 1.0.0
+ * @since 1.0.4
  * @param {string} filePath markdown 文件路径
  * @returns {Promise<void>}
  */
@@ -110,9 +110,12 @@ export async function createPromote(filePath: string): Promise<void> {
   const label = await getPromote(filePath);
   const spinner = ora("Creating markdown file").start();
   const fileContent = getFrontmatter(label.author, label.description);
+  if (filename !== label.filename) {
+    filePath = filePath.replace(filename, label.filename);
+  }
   fs.createFileSync(filePath);
   fs.writeFileSync(filePath, fileContent);
-  spinner.succeed("Markdown file created");
+  spinner.succeed(`Markdown file ${chalk.yellow(label.filename)} created`);
 }
 
 /**
