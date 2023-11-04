@@ -11,5 +11,5 @@ mmd:
     description: 说明文档
 pip:
   name: pip
-  enable: true
+  enable: false
 update: 1696430269
