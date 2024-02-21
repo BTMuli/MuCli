@@ -33,6 +33,7 @@ mmd
   .command("new [name]")
   .description("create markdown file")
   .action(async (name) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const filepath = handleMarkdownPath(name);
     await createPromote(filepath);
   });
@@ -42,6 +43,7 @@ mmd
   .command("update [name]")
   .description("update markdown frontmatter")
   .action(async (name) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const filepath = handleMarkdownPath(name);
     await updatePromote(filepath);
   });

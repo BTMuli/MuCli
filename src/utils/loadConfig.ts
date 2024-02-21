@@ -34,6 +34,7 @@ export function getOnSubCommands(): string[] {
   if (config.dev.enable) onSubCommands.push("dev");
   if (config.mmd.enable) onSubCommands.push("mmd");
   if (config.pip.enable) onSubCommands.push("pip");
+  if (config.rs.enable) onSubCommands.push("rs");
   return onSubCommands;
 }
 
@@ -60,7 +61,7 @@ export function mountSubCommand(
 /**
  * @description 修改子命令启用状态
  * @function changeSubCommandEnable
- * @since 1.0.0
+ * @since 1.2.0
  * @param {string[]} subCommands - 启用的子命令
  * @returns {void}
  */
@@ -68,6 +69,8 @@ export function changeSubCommandEnable(subCommands: string[]): void {
   const config: MUCLI.Config.FullInfo = getConfig();
   config.dev.enable = subCommands.includes("dev");
   config.mmd.enable = subCommands.includes("mmd");
+  config.pip.enable = subCommands.includes("pip");
+  config.rs.enable = subCommands.includes("rs");
   const configPath = getConfigPath();
   fs.writeFileSync(configPath, YAML.stringify(config, 4, 2));
 }

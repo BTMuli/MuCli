@@ -27,7 +27,7 @@ MuCli.name("muc")
 MuCli.command("set")
   .description("set subcommand on or off")
   .action(async () => {
-    const commandList = ["dev", "mmd", "pip"];
+    const commandList = ["dev", "mmd", "pip", "rs"];
     const onCommandList = getOnSubCommands();
     const choices = commandList.map((command) => {
       if (onCommandList.includes(command)) {
@@ -53,6 +53,7 @@ MuCli.command("set")
         },
       ])
       .then(async (answers) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         changeSubCommandEnable(answers.command);
       });
   });
@@ -99,18 +100,22 @@ MuCli.command("update")
     }
   });
 
+interface MucTestOptions {
+  timeout: string | undefined;
+}
+
 // test the time to request the site
 MuCli.command("test [url]")
   .option("-t, --timeout <timeout>", "set the timeout of request", "10")
   .description("test the time to request the site")
-  .action(async (url, options) => {
+  .action(async (url, options: MucTestOptions) => {
     let urlGet = url;
-    let timeout = parseInt(options.timeout);
+    let timeout: number;
+    if (options.timeout !== undefined) timeout = parseInt(options.timeout);
+    else timeout = 10;
+    timeout = isNaN(timeout) ? 10 : timeout;
     if (urlGet === undefined) {
       urlGet = "https://www.github.com";
-    }
-    if (timeout === undefined) {
-      timeout = 10;
     }
     const prefix = `Testing Website Response Time for ${chalk.blue(urlGet)}`;
     const spinner = ora(`${prefix} 0.00/${timeout}`).start();
@@ -120,6 +125,7 @@ MuCli.command("test [url]")
       spinner.text = `${prefix} ${timeLoad}/${timeout}`;
     }, 100);
     axios
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       .get(urlGet, {
         timeout: timeout * 1000,
       })

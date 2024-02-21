@@ -17,12 +17,14 @@ import YAML from "yamljs";
  * @property {string} dev - dev 命令
  * @property {string} mmd - mmd 命令
  * @property {string} pip - pip 命令
+ * @property {string} rs - rs 命令
  * @return enum
  */
 export enum SubCommand {
   dev = "dev",
   mmd = "mmd",
   pip = "pip",
+  rs = "rs",
 }
 
 /**

@@ -12,4 +12,7 @@ mmd:
 pip:
   name: pip
   enable: false
+rs:
+  name: rs
+  enable: false
 update: 1696430269

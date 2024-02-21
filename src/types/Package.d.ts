@@ -61,11 +61,13 @@ declare namespace MUCLI.Package {
    * @property {string} dev - 子命令 dev 版本号
    * @property {string} mmd - 子命令 mmd 版本号
    * @property {string} pip - 子命令 pip 版本号
+   * @property {string} rs - 子命令 rs 版本号
    * @return SubVersion
    */
   export interface SubVersion {
     dev: string;
     mmd: string;
     pip: string;
+    rs: string;
   }
 }

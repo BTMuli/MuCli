@@ -7,7 +7,7 @@
 /**
  * @description 配置文件类型定义
  * @namespace Config
- * @since 1.0.0
+ * @since 1.2.0
  * @return Config
  */
 declare namespace MUCLI.Config {
@@ -19,7 +19,7 @@ declare namespace MUCLI.Config {
    * @property {boolean} enable - 是否启用
    * @return Base
    */
-  export interface Base {
+  interface Base {
     name: string;
     enable: boolean;
   }
@@ -31,13 +31,15 @@ declare namespace MUCLI.Config {
    * @property {Dev} dev - 子命令 dev 配置
    * @property {Mmd} mmd - 子命令 mmd 配置
    * @property {Pip} pip - 子命令 pip 配置
+   * @property {Rs} rs - 子命令 rs 配置
    * @property {number} update - 更新时间戳（秒）
    * @return FullInfo
    */
-  export interface FullInfo {
+  interface FullInfo {
     dev: Dev;
     mmd: Mmd;
     pip: Pip;
+    rs: Rs;
     update: number;
   }
 
@@ -48,7 +50,7 @@ declare namespace MUCLI.Config {
    * @extends Base
    * @return Dev
    */
-  export interface Dev extends Base {}
+  interface Dev extends Base {}
 
   /**
    * @description 子命令 mmd 配置
@@ -59,7 +61,7 @@ declare namespace MUCLI.Config {
    * @property {MmdLabel} defaultLabel - 默认模板
    * @return Mmd
    */
-  export interface Mmd extends Base {
+  interface Mmd extends Base {
     labels: MmdLabel[];
     defaultLabel: MmdLabel;
   }
@@ -73,7 +75,7 @@ declare namespace MUCLI.Config {
    * @property {string} description - 描述
    * @return MmdLabel
    */
-  export interface MmdLabel {
+  interface MmdLabel {
     author: string;
     filename: string;
     description: string;
@@ -86,5 +88,14 @@ declare namespace MUCLI.Config {
    * @extends Base
    * @return Pip
    */
-  export interface Pip extends Base {}
+  interface Pip extends Base {}
+
+  /**
+   * @description 子命令 rs 配置
+   * @interface Rs
+   * @since 1.2.0
+   * @extends Base
+   * @return Rs
+   */
+  interface Rs extends Base {}
 }
