@@ -1,7 +1,8 @@
 /**
  * @file src/rs/utils.ts
  * @description rs 命令-工具函数
- * @since 1.2.0
+ * @since 1.2.1
+ * @version 1.0.1
  */
 
 import fs from "node:fs";
@@ -11,11 +12,14 @@ import * as toml from "toml";
 /**
  * @description 读取 cargo.toml 文件，返回所有依赖及其版本号
  * @function readCargoToml
- * @since 1.2.0
+ * @since 1.2.1
+ * @version 1.0.1
  * @returns {Promise<Record<string, string>>} 依赖及其版本号
  */
 export async function readCargoToml(): Promise<Record<string, string> | false> {
-  const path = process.cwd() + "\\Cargo.toml";
+  let path = `${process.cwd()}/Cargo.toml`;
+  if (!fs.existsSync(path)) path = `${process.cwd()}/src/Cargo.toml`;
+  if (!fs.existsSync(path)) path = `${process.cwd()}/src-tauri/Cargo.toml`;
   if (!fs.existsSync(path)) return false;
   try {
     const content = fs.readFileSync(path, "utf-8");
