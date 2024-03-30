@@ -1,7 +1,8 @@
 /**
  * @file src/mmd/promote.ts
  * @description mmd 命令-工具函数
- * @since 1.0.4
+ * @since 1.2.1
+ * @version 1.1.0
  */
 
 import chalk from "chalk";
@@ -19,7 +20,8 @@ import {
 /**
  * @description 获取 markdown 文件的 frontmatter 的提示
  * @function getPromote
- * @since 1.0.0
+ * @since 1.2.1
+ * @version 1.1.0
  * @param {string} filePath markdown 文件路径
  * @returns {Promise<MUCLI.Config.MmdLabel>}
  */
@@ -35,7 +37,8 @@ export async function getPromote(
       default: filename,
     },
   ]);
-  const label = getLabelByFilename(answerF.title);
+  if (answerF.title === "") answerF.title = filename;
+  const label = getLabelByFilename(<string>answerF.title);
   const answerS = await inquirer.prompt([
     {
       type: "input",
@@ -60,7 +63,8 @@ export async function getPromote(
 /**
  * @description 创建新的 markdown 文件的提示
  * @function createPromote
- * @since 1.0.4
+ * @since 1.2.1
+ * @version 1.1.0
  * @param {string} filePath markdown 文件路径
  * @returns {Promise<void>}
  */
@@ -114,14 +118,15 @@ export async function createPromote(filePath: string): Promise<void> {
     filePath = filePath.replace(filename, label.filename);
   }
   fs.createFileSync(filePath);
-  fs.writeFileSync(filePath, fileContent);
+  fs.writeFileSync(filePath, fileContent[0]);
   spinner.succeed(`Markdown file ${chalk.yellow(label.filename)} created`);
 }
 
 /**
  * @description 更新 markdown 文件的 frontmatter 的提示
  * @function updatePromote
- * @since 1.0.0
+ * @since 1.2.1
+ * @version 1.1.0
  * @param {string} filePath markdown 文件路径
  * @returns {Promise<void>}
  */
@@ -152,12 +157,12 @@ export async function updatePromote(filePath: string): Promise<void> {
     if (answer.update === true) {
       const spinner = ora("Updating frontmatter").start();
       const fileContent = getFrontmatter(
-        frontmatter.author,
-        frontmatter.description,
-        frontmatter.create,
+        frontmatter.fm.author,
+        frontmatter.fm.description,
+        { create: frontmatter.fm.create, raw: frontmatter.raw },
       );
       const contentArr = fs.readFileSync(filePath, "utf-8").split("\n");
-      contentArr.splice(0, 11, ...fileContent.split("\n"));
+      contentArr.splice(0, 11 + fileContent[1], ...fileContent[0].split("\n"));
       fs.writeFileSync(filePath, contentArr.join("\n"));
       spinner.succeed("Frontmatter updated");
     }
@@ -167,7 +172,8 @@ export async function updatePromote(filePath: string): Promise<void> {
 /**
  * @description 插入 markdown 文件的 frontmatter 的提示
  * @function insertPromote
- * @since 1.0.0
+ * @since 1.2.1
+ * @version 1.1.0
  * @param {string} filePath markdown 文件路径
  * @returns {Promise<void>}
  */
@@ -176,7 +182,7 @@ export async function insertPromote(filePath: string): Promise<void> {
   const spinner = ora("Inserting frontmatter").start();
   const fileContent = getFrontmatter(label.author, label.description);
   const contentArr = fs.readFileSync(filePath, "utf-8").split("\n");
-  contentArr.splice(0, 0, ...fileContent.split("\n"));
+  contentArr.splice(0, 0, ...fileContent[0].split("\n"));
   fs.writeFileSync(filePath, contentArr.join("\n"));
   spinner.succeed("Frontmatter inserted");
 }

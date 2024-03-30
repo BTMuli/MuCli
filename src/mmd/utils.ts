@@ -1,8 +1,8 @@
 /**
  * @file src/mmd/utils.ts
  * @description mmd 命令-工具函数
- * @since 1.1.4
- * @version 1.0.3
+ * @since 1.2.1
+ * @version 1.1.0
  */
 
 import { resolve } from "path";
@@ -49,19 +49,22 @@ export function handleMarkdownPath(filepath?: string): string {
 
 /**
  * @description 处理 markdown 文件名
- * @since 1.1.4
- * @version 1.0.3
+ * @since 1.2.1
+ * @version 1.1.0
  * @param {string} filepath markdown 文件路径
  * @returns {string} markdown 文件名
  */
 export function handleMarkdownName(filepath: string): string {
-  let filename: string;
+  let filename: string | undefined;
   if (filepath.includes("\\")) {
-    filename = <string>filepath.split("\\").pop();
+    filename = filepath.split("\\").pop();
   } else if (filepath.includes("/")) {
-    filename = <string>filepath.split("/").pop();
+    filename = filepath.split("/").pop();
   } else {
     filename = filepath;
+  }
+  if (filename === undefined) {
+    filename = "README";
   }
   if (filename.endsWith(".md")) {
     filename = filename.split(".md")[0];
@@ -71,20 +74,23 @@ export function handleMarkdownName(filepath: string): string {
 
 /**
  * @description 获取 markdown 文件的 frontmatter
- * @since 1.1.1
+ * @since 1.2.1
+ * @version 1.1.0
  * @param {string} author markdown 文件作者
  * @param {string} description markdown 文件描述
- * @returns {string} frontmatter
+ * @param {MUCLI.Markdown.CreateOptions} options markdown 文件创建时间
+ * @returns {[string,number]} frontmatter内容及行数
  */
 export function getFrontmatter(
   author: string,
   description: string,
-  create?: string,
-): string {
+  options?: MUCLI.Markdown.CreateOptions,
+): [string, number] {
+  let extra = 0;
   const templatePath = resolve(getRootPath(), "template", "MuCli", "README.md");
   const template = fs.readFileSync(templatePath, "utf-8");
   const date = getDate(false);
-  const datefull = getDate(true);
+  const dateFull = getDate(true);
   // 按行分割
   const templateArr = template.split("\n");
   // 根据行数处理
@@ -103,20 +109,20 @@ export function getFrontmatter(
       templateArr[index] = res;
     }
     if (index === 9) {
-      res = item.replace("modify", datefull);
+      res = item.replace("modify", dateFull);
       templateArr[index] = res;
     }
     if (index === 7) {
-      if (create !== undefined) {
-        res = item.replace("create", create);
+      if (options?.create !== undefined) {
+        res = item.replace("create", options.create);
       } else {
-        res = item.replace("create", datefull);
+        res = item.replace("create", dateFull);
       }
       templateArr[index] = res;
     }
     if (index === 3) {
-      if (create !== undefined) {
-        const dateCreate = create.split(" ")[0];
+      if (options?.create !== undefined) {
+        const dateCreate = options.create.split(" ")[0];
         res = item.replace("date", dateCreate);
       } else {
         res = item.replace("date", date);
@@ -124,19 +130,29 @@ export function getFrontmatter(
       templateArr[index] = res;
     }
   });
-  return templateArr.join("\n");
+  if (options?.raw !== undefined) {
+    const keyExclude = ["author", "description", "date", "update"];
+    let insertIndex = 5;
+    for (const key in options.raw) {
+      if (keyExclude.includes(key.toLowerCase())) continue;
+      templateArr.splice(insertIndex, 0, `${key}: ${options.raw[key]}`);
+      extra += 1;
+      insertIndex += 1;
+    }
+  }
+  return [templateArr.join("\n"), extra];
 }
 
 /**
  * @description 尝试读取 markdown 文件的 frontmatter
- * @since 1.1.3
- * @version 1.0.2
+ * @since 1.2.1
+ * @version 1.1.0
  * @param {string} filePath markdown 文件路径
  * @returns {MUCLI.Markdown.Frontmatter|false} frontmatter
  */
 export function tryGetFrontmatter(
   filePath?: string,
-): MUCLI.Markdown.Frontmatter | false {
+): MUCLI.Markdown.FrontmatterFull | false {
   let fullPath: string;
   if (filePath === undefined) {
     fullPath = "README.md";
@@ -151,7 +167,11 @@ export function tryGetFrontmatter(
   }
   if (!fs.existsSync(fullPath)) return false;
   const fileContent = fs.readFileSync(fullPath, "utf-8");
-  const contentArr = fileContent.split("\n");
+  const fmCheckRegex = /^---(\r\n|\n)(.*?)(\r\n|\n)---(\r\n|\n)/gs;
+  const fmCheck = fileContent.match(fmCheckRegex);
+  if (fmCheck === null) return false;
+  const fmStr = fmCheck[0];
+  const content = fileContent.replace(fmStr, "");
   const frontmatter: MUCLI.Markdown.Frontmatter = {
     author: "",
     description: "",
@@ -160,32 +180,59 @@ export function tryGetFrontmatter(
     create: "",
     modify: "",
   };
-  contentArr.forEach((item, index) => {
-    // 兼容旧版
-    if (index >= 1 && index <= 4) {
-      if (item.startsWith("Author: ")) {
-        frontmatter.author = item.split("Author: ")[1].trim();
-      } else if (item.startsWith("Description: ")) {
-        frontmatter.description = item.split("Description: ")[1].trim();
-      } else if (item.startsWith("Date: ")) {
-        frontmatter.date = item.split("Date: ")[1].trim();
-      } else if (item.startsWith("Update: ")) {
-        frontmatter.update = item.split("Update: ")[1].trim();
-      }
+  const fmGet = parseFrontmatter(fmStr);
+  if (fmGet === undefined) return false;
+  for (const key in fmGet) {
+    if (key === "Author" || key === "author") frontmatter.author = fmGet[key];
+    if (key === "Description" || key === "description") {
+      frontmatter.description = fmGet[key];
     }
-    if (index === 7) {
-      frontmatter.create = item.split("`")[3];
-    }
-    if (index === 9) {
-      frontmatter.modify = item.split("`")[1];
-    }
-  });
-  for (const key in frontmatter) {
-    const value = frontmatter[<keyof MUCLI.Markdown.Frontmatter>key];
-    if (value === "" || value === undefined) {
-      return false;
+    if (key === "Date" || key === "date") frontmatter.date = fmGet[key];
+    if (key === "Update" || key === "update") frontmatter.update = fmGet[key];
+    if (
+      frontmatter.author !== "" &&
+      frontmatter.description !== "" &&
+      frontmatter.date !== "" &&
+      frontmatter.update !== ""
+    ) {
+      break;
     }
   }
+  // 查找 自动生成于 `YYYY-MM-DD HH:mm:ss`
+  const createRegex = /生成于 `(.*)`/g;
+  const createMatch = content.match(createRegex);
+  if (createMatch !== null) {
+    frontmatter.create = createMatch[0].split("`")[1];
+  } else {
+    const stat = fs.statSync(fullPath);
+    const create = stat.birthtime;
+    frontmatter.create = create.toLocaleString("zh-CN", {
+      hour12: false,
+    });
+  }
+  return {
+    fm: frontmatter,
+    raw: fmGet,
+  };
+}
+
+/**
+ * @description 解析 frontmatter
+ * @since 1.2.1
+ * @version 1.1.0
+ * @param {string} str frontmatter 字符串
+ * @returns {Record<string, string>} frontmatter
+ */
+function parseFrontmatter(str: string): Record<string, string> {
+  const frontmatter: Record<string, string> = {};
+  const frontmatterArr = str.split(/(\r\n|\n)/);
+  frontmatterArr.forEach((item) => {
+    if (item === "---" || item === "") return;
+    if (!item.includes(":")) return;
+    if (item.startsWith("---")) return;
+    const key = item.split(":")[0].trim();
+    frontmatter[key] = item.split(":")[1].trim();
+  });
   return frontmatter;
 }
 

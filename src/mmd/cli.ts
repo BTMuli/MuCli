@@ -1,7 +1,8 @@
 /**
  * @file src/mmd/cli.ts
  * @description mmd 命令-入口文件
- * @since 1.0.0
+ * @since 1.2.1
+ * @version 1.1.0
  */
 
 import { Command } from "commander";
@@ -9,7 +10,7 @@ import { Command } from "commander";
 import { labelTransfer } from "./label";
 import { createPromote, updatePromote } from "./promote";
 import { handleMarkdownPath } from "./utils";
-import { SubCommand, getSubVersion } from "../utils/getBaseInfo";
+import { getSubVersion, SubCommand } from "../utils/getBaseInfo";
 
 const mmd = new Command("mmd");
 const version = getSubVersion(SubCommand.mmd);
@@ -32,8 +33,7 @@ mmd
 mmd
   .command("new [name]")
   .description("create markdown file")
-  .action(async (name) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  .action(async (name: string | undefined) => {
     const filepath = handleMarkdownPath(name);
     await createPromote(filepath);
   });
@@ -42,8 +42,7 @@ mmd
 mmd
   .command("update [name]")
   .description("update markdown frontmatter")
-  .action(async (name) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  .action(async (name: string | undefined) => {
     const filepath = handleMarkdownPath(name);
     await updatePromote(filepath);
   });

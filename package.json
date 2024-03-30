@@ -1,11 +1,11 @@
 {
   "name": "@btmuli/mucli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A Node Cli for personal use by BTMuli",
   "packageManager": "pnpm@8.15.5",
   "subVersion": {
     "dev": "1.0.0",
-    "mmd": "1.0.4",
+    "mmd": "1.1.0",
     "pip": "1.0.0",
     "rs": "1.0.0"
   },
