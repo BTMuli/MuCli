@@ -96,3 +96,13 @@ export function getConfigPath(isDefault: boolean = false): string {
   }
   return configPath;
 }
+
+/**
+ * @description 获取版本
+ * @function getVersion
+ * @since 1.3.0
+ * @returns {string} 版本号
+ */
+export function getVersion(): string {
+  return readPackage().version;
+}

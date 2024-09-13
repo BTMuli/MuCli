@@ -1,7 +1,7 @@
 /**
  * @file script/dev.ts
  * @description dev测试脚本，用于hotfix测试
- * @since 1.2.0
+ * @since 1.3.0
  */
 
 import { execSync } from "node:child_process";
@@ -25,7 +25,7 @@ watcher.on("change", (file) => {
     return;
   }
   building = true;
-  const res = execSync("npm run build");
+  const res = execSync("pnpm build");
   console.log(res.toString());
   building = false;
 });

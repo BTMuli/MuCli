@@ -1,11 +1,9 @@
 /**
  * @file src/mmd/label.ts
  * @description mmd 命令-label 相关
- * @since 1.1.4
- * @version 1.0.3
+ * @since 1.3.0
+ * @version 1.1.1
  */
-
-import assert from "assert";
 
 import chalk from "chalk";
 import fs from "fs-extra";
@@ -107,8 +105,8 @@ async function seeLabel(): Promise<void> {
 /**
  * @description 创建 label
  * @function createLabel
- * @since 1.1.4
- * @version 1.0.3
+ * @since 1.2.0
+ * @version 1.1.0
  * @param {string} filename 文件名
  * @returns {Promise<void>}
  */
@@ -125,7 +123,7 @@ async function createLabel(filename?: string): Promise<void> {
     },
   ]);
   if (
-    answerF === labelDefault.filename ||
+    answerF.filename === labelDefault.filename ||
     labels.some((label) => label.filename === answerF.filename)
   ) {
     if (answerF.filename === labelDefault.filename) {
@@ -220,7 +218,6 @@ export async function updateLabel(
     if (answerS.confirm === false) return;
     await createLabel(answerF.input);
   } else {
-    assert(labelFind !== undefined);
     const answerS = await inquirer.prompt([
       {
         type: "input",
@@ -249,7 +246,7 @@ export async function updateLabel(
         )}\n\tNew:${getLabel(newLabel)}`,
       },
     ]);
-    if (answerT === false) return;
+    if (!answerT.confirm) return;
     // 替换
     labels.forEach((label) => {
       if (label.filename === answerF.input) {
