@@ -1,7 +1,7 @@
 /**
  * @file src/utils/getBaseInfo.ts
  * @description 获取项目基本信息
- * @since 1.2.0
+ * @since 1.3.1
  */
 
 import { resolve } from "path";
@@ -30,13 +30,22 @@ export enum SubCommand {
 /**
  * @description 获取项目根路径
  * @function getRootPath
- * @since 1.1.0
+ * @since 1.3.1
  * @returns {string} 项目根路径
  */
 export function getRootPath(): string {
   if (appRootPath.path.endsWith("dist")) {
     return appRootPath.resolve("../");
   }
+  // 查找是否有 node_modules/@btmuli/mucli 目录
+  const searchPath = resolve(
+    appRootPath.path,
+    "node_modules",
+    "@btmuli",
+    "mucli",
+    "package.json",
+  );
+  if (fs.existsSync(searchPath)) return searchPath;
   return appRootPath.path;
 }
 
