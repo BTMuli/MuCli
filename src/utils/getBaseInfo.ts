@@ -43,7 +43,6 @@ export function getRootPath(): string {
     "node_modules",
     "@btmuli",
     "mucli",
-    "package.json",
   );
   if (fs.existsSync(searchPath)) return searchPath;
   return appRootPath.path;
