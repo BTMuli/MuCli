@@ -35,14 +35,18 @@ export function getDate(full?: boolean): string {
 
 /**
  * @description 处理 markdown 文件路径
- * @since 1.0.0
+ * @since 1.4.0
  * @param {string} filepath markdown 文件路径
  * @returns {string} markdown 文件路径
  */
 export function handleMarkdownPath(filepath?: string): string {
   let fullPath = "./README.md";
   if (filepath !== undefined) {
-    fullPath = filepath.endsWith(".md") ? filepath : (filepath += ".md");
+    if (filepath.endsWith(".md")) {
+      fullPath = filepath;
+    } else {
+      fullPath = `${filepath}.md`;
+    }
   }
   return fullPath;
 }

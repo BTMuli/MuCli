@@ -5,6 +5,7 @@
   "packageManager": "pnpm@9.11.0",
   "subVersion": {
     "dev": "1.0.0",
+    "git": "1.0.0",
     "mmd": "1.1.1",
     "pip": "1.0.0",
     "rs": "1.1.0"

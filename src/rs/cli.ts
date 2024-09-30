@@ -1,17 +1,17 @@
 /**
  * @file src/rs/cli.ts
  * @description rs 命令-入口文件
- * @since 1.2.0
+ * @since 1.4.0
  */
 
 import { Command } from "commander";
 import ora from "ora";
 
 import { getLatestVersion, readCargoToml } from "./utils";
-import { getSubVersion, SubCommand } from "../utils/getBaseInfo";
+import { getSubVersion } from "../utils/getBaseInfo";
 
 const rs = new Command("rs");
-const version = getSubVersion(SubCommand.rs);
+const version = getSubVersion("rs");
 
 // base info
 rs.name("rs")

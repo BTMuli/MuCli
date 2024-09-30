@@ -2,7 +2,7 @@
  * @file src/mmd/cli.ts
  * @description mmd 命令-入口文件
  * @since 1.2.1
- * @version 1.1.0
+ * @version 1.4.0
  */
 
 import { Command } from "commander";
@@ -10,10 +10,10 @@ import { Command } from "commander";
 import { labelTransfer } from "./label";
 import { createPromote, updatePromote } from "./promote";
 import { handleMarkdownPath } from "./utils";
-import { getSubVersion, SubCommand } from "../utils/getBaseInfo";
+import { getSubVersion } from "../utils/getBaseInfo";
 
 const mmd = new Command("mmd");
-const version = getSubVersion(SubCommand.mmd);
+const version = getSubVersion("mmd");
 
 // base info
 mmd

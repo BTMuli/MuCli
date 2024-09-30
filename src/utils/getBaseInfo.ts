@@ -1,7 +1,7 @@
 /**
  * @file src/utils/getBaseInfo.ts
  * @description 获取项目基本信息
- * @since 1.3.1
+ * @since 1.4.0
  */
 
 import { resolve } from "path";
@@ -9,23 +9,6 @@ import { resolve } from "path";
 import appRootPath from "app-root-path";
 import fs from "fs-extra";
 import YAML from "yamljs";
-
-/**
- * @description 子命令枚举
- * @enum SubCommand
- * @since 1.2.0
- * @property {string} dev - dev 命令
- * @property {string} mmd - mmd 命令
- * @property {string} pip - pip 命令
- * @property {string} rs - rs 命令
- * @return enum
- */
-export enum SubCommand {
-  dev = "dev",
-  mmd = "mmd",
-  pip = "pip",
-  rs = "rs",
-}
 
 /**
  * @description 获取项目根路径
@@ -62,11 +45,13 @@ export function readPackage(): MUCLI.Package.FullInfo {
 /**
  * @description 获取子命令版本号
  * @function getSubVersion
- * @since 1.0.0
- * @param {SubCommand} subCommand - 子命令
+ * @since 1.4.0
+ * @param {MUCLI.Package.SubCommandEnum} subCommand - 子命令
  * @returns {string} 子命令版本号
  */
-export function getSubVersion(subCommand: SubCommand): string {
+export function getSubVersion(
+  subCommand: MUCLI.Package.SubCommandEnum,
+): string {
   const packageInfo = readPackage();
   return packageInfo.subVersion[subCommand];
 }

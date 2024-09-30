@@ -27,7 +27,7 @@ MuCli.name("muc")
 MuCli.command("set")
   .description("set subcommand on or off")
   .action(async () => {
-    const commandList = ["dev", "mmd", "pip", "rs"];
+    const commandList = ["dev", "git", "mmd", "pip", "rs"];
     const onCommandList = getOnSubCommands();
     const choices = commandList.map((command) => {
       if (onCommandList.includes(command)) {

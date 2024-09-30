@@ -1,7 +1,7 @@
 /**
  * @file src/utils/loadConfig.ts
  * @description 加载配置文件
- * @since 1.2.0
+ * @since 1.4.0
  */
 
 import type { Command } from "commander";
@@ -25,13 +25,14 @@ export function getConfig(useLocal: boolean = false): MUCLI.Config.FullInfo {
 /**
  * @description 获取开启的子命令
  * @function getOnSubCommands
- * @since 1.2.0
+ * @since 1.4.0
  * @returns {string[]} 开启的子命令
  */
 export function getOnSubCommands(): string[] {
   const config: MUCLI.Config.FullInfo = getConfig();
   const onSubCommands: string[] = [];
   if (config.dev.enable) onSubCommands.push("dev");
+  if (config.git.enable) onSubCommands.push("git");
   if (config.mmd.enable) onSubCommands.push("mmd");
   if (config.pip.enable) onSubCommands.push("pip");
   if (config.rs.enable) onSubCommands.push("rs");
@@ -61,13 +62,14 @@ export function mountSubCommand(
 /**
  * @description 修改子命令启用状态
  * @function changeSubCommandEnable
- * @since 1.2.0
+ * @since 1.4.0
  * @param {string[]} subCommands - 启用的子命令
  * @returns {void}
  */
 export function changeSubCommandEnable(subCommands: string[]): void {
   const config: MUCLI.Config.FullInfo = getConfig();
   config.dev.enable = subCommands.includes("dev");
+  config.git.enable = subCommands.includes("git");
   config.mmd.enable = subCommands.includes("mmd");
   config.pip.enable = subCommands.includes("pip");
   config.rs.enable = subCommands.includes("rs");

@@ -1,7 +1,7 @@
 /**
  * @file src/commands/dev/cli.ts
  * @description dev 命令-入口文件
- * @since 1.0.0
+ * @since 1.4.0
  */
 
 import { exec } from "child_process";
@@ -13,7 +13,6 @@ import ora from "ora";
 import YAML from "yamljs";
 
 import {
-  SubCommand,
   getConfigPath,
   getRootPath,
   getScripts,
@@ -21,7 +20,7 @@ import {
 } from "../utils/getBaseInfo";
 
 const dev = new Command("dev");
-const version = getSubVersion(SubCommand.dev);
+const version = getSubVersion("dev");
 
 // base info
 dev

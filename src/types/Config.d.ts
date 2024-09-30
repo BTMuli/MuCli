@@ -1,13 +1,13 @@
 /**
  * @file src/types/Config.d.ts
  * @description 配置文件类型定义
- * @since 1.2.0
+ * @since 1.4.0
  */
 
 /**
  * @description 配置文件类型定义
  * @namespace Config
- * @since 1.2.0
+ * @since 1.4.0
  * @return Config
  */
 declare namespace MUCLI.Config {
@@ -27,8 +27,9 @@ declare namespace MUCLI.Config {
   /**
    * @description 配置文件类型定义
    * @interface FullInfo
-   * @since 1.2.0
+   * @since 1.4.0
    * @property {Dev} dev - 子命令 dev 配置
+   * @property {Git} git - 子命令 git 配置
    * @property {Mmd} mmd - 子命令 mmd 配置
    * @property {Pip} pip - 子命令 pip 配置
    * @property {Rs} rs - 子命令 rs 配置
@@ -37,6 +38,7 @@ declare namespace MUCLI.Config {
    */
   interface FullInfo {
     dev: Dev;
+    git: Git;
     mmd: Mmd;
     pip: Pip;
     rs: Rs;
@@ -50,7 +52,16 @@ declare namespace MUCLI.Config {
    * @extends Base
    * @return Dev
    */
-  interface Dev extends Base {}
+  type Dev = Base;
+
+  /**
+   * @description 子命令 git 配置
+   * @interface Git
+   * @since 1.4.0
+   * @extends Base
+   * @return Git
+   */
+  type Git = Base;
 
   /**
    * @description 子命令 mmd 配置
@@ -88,7 +99,7 @@ declare namespace MUCLI.Config {
    * @extends Base
    * @return Pip
    */
-  interface Pip extends Base {}
+  type Pip = Base;
 
   /**
    * @description 子命令 rs 配置
@@ -97,5 +108,5 @@ declare namespace MUCLI.Config {
    * @extends Base
    * @return Rs
    */
-  interface Rs extends Base {}
+  type Rs = Base;
 }

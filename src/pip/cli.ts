@@ -8,10 +8,10 @@ import { exec } from "child_process";
 
 import { Command } from "commander";
 
-import { SubCommand, getSubVersion } from "../utils/getBaseInfo";
+import { getSubVersion } from "../utils/getBaseInfo";
 
 const pip = new Command("pip");
-const version = getSubVersion(SubCommand.pip);
+const version = getSubVersion("pip");
 
 // base info
 pip

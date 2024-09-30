@@ -1,6 +1,9 @@
 dev:
   name: dev
   enable: false
+git:
+  name: git
+  enable: false
 mmd:
   name: mmd
   enable: true
@@ -15,4 +18,4 @@ pip:
 rs:
   name: rs
   enable: false
-update: 1696430269
+update: 1727661143
