@@ -1,8 +1,8 @@
 /**
  * @file src/mmd/utils.ts
  * @description mmd 命令-工具函数
- * @since 1.2.1
- * @version 1.1.0
+ * @since 1.4.1
+ * @version 1.2.0
  */
 
 import { resolve } from "path";
@@ -95,9 +95,7 @@ export function getFrontmatter(
   const template = fs.readFileSync(templatePath, "utf-8");
   const date = getDate(false);
   const dateFull = getDate(true);
-  // 按行分割
   const templateArr = template.split("\n");
-  // 根据行数处理
   templateArr.forEach((item, index) => {
     let res;
     if (index === 1) {
@@ -117,20 +115,16 @@ export function getFrontmatter(
       templateArr[index] = res;
     }
     if (index === 7) {
-      if (options?.create !== undefined) {
+      if (options?.create !== undefined)
         res = item.replace("create", options.create);
-      } else {
-        res = item.replace("create", dateFull);
-      }
+      else res = item.replace("create", dateFull);
       templateArr[index] = res;
     }
     if (index === 3) {
       if (options?.create !== undefined) {
         const dateCreate = options.create.split(" ")[0];
         res = item.replace("date", dateCreate);
-      } else {
-        res = item.replace("date", date);
-      }
+      } else res = item.replace("date", date);
       templateArr[index] = res;
     }
   });
@@ -149,8 +143,8 @@ export function getFrontmatter(
 
 /**
  * @description 尝试读取 markdown 文件的 frontmatter
- * @since 1.2.1
- * @version 1.1.0
+ * @since 1.4.1
+ * @version 1.2.0
  * @param {string} filePath markdown 文件路径
  * @returns {MUCLI.Markdown.Frontmatter|false} frontmatter
  */
@@ -158,17 +152,12 @@ export function tryGetFrontmatter(
   filePath?: string,
 ): MUCLI.Markdown.FrontmatterFull | false {
   let fullPath: string;
-  if (filePath === undefined) {
-    fullPath = "README.md";
-  } else if (filePath.includes(".")) {
+  if (filePath === undefined) fullPath = "README.md";
+  else if (filePath.includes(".")) {
     const fileSuffix = filePath.split(".").pop();
-    if (fileSuffix !== "md") {
-      return false;
-    }
+    if (fileSuffix !== "md") return false;
     fullPath = filePath;
-  } else {
-    fullPath = `${filePath}.md`;
-  }
+  } else fullPath = `${filePath}.md`;
   if (!fs.existsSync(fullPath)) return false;
   const fileContent = fs.readFileSync(fullPath, "utf-8");
   const fmCheckRegex = /^---(\r\n|\n)(.*?)(\r\n|\n)---(\r\n|\n)/gs;
@@ -188,9 +177,8 @@ export function tryGetFrontmatter(
   if (fmGet === undefined) return false;
   for (const key in fmGet) {
     if (key === "Author" || key === "author") frontmatter.author = fmGet[key];
-    if (key === "Description" || key === "description") {
+    if (key === "Description" || key === "description")
       frontmatter.description = fmGet[key];
-    }
     if (key === "Date" || key === "date") frontmatter.date = fmGet[key];
     if (key === "Update" || key === "update") frontmatter.update = fmGet[key];
     if (
@@ -202,22 +190,11 @@ export function tryGetFrontmatter(
       break;
     }
   }
-  // 查找 自动生成于 `YYYY-MM-DD HH:mm:ss`
   const createRegex = /生成于 `(.*)`/g;
   const createMatch = content.match(createRegex);
-  if (createMatch !== null) {
-    frontmatter.create = createMatch[0].split("`")[1];
-  } else {
-    const stat = fs.statSync(fullPath);
-    const create = stat.birthtime;
-    frontmatter.create = create.toLocaleString("zh-CN", {
-      hour12: false,
-    });
-  }
-  return {
-    fm: frontmatter,
-    raw: fmGet,
-  };
+  if (createMatch !== null) frontmatter.create = createMatch[0].split("`")[1];
+  else frontmatter.create = date2str(fs.statSync(fullPath).birthtime);
+  return { fm: frontmatter, raw: fmGet };
 }
 
 /**
@@ -250,8 +227,23 @@ export function getLabelByFilename(filename: string): MUCLI.Config.MmdLabel {
   const configMmd = getConfig().mmd;
   const defaultLabel = configMmd.defaultLabel;
   let labelFind = configMmd.labels.find((item) => item.filename === filename);
-  if (labelFind === undefined) {
-    labelFind = defaultLabel;
-  }
+  if (labelFind === undefined) labelFind = defaultLabel;
   return labelFind;
+}
+
+/**
+ * @description 时间戳转换为字符串
+ * @since 1.4.1
+ * @version 1.2.0
+ * @param {Date} date - 时间
+ * @returns {string}
+ */
+export function date2str(date: Date): string {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const hour = date.getHours().toString().padStart(2, "0");
+  const minute = date.getMinutes().toString().padStart(2, "0");
+  const second = date.getSeconds().toString().padStart(2, "0");
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }

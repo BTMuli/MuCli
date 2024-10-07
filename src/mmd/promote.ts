@@ -1,8 +1,8 @@
 /**
  * @file src/mmd/promote.ts
  * @description mmd 命令-工具函数
- * @since 1.2.1
- * @version 1.1.0
+ * @since 1.4.1
+ * @version 1.2.0
  */
 
 import chalk from "chalk";
@@ -11,6 +11,7 @@ import inquirer from "inquirer";
 import ora from "ora";
 
 import {
+  date2str,
   getFrontmatter,
   getLabelByFilename,
   handleMarkdownName,
@@ -72,30 +73,15 @@ export async function createPromote(filePath: string): Promise<void> {
   const filename = handleMarkdownName(filePath);
   if (fs.existsSync(filePath)) {
     const frontmatter = tryGetFrontmatter(filePath);
-    const choices = [
-      {
-        name: "Create new file",
-        value: "create",
-      },
-    ];
-    if (frontmatter !== false) {
-      choices.unshift({
-        name: "Update frontmatter",
-        value: "update",
-      });
-    } else {
-      choices.unshift({
-        name: "Insert frontmatter",
-        value: "insert",
-      });
-    }
+    const choices = [{ name: "Create new file", value: "create" }];
+    if (frontmatter !== false)
+      choices.unshift({ name: "Update frontmatter", value: "update" });
+    else choices.unshift({ name: "Insert frontmatter", value: "insert" });
     const answer = await inquirer.prompt([
       {
         type: "list",
         name: "action",
-        message: `File ${chalk.yellow(
-          filename,
-        )} already exists, what do you want to do?`,
+        message: `File ${chalk.yellow(filename)} already exists, what do you want to do?`,
         choices,
         default: frontmatter === false ? "insert" : "update",
       },
@@ -114,9 +100,8 @@ export async function createPromote(filePath: string): Promise<void> {
   const label = await getPromote(filePath);
   const spinner = ora("Creating markdown file").start();
   const fileContent = getFrontmatter(label.author, label.description);
-  if (filename !== label.filename) {
+  if (filename !== label.filename)
     filePath = filePath.replace(filename, label.filename);
-  }
   fs.createFileSync(filePath);
   fs.writeFileSync(filePath, fileContent[0]);
   spinner.succeed(`Markdown file ${chalk.yellow(label.filename)} created`);
@@ -142,9 +127,7 @@ export async function updatePromote(filePath: string): Promise<void> {
         default: true,
       },
     ]);
-    if (answer.create === true) {
-      await createPromote(filePath);
-    }
+    if (answer.create === true) await createPromote(filePath);
   } else {
     const answer = await inquirer.prompt([
       {
@@ -172,15 +155,18 @@ export async function updatePromote(filePath: string): Promise<void> {
 /**
  * @description 插入 markdown 文件的 frontmatter 的提示
  * @function insertPromote
- * @since 1.2.1
- * @version 1.1.0
+ * @since 1.4.1
+ * @version 1.2.0
  * @param {string} filePath markdown 文件路径
  * @returns {Promise<void>}
  */
 export async function insertPromote(filePath: string): Promise<void> {
   const label = await getPromote(filePath);
   const spinner = ora("Inserting frontmatter").start();
-  const fileContent = getFrontmatter(label.author, label.description);
+  const create = date2str(fs.statSync(filePath).birthtime);
+  const fileContent = getFrontmatter(label.author, label.description, {
+    create: create,
+  });
   const contentArr = fs.readFileSync(filePath, "utf-8").split("\n");
   contentArr.splice(0, 0, ...fileContent[0].split("\n"));
   fs.writeFileSync(filePath, contentArr.join("\n"));
