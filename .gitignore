@@ -4,3 +4,5 @@ node_modules
 config/user.yml
 # Jetbrains IDE
 .idea
+# build
+dist/

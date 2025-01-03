@@ -1,7 +1,8 @@
 /**
  * @file src/commands/dev/cli.ts
  * @description dev 命令-入口文件
- * @since 1.4.0
+ * @since 1.5.0
+ * @version 1.0.1
  */
 
 import { exec } from "child_process";
@@ -26,7 +27,7 @@ const version = getSubVersion("dev");
 dev
   .name("dev")
   .description("A cli tool for devtools")
-  .version(version, "-sv, --subversion");
+  .version(version, "-s, --subversion");
 
 // command for run pnpm script
 dev

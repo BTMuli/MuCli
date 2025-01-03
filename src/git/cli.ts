@@ -1,12 +1,13 @@
 /**
  * @file src/git/cli.ts
  * @description git 命令-入口文件
- * @since 1.4.0
+ * @since 1.5.0
+ * @version 1.0.1
  */
 import { Command } from "commander";
 import { getSubVersion } from "../utils/getBaseInfo";
 import { getProxyCommand } from "./utils";
-import { exec, execSync } from "child_process";
+import { execSync } from "child_process";
 
 const git = new Command("git");
 const version = getSubVersion("git");
@@ -15,7 +16,7 @@ const version = getSubVersion("git");
 git
   .name("git")
   .description("A cli tool for git")
-  .version(version, "-sv, --subversion");
+  .version(version, "-s, --subversion");
 
 interface GitProxyOptions {
   url: string | undefined;

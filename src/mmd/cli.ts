@@ -1,8 +1,8 @@
 /**
  * @file src/mmd/cli.ts
  * @description mmd 命令-入口文件
- * @since 1.2.1
- * @version 1.4.0
+ * @since 1.5.0
+ * @version 1.2.1
  */
 
 import { Command } from "commander";
@@ -19,7 +19,7 @@ const version = getSubVersion("mmd");
 mmd
   .name("mmd")
   .description("A cli tool for markdown")
-  .version(version, "-sv, --subversion");
+  .version(version, "-s, --subversion");
 
 // command for label crud
 mmd

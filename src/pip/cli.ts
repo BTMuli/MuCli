@@ -1,7 +1,8 @@
 /**
  * @file src/pip/cli.ts
  * @description pip 命令-入口文件
- * @since 1.2.0
+ * @since 1.5.0
+ * @version 1.0.1
  */
 
 import { exec } from "child_process";
@@ -17,7 +18,7 @@ const version = getSubVersion("pip");
 pip
   .name("pip")
   .description("A cli tool for pip")
-  .version(version, "-sv, --subversion");
+  .version(version, "-s, --subversion");
 
 // command for mirror
 pip
