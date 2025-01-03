@@ -16,6 +16,10 @@ import {
 import typescript2 from "rollup-plugin-typescript2";
 import typescript from "typescript";
 
+// 读取--dev
+const args = process.argv.slice(2);
+const isDev = args.includes("--dev");
+
 const dependencies: Record<string, string> =
   fs.readJSONSync("./package.json").dependencies;
 const external: string[] = Object.keys(dependencies);
@@ -25,6 +29,7 @@ const globals = external.reduce((prev, curr) => {
   return newPre;
 }, {});
 
+const devOption = isDev ? [json()] : [json(), terser()];
 const inputOptions: InputOptionsWithPlugins = {
   external,
   input: "src/index.ts",
@@ -36,8 +41,7 @@ const inputOptions: InputOptionsWithPlugins = {
       typescript,
       tsconfig: "./tsconfig.json",
     }),
-    json(),
-    terser(),
+    ...devOption,
   ],
 };
 
