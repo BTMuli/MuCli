@@ -26,7 +26,7 @@ const eslintConfigYml = {
       "error",
       {
         pathPattern: "^rules$",
-        order: "asc",
+        order: ["asc"],
       },
     ],
   },
