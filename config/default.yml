@@ -3,7 +3,7 @@ dev:
   enable: false
 git:
   name: git
-  enable: false
+  enable: true
 mmd:
   name: mmd
   enable: true
@@ -14,8 +14,8 @@ mmd:
     description: 说明文档
 pip:
   name: pip
-  enable: false
+  enable: true
 rs:
   name: rs
-  enable: false
+  enable: true
 update: 1727661143
