@@ -1,8 +1,7 @@
 /**
- * @file src/mmd/utils.ts
- * @description mmd 命令-工具函数
- * @since 1.4.1
- * @version 1.2.0
+ * mmd 命令-工具函数
+ * @since 1.5.2
+ * @version 1.2.2
  */
 
 import { resolve } from "path";
@@ -218,16 +217,19 @@ function parseFrontmatter(str: string): Record<string, string> {
 }
 
 /**
- * @description 根据 filename 获取对应的 label
- * @since 1.0.0
- * @param {string} filename markdown 文件名
- * @returns {MUCLI.Config.MmdLabel} label
+ * 根据 filename 获取对应的 label
+ * @since 1.2.2
+ * @param filename - markdown 文件名
+ * @returns label
  */
 export function getLabelByFilename(filename: string): MUCLI.Config.MmdLabel {
   const configMmd = getConfig().mmd;
   const defaultLabel = configMmd.defaultLabel;
   let labelFind = configMmd.labels.find((item) => item.filename === filename);
-  if (labelFind === undefined) labelFind = defaultLabel;
+  if (labelFind === undefined) {
+    labelFind = defaultLabel;
+    labelFind.description = filename;
+  }
   return labelFind;
 }
 
